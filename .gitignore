@@ -1,0 +1,14 @@
+.vscode
+bin
+vendor
+go.work*
+*.o
+*.skel.json
+package.json
+ecc
+ecli
+.idea
+**/.DS_Store
+cmake-build-debug
+**/*_bpfel.go
+**/*_bpfeb.go

@@ -1,0 +1,5 @@
+
+1、Argument to 'section' attribute is not valid for this target: mach-o section specifier requires a segment and section separated by a comma
+```
+macos clion 会提示,但linux 没问题
+```
