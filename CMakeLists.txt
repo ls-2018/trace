@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28.3)
-project(awesomeProject1 C)
+project(trace C)
 
 set(CMAKE_C_STANDARD 11)
 include_directories("./ebpf/headers")

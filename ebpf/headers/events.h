@@ -19,8 +19,7 @@ struct retis_log_event {
     char msg[LOG_MAX];
 } __binding;
 
-/* We're using the factory identifiers defined in retis-events.
- * Please keep in sync. */
+// 事件类型
 enum retis_event_owners {
     COMMON = 1,
     KERNEL = 2,
@@ -38,17 +37,15 @@ struct retis_raw_event {
     u8 data[RAW_EVENT_DATA_SIZE];
 } __packed;
 
-/* Please keep synced with its Rust counterpart. */
 struct retis_raw_event_section_header {
     u8 owner;
     u8 data_type;
     u16 size;
 } __packed;
 
-/* Please keep synced with its Rust counterpart. */
 struct {
     __uint(type, BPF_MAP_TYPE_RINGBUF);
-    __uint(max_entries, sizeof(struct retis_raw_event) * EVENTS_MAX);
+    __uint(max_entries, sizeof(struct retis_raw_event) * EVENTS_MAX); // 8 * 1024
 } events_map SEC(".maps");
 
 /* Please keep synced with its Rust counterpart. */
