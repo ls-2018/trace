@@ -94,46 +94,45 @@ struct {
     __type(value, struct retis_packet_buffer);
 } packet_buffers SEC(".maps");
 
-static __always_inline u32 hash_packet(struct retis_packet_buffer *buff, void *pkt_data, u64 size)
-{
+static __always_inline u32 hash_packet(struct retis_packet_buffer *buff, void *pkt_data, u64 size) {
     __builtin_memset(buff->data, 0, sizeof(buff->data));
     /* Prevent clang from using register mirroring (or any optimization) on
-   * the 'size' variable. */
+     * the 'size' variable. */
     barrier_var(size);
     if (size >= PACKET_HASH_SIZE) {
-	bpf_probe_read(buff->data, PACKET_HASH_SIZE, pkt_data);
-    } else {
-	bpf_probe_read(buff->data, size, pkt_data);
+        bpf_probe_read(buff->data, PACKET_HASH_SIZE, pkt_data);
+    }
+    else {
+        bpf_probe_read(buff->data, size, pkt_data);
     }
     return jhash(buff->data, PACKET_HASH_SIZE, 0);
 }
 
-static __always_inline u32 hash_skb(struct retis_packet_buffer *buff, struct sk_buff *skb)
-{
+static __always_inline u32 hash_skb(struct retis_packet_buffer *buff, struct sk_buff *skb) {
     u64 size;
     u32 data_len, len;
     if (!skb) {
-	return 0;
+        return 0;
     }
     data_len = BPF_CORE_READ(skb, data_len);
     len = BPF_CORE_READ(skb, len);
 
     if (data_len != 0) {
-	size = (len - data_len) & 0xfffffff;
-    } else {
-	size = len;
+        size = (len - data_len) & 0xfffffff;
+    }
+    else {
+        size = len;
     }
     return hash_packet(buff, BPF_CORE_READ(skb, data), size);
 }
 
-static __always_inline u32 queue_id_gen_skb(struct sk_buff *skb)
-{
+static __always_inline u32 queue_id_gen_skb(struct sk_buff *skb) {
     int zero = 0;
     struct retis_packet_buffer *buff = bpf_map_lookup_elem(&packet_buffers, &zero);
     /* This should always succeed but checks are still needed to keep the
-   * verifier happy. */
+     * verifier happy. */
     if (!buff)
-	return 0;
+        return 0;
 
     return hash_skb(buff, skb);
 }

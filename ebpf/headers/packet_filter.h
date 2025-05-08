@@ -5,7 +5,7 @@
 
 struct retis_packet_filter_ctx {
     /* Input */
-    char *data; /* points to the beginning of the mac header. */
+    char *data;       /* points to the beginning of the mac header. */
     unsigned int len; /* linear length. */
     /* Output */
     unsigned int ret; /* outcome of the match (zero if miss). */
@@ -18,7 +18,7 @@ struct retis_packet_filter_ctx {
 BINDING_DEF(FILTER_MAX_INSNS, __FILTER_MAX_INSNS)
 
 #define __s(v) #v
-#define s(v)   __s(v)
+#define s(v) __s(v)
 
 BINDING_DEF(STACK_RESERVED, 8)
 BINDING_DEF(SCRATCH_MEM_SIZE, 4)

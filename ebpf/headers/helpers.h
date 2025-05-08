@@ -6,9 +6,9 @@
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-#define BUILD_BUG_ON(cond) _Static_assert(!(cond), "BUILD_BUG_ON failed " #cond)
+#    define BUILD_BUG_ON(cond) _Static_assert(!(cond), "BUILD_BUG_ON failed " #cond)
 #else
-#define BUILD_BUG_ON(cond)
+#    define BUILD_BUG_ON(cond)
 #endif
 
 enum bpf_func_id___x { BPF_FUNC_get_func_ip___5_15_0 = 42 };
@@ -33,15 +33,14 @@ enum bpf_func_id___x { BPF_FUNC_get_func_ip___5_15_0 = 42 };
  * CONFIG_X86_KERNEL_IBT=y and bpf_get_func_ip won't work. Hopefully that should
  * be rare, and even less common over time.
  */
-static __always_inline u64 kprobe_get_func_ip(struct pt_regs *ctx)
-{
+static __always_inline u64 kprobe_get_func_ip(struct pt_regs *ctx) {
     if (bpf_core_enum_value_exists(enum bpf_func_id___x, BPF_FUNC_get_func_ip___5_15_0))
-	return bpf_get_func_ip(ctx);
+        return bpf_get_func_ip(ctx);
     else
 #ifdef __TARGET_ARCH_x86
-	return PT_REGS_IP(ctx) - sizeof(kprobe_opcode_t);
+        return PT_REGS_IP(ctx) - sizeof(kprobe_opcode_t);
 #else
-	return PT_REGS_IP(ctx);
+        return PT_REGS_IP(ctx);
 #endif
 }
 
@@ -59,24 +58,21 @@ static __always_inline u64 kprobe_get_func_ip(struct pt_regs *ctx)
  * check both.
  */
 
-#define IS_UNSET(x)	      ((x) == (typeof(x))~0U)
+#define IS_UNSET(x) ((x) == (typeof(x))~0U)
 #define IS_RESET(x, headroom) ((x) == (headroom))
 
-static __always_inline bool is_mac_valid(u16 mac)
-{
+static __always_inline bool is_mac_valid(u16 mac) {
     /* Only check the mac offset was set, as it's the first of the offsets
-   * and could be equal to 0.
-   */
+     * and could be equal to 0.
+     */
     return !IS_UNSET(mac);
 }
-static __always_inline bool is_network_valid(u16 network)
-{
+static __always_inline bool is_network_valid(u16 network) {
     return network && !IS_UNSET(network);
 }
 #define is_transport_valid is_network_valid
 
-static __always_inline bool is_mac_data_valid(const struct sk_buff *skb)
-{
+static __always_inline bool is_mac_data_valid(const struct sk_buff *skb) {
     u16 mac, network;
 
     mac = BPF_CORE_READ(skb, mac_header);
@@ -85,8 +81,7 @@ static __always_inline bool is_mac_data_valid(const struct sk_buff *skb)
     return is_mac_valid(mac) && !(is_network_valid(network) && network == mac && BPF_CORE_READ(skb, mac_len) == 0);
 }
 
-static __always_inline bool is_network_data_valid(const struct sk_buff *skb)
-{
+static __always_inline bool is_network_data_valid(const struct sk_buff *skb) {
     u16 mac, network;
 
     mac = BPF_CORE_READ(skb, mac_header);
@@ -95,8 +90,7 @@ static __always_inline bool is_network_data_valid(const struct sk_buff *skb)
     return is_network_valid(network) && !(is_mac_valid(mac) && mac == network && BPF_CORE_READ(skb, mac_len) != 0);
 }
 
-static __always_inline bool is_transport_data_valid(struct sk_buff *skb)
-{
+static __always_inline bool is_transport_data_valid(struct sk_buff *skb) {
     u16 network, transport;
 
     network = BPF_CORE_READ(skb, network_header);

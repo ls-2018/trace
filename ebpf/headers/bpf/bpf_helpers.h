@@ -10,8 +10,8 @@
  */
 #include "bpf_helper_defs.h"
 
-#define __uint(name, val)  int (*name)[val]
-#define __type(name, val)  typeof(val) *name
+#define __uint(name, val) int (*name)[val]
+#define __type(name, val) typeof(val) *name
 #define __array(name, val) typeof(val) *name[]
 #define __ulong(name, val) enum { ___bpf_concat(__unique_value, __COUNTER__) = val } name
 
@@ -30,11 +30,11 @@
  * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55578
  * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90400
  */
-#define SEC(name) __attribute__((section(name), used))
+#    define SEC(name) __attribute__((section(name), used))
 
 #else
 
-#define SEC(name) _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"") __attribute__((section(name), used)) _Pragma("GCC diagnostic pop")
+#    define SEC(name) _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wignored-attributes\"") __attribute__((section(name), used)) _Pragma("GCC diagnostic pop")
 
 #endif
 
@@ -43,10 +43,10 @@
 #define __always_inline inline __attribute__((always_inline))
 
 #ifndef __noinline
-#define __noinline __attribute__((noinline))
+#    define __noinline __attribute__((noinline))
 #endif
 #ifndef __weak
-#define __weak __attribute__((weak))
+#    define __weak __attribute__((weak))
 #endif
 
 /*
@@ -64,11 +64,11 @@
  * them on their own. So as a convenience, provide such definitions here.
  */
 #ifndef NULL
-#define NULL ((void *)0)
+#    define NULL ((void *)0)
 #endif
 
 #ifndef KERNEL_VERSION
-#define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
+#    define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
 #endif
 
 /*
@@ -86,15 +86,15 @@
 #undef container_of
 #define container_of(ptr, type, member)              \
     ({                                               \
-	void *__mptr = (void *)(ptr);                \
-	((type *)(__mptr - offsetof(type, member))); \
+        void *__mptr = (void *)(ptr);                \
+        ((type *)(__mptr - offsetof(type, member))); \
     })
 
 /*
  * Compiler (optimization) barrier.
  */
 #ifndef barrier
-#define barrier() asm volatile("" ::: "memory")
+#    define barrier() asm volatile("" ::: "memory")
 #endif
 
 /* Variable-specific compiler (optimization) barrier. It's a no-op which makes
@@ -111,7 +111,7 @@
  * This is a variable-specific variant of more global barrier().
  */
 #ifndef barrier_var
-#define barrier_var(var) asm volatile("" : "+r"(var))
+#    define barrier_var(var) asm volatile("" : "+r"(var))
 #endif
 
 /*
@@ -127,40 +127,40 @@
  * being compiled out.
  */
 #ifndef __bpf_unreachable
-#define __bpf_unreachable() __builtin_trap()
+#    define __bpf_unreachable() __builtin_trap()
 #endif
 
 /*
  * Helper function to perform a tail call with a constant/immediate map slot.
  */
 #if (defined(__clang__) && __clang_major__ >= 8) || (!defined(__clang__) && __GNUC__ > 12)
-#if defined(__bpf__)
-static __always_inline void bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
-{
+#    if defined(__bpf__)
+static __always_inline void bpf_tail_call_static(void *ctx, const void *map, const __u32 slot) {
     if (!__builtin_constant_p(slot))
-	__bpf_unreachable();
+        __bpf_unreachable();
 
     /*
-   * Provide a hard guarantee that LLVM won't optimize setting r2 (map
-   * pointer) and r3 (constant map index) from _different paths_ ending
-   * up at the _same_ call insn as otherwise we won't be able to use the
-   * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
-   * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
-   * tracking for prog array pokes") for details on verifier tracking.
-   *
-   * Note on clobber list: we need to stay in-line with BPF calling
-   * convention, so even if we don't end up using r0, r4, r5, we need
-   * to mark them as clobber so that LLVM doesn't end up using them
-   * before / after the call.
-   */
-    asm volatile("r1 = %[ctx]\n\t"
-		 "r2 = %[map]\n\t"
-		 "r3 = %[slot]\n\t"
-		 "call 12" ::[ctx] "r"(ctx),
-		 [map] "r"(map), [slot] "i"(slot)
-		 : "r0", "r1", "r2", "r3", "r4", "r5");
+     * Provide a hard guarantee that LLVM won't optimize setting r2 (map
+     * pointer) and r3 (constant map index) from _different paths_ ending
+     * up at the _same_ call insn as otherwise we won't be able to use the
+     * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
+     * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
+     * tracking for prog array pokes") for details on verifier tracking.
+     *
+     * Note on clobber list: we need to stay in-line with BPF calling
+     * convention, so even if we don't end up using r0, r4, r5, we need
+     * to mark them as clobber so that LLVM doesn't end up using them
+     * before / after the call.
+     */
+    asm volatile(
+        "r1 = %[ctx]\n\t"
+        "r2 = %[map]\n\t"
+        "r3 = %[slot]\n\t"
+        "call 12" ::[ctx] "r"(ctx),
+        [map] "r"(map), [slot] "i"(slot)
+        : "r0", "r1", "r2", "r3", "r4", "r5");
 }
-#endif
+#    endif
 #endif
 
 enum libbpf_pin_type {
@@ -175,46 +175,46 @@ enum libbpf_tristate {
     TRI_MODULE = 2,
 };
 
-#define __kconfig	 __attribute__((section(".kconfig")))
-#define __ksym		 __attribute__((section(".ksyms")))
+#define __kconfig __attribute__((section(".kconfig")))
+#define __ksym __attribute__((section(".ksyms")))
 #define __kptr_untrusted __attribute__((btf_type_tag("kptr_untrusted")))
-#define __kptr		 __attribute__((btf_type_tag("kptr")))
-#define __percpu_kptr	 __attribute__((btf_type_tag("percpu_kptr")))
-#define __uptr		 __attribute__((btf_type_tag("uptr")))
+#define __kptr __attribute__((btf_type_tag("kptr")))
+#define __percpu_kptr __attribute__((btf_type_tag("percpu_kptr")))
+#define __uptr __attribute__((btf_type_tag("uptr")))
 
 #if defined(__clang__)
-#define bpf_ksym_exists(sym)                                                              \
-    ({                                                                                    \
-	_Static_assert(!__builtin_constant_p(!!sym), #sym " should be marked as __weak"); \
-	!!sym;                                                                            \
-    })
+#    define bpf_ksym_exists(sym)                                                              \
+        ({                                                                                    \
+            _Static_assert(!__builtin_constant_p(!!sym), #sym " should be marked as __weak"); \
+            !!sym;                                                                            \
+        })
 #elif __GNUC__ > 8
-#define bpf_ksym_exists(sym)                                                                         \
-    ({                                                                                               \
-	_Static_assert(__builtin_has_attribute(*sym, __weak__), #sym " should be marked as __weak"); \
-	!!sym;                                                                                       \
-    })
+#    define bpf_ksym_exists(sym)                                                                         \
+        ({                                                                                               \
+            _Static_assert(__builtin_has_attribute(*sym, __weak__), #sym " should be marked as __weak"); \
+            !!sym;                                                                                       \
+        })
 #else
-#define bpf_ksym_exists(sym) !!sym
+#    define bpf_ksym_exists(sym) !!sym
 #endif
 
-#define __arg_ctx      __attribute__((btf_decl_tag("arg:ctx")))
-#define __arg_nonnull  __attribute((btf_decl_tag("arg:nonnull")))
+#define __arg_ctx __attribute__((btf_decl_tag("arg:ctx")))
+#define __arg_nonnull __attribute((btf_decl_tag("arg:nonnull")))
 #define __arg_nullable __attribute((btf_decl_tag("arg:nullable")))
-#define __arg_trusted  __attribute((btf_decl_tag("arg:trusted")))
-#define __arg_arena    __attribute((btf_decl_tag("arg:arena")))
+#define __arg_trusted __attribute((btf_decl_tag("arg:trusted")))
+#define __arg_arena __attribute((btf_decl_tag("arg:arena")))
 
 #ifndef ___bpf_concat
-#define ___bpf_concat(a, b) a##b
+#    define ___bpf_concat(a, b) a##b
 #endif
 #ifndef ___bpf_apply
-#define ___bpf_apply(fn, n) ___bpf_concat(fn, n)
+#    define ___bpf_apply(fn, n) ___bpf_concat(fn, n)
 #endif
 #ifndef ___bpf_nth
-#define ___bpf_nth(_, _1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c, N, ...) N
+#    define ___bpf_nth(_, _1, _2, _3, _4, _5, _6, _7, _8, _9, _a, _b, _c, N, ...) N
 #endif
 #ifndef ___bpf_narg
-#define ___bpf_narg(...) ___bpf_nth(_, ##__VA_ARGS__, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+#    define ___bpf_narg(...) ___bpf_nth(_, ##__VA_ARGS__, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 #endif
 
 #define ___bpf_fill0(arr, p, x) \
@@ -262,13 +262,13 @@ enum libbpf_tristate {
  */
 #define BPF_SEQ_PRINTF(seq, fmt, args...)                                                                                  \
     ({                                                                                                                     \
-	static const char ___fmt[] = fmt;                                                                                  \
-	unsigned long long ___param[___bpf_narg(args)];                                                                    \
+        static const char ___fmt[] = fmt;                                                                                  \
+        unsigned long long ___param[___bpf_narg(args)];                                                                    \
                                                                                                                            \
-	_Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
-	_Pragma("GCC diagnostic pop")                                                                                      \
+        _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
+        _Pragma("GCC diagnostic pop")                                                                                      \
                                                                                                                            \
-		bpf_seq_printf(seq, ___fmt, sizeof(___fmt), ___param, sizeof(___param));                                   \
+            bpf_seq_printf(seq, ___fmt, sizeof(___fmt), ___param, sizeof(___param));                                       \
     })
 
 /*
@@ -277,25 +277,25 @@ enum libbpf_tristate {
  */
 #define BPF_SNPRINTF(out, out_size, fmt, args...)                                                                          \
     ({                                                                                                                     \
-	static const char ___fmt[] = fmt;                                                                                  \
-	unsigned long long ___param[___bpf_narg(args)];                                                                    \
+        static const char ___fmt[] = fmt;                                                                                  \
+        unsigned long long ___param[___bpf_narg(args)];                                                                    \
                                                                                                                            \
-	_Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
-	_Pragma("GCC diagnostic pop")                                                                                      \
+        _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
+        _Pragma("GCC diagnostic pop")                                                                                      \
                                                                                                                            \
-		bpf_snprintf(out, out_size, ___fmt, ___param, sizeof(___param));                                           \
+            bpf_snprintf(out, out_size, ___fmt, ___param, sizeof(___param));                                               \
     })
 
 #ifdef BPF_NO_GLOBAL_DATA
-#define BPF_PRINTK_FMT_MOD
+#    define BPF_PRINTK_FMT_MOD
 #else
-#define BPF_PRINTK_FMT_MOD static const
+#    define BPF_PRINTK_FMT_MOD static const
 #endif
 
 #define __bpf_printk(fmt, ...)                                     \
     ({                                                             \
-	BPF_PRINTK_FMT_MOD char ____fmt[] = fmt;                   \
-	bpf_trace_printk(____fmt, sizeof(____fmt), ##__VA_ARGS__); \
+        BPF_PRINTK_FMT_MOD char ____fmt[] = fmt;                   \
+        bpf_trace_printk(____fmt, sizeof(____fmt), ##__VA_ARGS__); \
     })
 
 /*
@@ -304,13 +304,13 @@ enum libbpf_tristate {
  */
 #define __bpf_vprintk(fmt, args...)                                                                                        \
     ({                                                                                                                     \
-	static const char ___fmt[] = fmt;                                                                                  \
-	unsigned long long ___param[___bpf_narg(args)];                                                                    \
+        static const char ___fmt[] = fmt;                                                                                  \
+        unsigned long long ___param[___bpf_narg(args)];                                                                    \
                                                                                                                            \
-	_Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
-	_Pragma("GCC diagnostic pop")                                                                                      \
+        _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wint-conversion\"") ___bpf_fill(___param, args); \
+        _Pragma("GCC diagnostic pop")                                                                                      \
                                                                                                                            \
-		bpf_trace_vprintk(___fmt, sizeof(___fmt), ___param, sizeof(___param));                                     \
+            bpf_trace_vprintk(___fmt, sizeof(___fmt), ___param, sizeof(___param));                                         \
     })
 
 /* Use __bpf_printk when bpf_printk call has 3 or fewer fmt args
@@ -355,15 +355,16 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __weak __ksym;
  * extension: __attribute__((cleanup(<func>))), supported by both GCC and
  * Clang.
  */
-#define bpf_for_each(type, cur, args...)                                                                                                                                                                                                                                                                                 \
-    for (/* initialize and define destructor */                                                                                                                                                                                                                                                                          \
-	 struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforce, just in case */, cleanup(bpf_iter_##type##_destroy))), /* ___p pointer is just to call                                                                                                                                                    \
-                                                bpf_iter_##type##_new() *once*                                                                                                                                                  \
-                                                to init ___it */ \
-	 *___p __attribute__((unused)) = (bpf_iter_##type##_new(&___it, ##args), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_##type##_destroy() when used from cleanup() attribute */                                                                                        \
-					  (void)bpf_iter_##type##_destroy, (void *)0); /* iteration and                                                                                                                                                            \
-                                                       termination check */                                                     \
-	 (((cur) = bpf_iter_##type##_next(&___it)));)
+#    define bpf_for_each(type, cur, args...)                                                                                                                                                              \
+        for (                                                                                                                           /* initialize and define destructor */                            \
+             struct bpf_iter_##type ___it __attribute__((aligned(8), /* enforce, just in case */, cleanup(bpf_iter_##type##_destroy))), /* ___p pointer is just to call                                   \
+                                                        bpf_iter_##type##_new() *once*                                                                                                                    \
+                                                        to init ___it */                                                                                                                                  \
+             *___p __attribute__((unused)) =                                                                                                                                                              \
+                 (bpf_iter_##type##_new(&___it, ##args), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_##type##_destroy() when used from cleanup() attribute */ \
+                  (void)bpf_iter_##type##_destroy, (void *)0);                                                                   /* iteration and                                                         \
+                                                                                                                     termination check */                                                                 \
+             (((cur) = bpf_iter_##type##_next(&___it)));)
 #endif /* bpf_for_each */
 
 #ifndef bpf_for
@@ -380,20 +381,22 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __weak __ksym;
  * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring
  * for() loop bound variables and cleanup attribute, supported by GCC and Clang.
  */
-#define bpf_for(i, start, end)                                                                                                                                                                                                                                   \
-    for (/* initialize and define destructor */                                                                                                                                                                                                                  \
-	 struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */                                                                                                                                                                        \
-						  cleanup(bpf_iter_num_destroy))), /* ___p pointer is necessary to                                                                                                                                             \
-                                               call bpf_iter_num_new() *once*                                                                                                                                           \
-                                               to init ___it */ \
-	 *___p __attribute__((unused)) = (bpf_iter_num_new(&___it, (start), (end)), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_num_destroy() when used from cleanup() attribute */                                  \
-					  (void)bpf_iter_num_destroy, (void *)0);                                                                                                                                                                                \
-	 ({                                                                                                                                                                                                                                                      \
-	     /* iteration step */                                                                                                                                                                                                                                \
-	     int *___t = bpf_iter_num_next(&___it);                                                                                                                                                                                                              \
-	     /* termination and bounds check */                                                                                                                                                                                                                  \
-	     (___t && ((i) = *___t, (i) >= (start) && (i) < (end)));                                                                                                                                                                                             \
-	 });)
+#    define bpf_for(i, start, end)                                                                                                                                                                      \
+        for (/* initialize and define destructor */                                                                                                                                                     \
+             struct bpf_iter_num ___it __attribute__((                                                                                                                                                  \
+                 aligned(8),                      /* enforce, just in case */                                                                                                                           \
+                 cleanup(bpf_iter_num_destroy))), /* ___p pointer is necessary to                                                                                                                       \
+                                      call bpf_iter_num_new() *once*                                                                                                                                    \
+                                      to init ___it */                                                                                                                                                  \
+             *___p __attribute__((unused)) =                                                                                                                                                            \
+                 (bpf_iter_num_new(&___it, (start), (end)), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_num_destroy() when used from cleanup() attribute */ \
+                  (void)bpf_iter_num_destroy, (void *)0);                                                                                                                                               \
+             ({                                                                                                                                                                                         \
+                 /* iteration step */                                                                                                                                                                   \
+                 int *___t = bpf_iter_num_next(&___it);                                                                                                                                                 \
+                 /* termination and bounds check */                                                                                                                                                     \
+                 (___t && ((i) = *___t, (i) >= (start) && (i) < (end)));                                                                                                                                \
+             });)
 #endif /* bpf_for */
 
 #ifndef bpf_repeat
@@ -402,14 +405,16 @@ extern void bpf_iter_num_destroy(struct bpf_iter_num *it) __weak __ksym;
  * Note: similarly to bpf_for_each(), it relies on C99 feature of declaring
  * for() loop bound variables and cleanup attribute, supported by GCC and Clang.
  */
-#define bpf_repeat(N)                                                                                                                                                                                                   \
-    for (/* initialize and define destructor */                                                                                                                                                                         \
-	 struct bpf_iter_num ___it __attribute__((aligned(8), /* enforce, just in case */                                                                                                                               \
-						  cleanup(bpf_iter_num_destroy))), /* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */                                                      \
-	 *___p __attribute__((unused)) = (bpf_iter_num_new(&___it, 0, (N)), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_num_destroy() when used from cleanup() attribute */ \
-					  (void)bpf_iter_num_destroy, (void *)0);                                                                                                                                       \
-	 bpf_iter_num_next(&___it); /* nothing here  */                                                                                                                                                                 \
-    )
+#    define bpf_repeat(N)                                                                                                                                                                       \
+        for (/* initialize and define destructor */                                                                                                                                             \
+             struct bpf_iter_num ___it __attribute__((                                                                                                                                          \
+                 aligned(8),                      /* enforce, just in case */                                                                                                                   \
+                 cleanup(bpf_iter_num_destroy))), /* ___p pointer is necessary to call bpf_iter_num_new() *once* to init ___it */                                                               \
+             *___p __attribute__((unused)) =                                                                                                                                                    \
+                 (bpf_iter_num_new(&___it, 0, (N)), /* this is a workaround for Clang bug: it currently doesn't emit BTF */ /* for bpf_iter_num_destroy() when used from cleanup() attribute */ \
+                  (void)bpf_iter_num_destroy, (void *)0);                                                                                                                                       \
+             bpf_iter_num_next(&___it); /* nothing here  */                                                                                                                                     \
+        )
 #endif /* bpf_repeat */
 
 #endif

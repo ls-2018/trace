@@ -23,33 +23,33 @@ enum bpf_field_info_kind {
 
 /* second argument to __builtin_btf_type_id() built-in */
 enum bpf_type_id_kind {
-    BPF_TYPE_ID_LOCAL = 0, /* BTF type ID in local program */
+    BPF_TYPE_ID_LOCAL = 0,  /* BTF type ID in local program */
     BPF_TYPE_ID_TARGET = 1, /* BTF type ID in target kernel */
 };
 
 /* second argument to __builtin_preserve_type_info() built-in */
 enum bpf_type_info_kind {
-    BPF_TYPE_EXISTS = 0, /* type existence in target kernel */
-    BPF_TYPE_SIZE = 1, /* type size in target kernel */
+    BPF_TYPE_EXISTS = 0,  /* type existence in target kernel */
+    BPF_TYPE_SIZE = 1,    /* type size in target kernel */
     BPF_TYPE_MATCHES = 2, /* type match in target kernel */
 };
 
 /* second argument to __builtin_preserve_enum_value() built-in */
 enum bpf_enum_value_kind {
     BPF_ENUMVAL_EXISTS = 0, /* enum value existence in kernel */
-    BPF_ENUMVAL_VALUE = 1, /* enum value value relocation */
+    BPF_ENUMVAL_VALUE = 1,  /* enum value value relocation */
 };
 
 #define __CORE_RELO(src, field, info) __builtin_preserve_field_info((src)->field, BPF_FIELD_##info)
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-#define __CORE_BITFIELD_PROBE_READ(dst, src, fld) bpf_probe_read_kernel((void *)dst, __CORE_RELO(src, fld, BYTE_SIZE), (const void *)src + __CORE_RELO(src, fld, BYTE_OFFSET))
+#    define __CORE_BITFIELD_PROBE_READ(dst, src, fld) bpf_probe_read_kernel((void *)dst, __CORE_RELO(src, fld, BYTE_SIZE), (const void *)src + __CORE_RELO(src, fld, BYTE_OFFSET))
 #else
 /* semantics of LSHIFT_64 assumes loading values into low-ordered bytes, so
  * for big-endian we need to adjust destination pointer accordingly, based on
  * field byte size
  */
-#define __CORE_BITFIELD_PROBE_READ(dst, src, fld) bpf_probe_read_kernel((void *)dst + (8 - __CORE_RELO(src, fld, BYTE_SIZE)), __CORE_RELO(src, fld, BYTE_SIZE), (const void *)src + __CORE_RELO(src, fld, BYTE_OFFSET))
+#    define __CORE_BITFIELD_PROBE_READ(dst, src, fld) bpf_probe_read_kernel((void *)dst + (8 - __CORE_RELO(src, fld, BYTE_SIZE)), __CORE_RELO(src, fld, BYTE_SIZE), (const void *)src + __CORE_RELO(src, fld, BYTE_OFFSET))
 #endif
 
 /*
@@ -62,15 +62,15 @@ enum bpf_enum_value_kind {
  */
 #define BPF_CORE_READ_BITFIELD_PROBED(s, field)                          \
     ({                                                                   \
-	unsigned long long val = 0;                                      \
+        unsigned long long val = 0;                                      \
                                                                          \
-	__CORE_BITFIELD_PROBE_READ(&val, s, field);                      \
-	val <<= __CORE_RELO(s, field, LSHIFT_U64);                       \
-	if (__CORE_RELO(s, field, SIGNED))                               \
-	    val = ((long long)val) >> __CORE_RELO(s, field, RSHIFT_U64); \
-	else                                                             \
-	    val = val >> __CORE_RELO(s, field, RSHIFT_U64);              \
-	val;                                                             \
+        __CORE_BITFIELD_PROBE_READ(&val, s, field);                      \
+        val <<= __CORE_RELO(s, field, LSHIFT_U64);                       \
+        if (__CORE_RELO(s, field, SIGNED))                               \
+            val = ((long long)val) >> __CORE_RELO(s, field, RSHIFT_U64); \
+        else                                                             \
+            val = val >> __CORE_RELO(s, field, RSHIFT_U64);              \
+        val;                                                             \
     })
 
 /*
@@ -79,42 +79,42 @@ enum bpf_enum_value_kind {
  * BPF program types that support such functionality (e.g., typed raw
  * tracepoints).
  */
-#define BPF_CORE_READ_BITFIELD(s, field)                                             \
-    ({                                                                               \
-	const void *p = (const void *)s + __CORE_RELO(s, field, BYTE_OFFSET);        \
-	unsigned long long val;                                                      \
-                                                                                     \
-	/* This is a so-called barrier_var() operation that makes specified        \
-     * variable "a black box" for optimizing compiler.                         \
-     * It forces compiler to perform BYTE_OFFSET relocation on p and use       \
-     * its calculated value in the switch below, instead of applying           \
-     * the same relocation 4 times for each individual memory load.            \
-     */ \
-	asm volatile("" : "=r"(p) : "0"(p));                                         \
-                                                                                     \
-	switch (__CORE_RELO(s, field, BYTE_SIZE)) {                                  \
-	case 1:                                                                      \
-	    val = *(const unsigned char *)p;                                         \
-	    break;                                                                   \
-	case 2:                                                                      \
-	    val = *(const unsigned short *)p;                                        \
-	    break;                                                                   \
-	case 4:                                                                      \
-	    val = *(const unsigned int *)p;                                          \
-	    break;                                                                   \
-	case 8:                                                                      \
-	    val = *(const unsigned long long *)p;                                    \
-	    break;                                                                   \
-	default:                                                                     \
-	    val = 0;                                                                 \
-	    break;                                                                   \
-	}                                                                            \
-	val <<= __CORE_RELO(s, field, LSHIFT_U64);                                   \
-	if (__CORE_RELO(s, field, SIGNED))                                           \
-	    val = ((long long)val) >> __CORE_RELO(s, field, RSHIFT_U64);             \
-	else                                                                         \
-	    val = val >> __CORE_RELO(s, field, RSHIFT_U64);                          \
-	val;                                                                         \
+#define BPF_CORE_READ_BITFIELD(s, field)                                      \
+    ({                                                                        \
+        const void *p = (const void *)s + __CORE_RELO(s, field, BYTE_OFFSET); \
+        unsigned long long val;                                               \
+                                                                              \
+        /* This is a so-called barrier_var() operation that makes specified   \
+         * variable "a black box" for optimizing compiler.                    \
+         * It forces compiler to perform BYTE_OFFSET relocation on p and use  \
+         * its calculated value in the switch below, instead of applying      \
+         * the same relocation 4 times for each individual memory load.       \
+         */                                                                   \
+        asm volatile("" : "=r"(p) : "0"(p));                                  \
+                                                                              \
+        switch (__CORE_RELO(s, field, BYTE_SIZE)) {                           \
+            case 1:                                                           \
+                val = *(const unsigned char *)p;                              \
+                break;                                                        \
+            case 2:                                                           \
+                val = *(const unsigned short *)p;                             \
+                break;                                                        \
+            case 4:                                                           \
+                val = *(const unsigned int *)p;                               \
+                break;                                                        \
+            case 8:                                                           \
+                val = *(const unsigned long long *)p;                         \
+                break;                                                        \
+            default:                                                          \
+                val = 0;                                                      \
+                break;                                                        \
+        }                                                                     \
+        val <<= __CORE_RELO(s, field, LSHIFT_U64);                            \
+        if (__CORE_RELO(s, field, SIGNED))                                    \
+            val = ((long long)val) >> __CORE_RELO(s, field, RSHIFT_U64);      \
+        else                                                                  \
+            val = val >> __CORE_RELO(s, field, RSHIFT_U64);                   \
+        val;                                                                  \
     })
 
 /*
@@ -123,47 +123,47 @@ enum bpf_enum_value_kind {
  */
 #define BPF_CORE_WRITE_BITFIELD(s, field, new_val)                 \
     ({                                                             \
-	void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);  \
-	unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE); \
-	unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);   \
-	unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);   \
-	unsigned long long mask, val, nval = new_val;              \
-	unsigned int rpad = rshift - lshift;                       \
+        void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);  \
+        unsigned int byte_size = __CORE_RELO(s, field, BYTE_SIZE); \
+        unsigned int lshift = __CORE_RELO(s, field, LSHIFT_U64);   \
+        unsigned int rshift = __CORE_RELO(s, field, RSHIFT_U64);   \
+        unsigned long long mask, val, nval = new_val;              \
+        unsigned int rpad = rshift - lshift;                       \
                                                                    \
-	asm volatile("" : "+r"(p));                                \
+        asm volatile("" : "+r"(p));                                \
                                                                    \
-	switch (byte_size) {                                       \
-	case 1:                                                    \
-	    val = *(unsigned char *)p;                             \
-	    break;                                                 \
-	case 2:                                                    \
-	    val = *(unsigned short *)p;                            \
-	    break;                                                 \
-	case 4:                                                    \
-	    val = *(unsigned int *)p;                              \
-	    break;                                                 \
-	case 8:                                                    \
-	    val = *(unsigned long long *)p;                        \
-	    break;                                                 \
-	}                                                          \
+        switch (byte_size) {                                       \
+            case 1:                                                \
+                val = *(unsigned char *)p;                         \
+                break;                                             \
+            case 2:                                                \
+                val = *(unsigned short *)p;                        \
+                break;                                             \
+            case 4:                                                \
+                val = *(unsigned int *)p;                          \
+                break;                                             \
+            case 8:                                                \
+                val = *(unsigned long long *)p;                    \
+                break;                                             \
+        }                                                          \
                                                                    \
-	mask = (~0ULL << rshift) >> lshift;                        \
-	val = (val & ~mask) | ((nval << rpad) & mask);             \
+        mask = (~0ULL << rshift) >> lshift;                        \
+        val = (val & ~mask) | ((nval << rpad) & mask);             \
                                                                    \
-	switch (byte_size) {                                       \
-	case 1:                                                    \
-	    *(unsigned char *)p = val;                             \
-	    break;                                                 \
-	case 2:                                                    \
-	    *(unsigned short *)p = val;                            \
-	    break;                                                 \
-	case 4:                                                    \
-	    *(unsigned int *)p = val;                              \
-	    break;                                                 \
-	case 8:                                                    \
-	    *(unsigned long long *)p = val;                        \
-	    break;                                                 \
-	}                                                          \
+        switch (byte_size) {                                       \
+            case 1:                                                \
+                *(unsigned char *)p = val;                         \
+                break;                                             \
+            case 2:                                                \
+                *(unsigned short *)p = val;                        \
+                break;                                             \
+            case 4:                                                \
+                *(unsigned int *)p = val;                          \
+                break;                                             \
+            case 8:                                                \
+                *(unsigned long long *)p = val;                    \
+                break;                                             \
+        }                                                          \
     })
 
 /* Differentiator between compilers builtin implementations. This is a
@@ -173,22 +173,22 @@ enum bpf_enum_value_kind {
  * information in the builtin expansion.
  */
 #ifdef __clang__
-#define ___bpf_typeof(type) ((typeof(type) *)0)
+#    define ___bpf_typeof(type) ((typeof(type) *)0)
 #else
-#define ___bpf_typeof1(type, NR)                           \
-    ({                                                     \
-	extern typeof(type) *___concat(bpf_type_tmp_, NR); \
-	___concat(bpf_type_tmp_, NR);                      \
-    })
-#define ___bpf_typeof(type) ___bpf_typeof1(type, __COUNTER__)
+#    define ___bpf_typeof1(type, NR)                           \
+        ({                                                     \
+            extern typeof(type) *___concat(bpf_type_tmp_, NR); \
+            ___concat(bpf_type_tmp_, NR);                      \
+        })
+#    define ___bpf_typeof(type) ___bpf_typeof1(type, __COUNTER__)
 #endif
 
 #ifdef __clang__
-#define ___bpf_field_ref1(field)       (field)
-#define ___bpf_field_ref2(type, field) (___bpf_typeof(type)->field)
+#    define ___bpf_field_ref1(field) (field)
+#    define ___bpf_field_ref2(type, field) (___bpf_typeof(type)->field)
 #else
-#define ___bpf_field_ref1(field)       (&(field))
-#define ___bpf_field_ref2(type, field) (&(___bpf_typeof(type)->field))
+#    define ___bpf_field_ref1(field) (&(field))
+#    define ___bpf_field_ref2(type, field) (&(___bpf_typeof(type)->field))
 #endif
 #define ___bpf_field_ref(args...) ___bpf_apply(___bpf_field_ref, ___bpf_narg(args))(args)
 
@@ -281,9 +281,9 @@ enum bpf_enum_value_kind {
  *    0, if no matching enum and/or enum value within that enum is found.
  */
 #ifdef __clang__
-#define bpf_core_enum_value_exists(enum_type, enum_value) __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_EXISTS)
+#    define bpf_core_enum_value_exists(enum_type, enum_value) __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_EXISTS)
 #else
-#define bpf_core_enum_value_exists(enum_type, enum_value) __builtin_preserve_enum_value(___bpf_typeof(enum_type), enum_value, BPF_ENUMVAL_EXISTS)
+#    define bpf_core_enum_value_exists(enum_type, enum_value) __builtin_preserve_enum_value(___bpf_typeof(enum_type), enum_value, BPF_ENUMVAL_EXISTS)
 #endif
 
 /*
@@ -295,9 +295,9 @@ enum bpf_enum_value_kind {
  *    0, if no matching enum and/or enum value within that enum is found.
  */
 #ifdef __clang__
-#define bpf_core_enum_value(enum_type, enum_value) __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
+#    define bpf_core_enum_value(enum_type, enum_value) __builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENUMVAL_VALUE)
 #else
-#define bpf_core_enum_value(enum_type, enum_value) __builtin_preserve_enum_value(___bpf_typeof(enum_type), enum_value, BPF_ENUMVAL_VALUE)
+#    define bpf_core_enum_value(enum_type, enum_value) __builtin_preserve_enum_value(___bpf_typeof(enum_type), enum_value, BPF_ENUMVAL_VALUE)
 #endif
 
 /*
@@ -338,10 +338,10 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  * type. This allows to access members of kernel types directly without the
  * need to use BPF_CORE_READ() macros.
  */
-#define bpf_core_cast(ptr, type)				      ((typeof(type) *)bpf_rdonly_cast((ptr), bpf_core_type_id_kernel(type)))
+#define bpf_core_cast(ptr, type) ((typeof(type) *)bpf_rdonly_cast((ptr), bpf_core_type_id_kernel(type)))
 
-#define ___concat(a, b)						      a##b
-#define ___apply(fn, n)						      ___concat(fn, n)
+#define ___concat(a, b) a##b
+#define ___apply(fn, n) ___concat(fn, n)
 #define ___nth(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, __11, N, ...) N
 
 /*
@@ -354,65 +354,65 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  * recursively-defined macros to specify termination (0) case, and generic
  * (N) case (e.g., ___read_ptrs, ___core_read)
  */
-#define ___empty(...)				       ___nth(_, ##__VA_ARGS__, N, N, N, N, N, N, N, N, N, N, 0)
+#define ___empty(...) ___nth(_, ##__VA_ARGS__, N, N, N, N, N, N, N, N, N, N, 0)
 
-#define ___last1(x)				       x
-#define ___last2(a, x)				       x
-#define ___last3(a, b, x)			       x
-#define ___last4(a, b, c, x)			       x
-#define ___last5(a, b, c, d, x)			       x
-#define ___last6(a, b, c, d, e, x)		       x
-#define ___last7(a, b, c, d, e, f, x)		       x
-#define ___last8(a, b, c, d, e, f, g, x)	       x
-#define ___last9(a, b, c, d, e, f, g, h, x)	       x
-#define ___last10(a, b, c, d, e, f, g, h, i, x)	       x
-#define ___last(...)				       ___apply(___last, ___narg(__VA_ARGS__))(__VA_ARGS__)
+#define ___last1(x) x
+#define ___last2(a, x) x
+#define ___last3(a, b, x) x
+#define ___last4(a, b, c, x) x
+#define ___last5(a, b, c, d, x) x
+#define ___last6(a, b, c, d, e, x) x
+#define ___last7(a, b, c, d, e, f, x) x
+#define ___last8(a, b, c, d, e, f, g, x) x
+#define ___last9(a, b, c, d, e, f, g, h, x) x
+#define ___last10(a, b, c, d, e, f, g, h, i, x) x
+#define ___last(...) ___apply(___last, ___narg(__VA_ARGS__))(__VA_ARGS__)
 
-#define ___nolast2(a, _)			       a
-#define ___nolast3(a, b, _)			       a, b
-#define ___nolast4(a, b, c, _)			       a, b, c
-#define ___nolast5(a, b, c, d, _)		       a, b, c, d
-#define ___nolast6(a, b, c, d, e, _)		       a, b, c, d, e
-#define ___nolast7(a, b, c, d, e, f, _)		       a, b, c, d, e, f
-#define ___nolast8(a, b, c, d, e, f, g, _)	       a, b, c, d, e, f, g
-#define ___nolast9(a, b, c, d, e, f, g, h, _)	       a, b, c, d, e, f, g, h
-#define ___nolast10(a, b, c, d, e, f, g, h, i, _)      a, b, c, d, e, f, g, h, i
-#define ___nolast(...)				       ___apply(___nolast, ___narg(__VA_ARGS__))(__VA_ARGS__)
+#define ___nolast2(a, _) a
+#define ___nolast3(a, b, _) a, b
+#define ___nolast4(a, b, c, _) a, b, c
+#define ___nolast5(a, b, c, d, _) a, b, c, d
+#define ___nolast6(a, b, c, d, e, _) a, b, c, d, e
+#define ___nolast7(a, b, c, d, e, f, _) a, b, c, d, e, f
+#define ___nolast8(a, b, c, d, e, f, g, _) a, b, c, d, e, f, g
+#define ___nolast9(a, b, c, d, e, f, g, h, _) a, b, c, d, e, f, g, h
+#define ___nolast10(a, b, c, d, e, f, g, h, i, _) a, b, c, d, e, f, g, h, i
+#define ___nolast(...) ___apply(___nolast, ___narg(__VA_ARGS__))(__VA_ARGS__)
 
-#define ___arrow1(a)				       a
-#define ___arrow2(a, b)				       a->b
-#define ___arrow3(a, b, c)			       a->b->c
-#define ___arrow4(a, b, c, d)			       a->b->c->d
-#define ___arrow5(a, b, c, d, e)		       a->b->c->d->e
-#define ___arrow6(a, b, c, d, e, f)		       a->b->c->d->e->f
-#define ___arrow7(a, b, c, d, e, f, g)		       a->b->c->d->e->f->g
-#define ___arrow8(a, b, c, d, e, f, g, h)	       a->b->c->d->e->f->g->h
-#define ___arrow9(a, b, c, d, e, f, g, h, i)	       a->b->c->d->e->f->g->h->i
-#define ___arrow10(a, b, c, d, e, f, g, h, i, j)       a->b->c->d->e->f->g->h->i->j
-#define ___arrow(...)				       ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
+#define ___arrow1(a) a
+#define ___arrow2(a, b) a->b
+#define ___arrow3(a, b, c) a->b->c
+#define ___arrow4(a, b, c, d) a->b->c->d
+#define ___arrow5(a, b, c, d, e) a->b->c->d->e
+#define ___arrow6(a, b, c, d, e, f) a->b->c->d->e->f
+#define ___arrow7(a, b, c, d, e, f, g) a->b->c->d->e->f->g
+#define ___arrow8(a, b, c, d, e, f, g, h) a->b->c->d->e->f->g->h
+#define ___arrow9(a, b, c, d, e, f, g, h, i) a->b->c->d->e->f->g->h->i
+#define ___arrow10(a, b, c, d, e, f, g, h, i, j) a->b->c->d->e->f->g->h->i->j
+#define ___arrow(...) ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
 
-#define ___type(...)				       typeof(___arrow(__VA_ARGS__))
+#define ___type(...) typeof(___arrow(__VA_ARGS__))
 
 #define ___read(read_fn, dst, src_type, src, accessor) read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
 
 /* "recursively" read a sequence of inner pointers using local __t var */
 #define ___rd_first(fn, src, a) ___read(fn, &__t, ___type(src), src, a);
-#define ___rd_last(fn, ...)	___read(fn, &__t, ___type(___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
+#define ___rd_last(fn, ...) ___read(fn, &__t, ___type(___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
 #define ___rd_p1(fn, ...) \
     const void *__t;      \
     ___rd_first(fn, __VA_ARGS__)
-#define ___rd_p2(fn, ...)			   ___rd_p1(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p3(fn, ...)			   ___rd_p2(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p4(fn, ...)			   ___rd_p3(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p5(fn, ...)			   ___rd_p4(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p6(fn, ...)			   ___rd_p5(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p7(fn, ...)			   ___rd_p6(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p8(fn, ...)			   ___rd_p7(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___rd_p9(fn, ...)			   ___rd_p8(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
-#define ___read_ptrs(fn, src, ...)		   ___apply(___rd_p, ___narg(__VA_ARGS__))(fn, src, __VA_ARGS__)
+#define ___rd_p2(fn, ...) ___rd_p1(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p3(fn, ...) ___rd_p2(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p4(fn, ...) ___rd_p3(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p5(fn, ...) ___rd_p4(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p6(fn, ...) ___rd_p5(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p7(fn, ...) ___rd_p6(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p8(fn, ...) ___rd_p7(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___rd_p9(fn, ...) ___rd_p8(fn, ___nolast(__VA_ARGS__)) ___rd_last(fn, __VA_ARGS__)
+#define ___read_ptrs(fn, src, ...) ___apply(___rd_p, ___narg(__VA_ARGS__))(fn, src, __VA_ARGS__)
 
-#define ___core_read0(fn, fn_ptr, dst, src, a)	   ___read(fn, dst, ___type(src), src, a);
-#define ___core_readN(fn, fn_ptr, dst, src, ...)   ___read_ptrs(fn_ptr, src, ___nolast(__VA_ARGS__)) ___read(fn, dst, ___type(src, ___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
+#define ___core_read0(fn, fn_ptr, dst, src, a) ___read(fn, dst, ___type(src), src, a);
+#define ___core_readN(fn, fn_ptr, dst, src, ...) ___read_ptrs(fn_ptr, src, ___nolast(__VA_ARGS__)) ___read(fn, dst, ___type(src, ___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
 #define ___core_read(fn, fn_ptr, dst, src, a, ...) ___apply(___core_read, ___empty(__VA_ARGS__))(fn, fn_ptr, dst, src, a, ##__VA_ARGS__)
 
 /*
@@ -420,41 +420,41 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  * BPF_CORE_READ(), in which final field is read into user-provided storage.
  * See BPF_CORE_READ() below for more details on general usage.
  */
-#define BPF_CORE_READ_INTO(dst, src, a, ...) ({ ___core_read(bpf_core_read, bpf_core_read, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_CORE_READ_INTO(dst, src, a, ...) ({___core_read(bpf_core_read, bpf_core_read, dst, (src), a, ##__VA_ARGS__)})
 
 /*
  * Variant of BPF_CORE_READ_INTO() for reading from user-space memory.
  *
  * NOTE: see comments for BPF_CORE_READ_USER() about the proper types use.
  */
-#define BPF_CORE_READ_USER_INTO(dst, src, a, ...) ({ ___core_read(bpf_core_read_user, bpf_core_read_user, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_CORE_READ_USER_INTO(dst, src, a, ...) ({___core_read(bpf_core_read_user, bpf_core_read_user, dst, (src), a, ##__VA_ARGS__)})
 
 /* Non-CO-RE variant of BPF_CORE_READ_INTO() */
-#define BPF_PROBE_READ_INTO(dst, src, a, ...) ({ ___core_read(bpf_probe_read_kernel, bpf_probe_read_kernel, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_PROBE_READ_INTO(dst, src, a, ...) ({___core_read(bpf_probe_read_kernel, bpf_probe_read_kernel, dst, (src), a, ##__VA_ARGS__)})
 
 /* Non-CO-RE variant of BPF_CORE_READ_USER_INTO().
  *
  * As no CO-RE relocations are emitted, source types can be arbitrary and are
  * not restricted to kernel types only.
  */
-#define BPF_PROBE_READ_USER_INTO(dst, src, a, ...) ({ ___core_read(bpf_probe_read_user, bpf_probe_read_user, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_PROBE_READ_USER_INTO(dst, src, a, ...) ({___core_read(bpf_probe_read_user, bpf_probe_read_user, dst, (src), a, ##__VA_ARGS__)})
 
 /*
  * BPF_CORE_READ_STR_INTO() does same "pointer chasing" as
  * BPF_CORE_READ() for intermediate pointers, but then executes (and returns
  * corresponding error code) bpf_core_read_str() for final string read.
  */
-#define BPF_CORE_READ_STR_INTO(dst, src, a, ...) ({ ___core_read(bpf_core_read_str, bpf_core_read, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_CORE_READ_STR_INTO(dst, src, a, ...) ({___core_read(bpf_core_read_str, bpf_core_read, dst, (src), a, ##__VA_ARGS__)})
 
 /*
  * Variant of BPF_CORE_READ_STR_INTO() for reading from user-space memory.
  *
  * NOTE: see comments for BPF_CORE_READ_USER() about the proper types use.
  */
-#define BPF_CORE_READ_USER_STR_INTO(dst, src, a, ...) ({ ___core_read(bpf_core_read_user_str, bpf_core_read_user, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_CORE_READ_USER_STR_INTO(dst, src, a, ...) ({___core_read(bpf_core_read_user_str, bpf_core_read_user, dst, (src), a, ##__VA_ARGS__)})
 
 /* Non-CO-RE variant of BPF_CORE_READ_STR_INTO() */
-#define BPF_PROBE_READ_STR_INTO(dst, src, a, ...) ({ ___core_read(bpf_probe_read_kernel_str, bpf_probe_read_kernel, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_PROBE_READ_STR_INTO(dst, src, a, ...) ({___core_read(bpf_probe_read_kernel_str, bpf_probe_read_kernel, dst, (src), a, ##__VA_ARGS__)})
 
 /*
  * Non-CO-RE variant of BPF_CORE_READ_USER_STR_INTO().
@@ -462,7 +462,7 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  * As no CO-RE relocations are emitted, source types can be arbitrary and are
  * not restricted to kernel types only.
  */
-#define BPF_PROBE_READ_USER_STR_INTO(dst, src, a, ...) ({ ___core_read(bpf_probe_read_user_str, bpf_probe_read_user, dst, (src), a, ##__VA_ARGS__) })
+#define BPF_PROBE_READ_USER_STR_INTO(dst, src, a, ...) ({___core_read(bpf_probe_read_user_str, bpf_probe_read_user, dst, (src), a, ##__VA_ARGS__)})
 
 /*
  * BPF_CORE_READ() is used to simplify BPF CO-RE relocatable read, especially
@@ -490,9 +490,9 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  */
 #define BPF_CORE_READ(src, a, ...)                         \
     ({                                                     \
-	___type((src), a, ##__VA_ARGS__) __r;              \
-	BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__); \
-	__r;                                               \
+        ___type((src), a, ##__VA_ARGS__) __r;              \
+        BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__); \
+        __r;                                               \
     })
 
 /*
@@ -507,17 +507,17 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  */
 #define BPF_CORE_READ_USER(src, a, ...)                         \
     ({                                                          \
-	___type((src), a, ##__VA_ARGS__) __r;                   \
-	BPF_CORE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__); \
-	__r;                                                    \
+        ___type((src), a, ##__VA_ARGS__) __r;                   \
+        BPF_CORE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__); \
+        __r;                                                    \
     })
 
 /* Non-CO-RE variant of BPF_CORE_READ() */
 #define BPF_PROBE_READ(src, a, ...)                         \
     ({                                                      \
-	___type((src), a, ##__VA_ARGS__) __r;               \
-	BPF_PROBE_READ_INTO(&__r, (src), a, ##__VA_ARGS__); \
-	__r;                                                \
+        ___type((src), a, ##__VA_ARGS__) __r;               \
+        BPF_PROBE_READ_INTO(&__r, (src), a, ##__VA_ARGS__); \
+        __r;                                                \
     })
 
 /*
@@ -528,9 +528,9 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
  */
 #define BPF_PROBE_READ_USER(src, a, ...)                         \
     ({                                                           \
-	___type((src), a, ##__VA_ARGS__) __r;                    \
-	BPF_PROBE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__); \
-	__r;                                                     \
+        ___type((src), a, ##__VA_ARGS__) __r;                    \
+        BPF_PROBE_READ_USER_INTO(&__r, (src), a, ##__VA_ARGS__); \
+        __r;                                                     \
     })
 
 #endif

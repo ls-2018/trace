@@ -33,8 +33,8 @@ enum {
     REG_MAX = 11, /* Fexit max, let's use this */
 
     /* Extended registers are used to store dynamically extracted
-   * arguments.
-   */
+     * arguments.
+     */
     EXT_REG_SKB, /* Extended register for struct sk_buff.*/
 
     __EXT_REG_END,
@@ -78,9 +78,9 @@ struct retis_context {
     /* Pointer to the original ctx. Needed for helper calls. */
     void *orig_ctx;
     /* Contains the bits identifying what filters yield a hit outcome.
-   * A bit is set means that the filter matched the data based on its
-   * criteria.
-   */
+     * A bit is set means that the filter matched the data based on its
+     * criteria.
+     */
     u32 filters_ret;
 };
 
@@ -99,16 +99,15 @@ struct retis_context {
 /* Same as RETIS_GET() but local to hooks only. */
 #define RETIS_HOOK_GET(ctx, offsets, name, type) (retis_offset_valid(offsets.name) ? retis_get_param(ctx, offsets.name, type) : 0)
 
-#define retis_get_sk_buff(ctx)			 RETIS_GET(ctx, sk_buff, struct sk_buff *)
-#define retis_get_skb_drop_reason(ctx)		 RETIS_GET(ctx, skb_drop_reason, enum skb_drop_reason)
-#define retis_get_net_device(ctx)		 RETIS_GET(ctx, net_device, struct net_device *)
-#define retis_get_net(ctx)			 RETIS_GET(ctx, net, struct net *)
-#define retis_get_nft_pktinfo(ctx)		 RETIS_GET(ctx, nft_pktinfo, struct nft_pktinfo *)
-#define retis_get_nft_traceinfo(ctx)		 RETIS_GET(ctx, nft_traceinfo, struct nft_traceinfo *)
+#define retis_get_sk_buff(ctx) RETIS_GET(ctx, sk_buff, struct sk_buff *)
+#define retis_get_skb_drop_reason(ctx) RETIS_GET(ctx, skb_drop_reason, enum skb_drop_reason)
+#define retis_get_net_device(ctx) RETIS_GET(ctx, net_device, struct net_device *)
+#define retis_get_net(ctx) RETIS_GET(ctx, net, struct net *)
+#define retis_get_nft_pktinfo(ctx) RETIS_GET(ctx, nft_pktinfo, struct nft_pktinfo *)
+#define retis_get_nft_traceinfo(ctx) RETIS_GET(ctx, nft_traceinfo, struct nft_traceinfo *)
 
 /* Extended register helpers */
-static __always_inline void retis_set_ext_sk_buff(struct retis_context *ctx, struct sk_buff *skb)
-{
+static __always_inline void retis_set_ext_sk_buff(struct retis_context *ctx, struct sk_buff *skb) {
     ctx->regs.reg[EXT_REG_SKB] = (u64)(skb);
     ctx->offsets.sk_buff = EXT_REG_SKB;
 }

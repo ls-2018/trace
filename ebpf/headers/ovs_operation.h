@@ -41,11 +41,11 @@ struct user_upcall_info {
     u32 queue_id;
 
     /* It indicates that the upcall event was filtered out so no events
-   * related to this upcall should be generated. */
+     * related to this upcall should be generated. */
     bool skip_event;
 
     /* Bitmask of processed operations. Bit order corresponds to
-   * enum ovs_operation_type values.*/
+     * enum ovs_operation_type values.*/
     u8 processed_ops;
 } __binding;
 
@@ -53,12 +53,12 @@ struct user_upcall_info {
 
 /* Upcall batch information. */
 struct upcall_batch {
-    u64 leader_ts; /* Timestamp of the first upcall in the batch. */
-    bool processing; /* Whether we're still batching (false) or we
-       are processing batched upcalls. */
+    u64 leader_ts;                                     /* Timestamp of the first upcall in the batch. */
+    bool processing;                                   /* Whether we're still batching (false) or we
+                                         are processing batched upcalls. */
     struct user_upcall_info upcalls[UPCALL_MAX_BATCH]; /* Upcalls in batch */
-    u8 current_upcall; /* Current upcall being processed */
-    u8 total; /* Number of upcalls of the batch */
+    u8 current_upcall;                                 /* Current upcall being processed */
+    u8 total;                                          /* Number of upcalls of the batch */
 } __binding;
 
 /* Array of batches. This is a placeholder as this array must be created
@@ -81,23 +81,21 @@ struct {
 } pid_to_batch SEC(".maps");
 
 /* Get the batch for the current handler thread. */
-static __always_inline struct upcall_batch *batch_get()
-{
+static __always_inline struct upcall_batch *batch_get() {
     u32 *idx;
     u32 pid = bpf_get_current_pid_tgid() & 0xFFFFFFFF;
 
     idx = bpf_map_lookup_elem(&pid_to_batch, &pid);
     if (!idx)
-	return NULL;
+        return NULL;
 
     return bpf_map_lookup_elem(&upcall_batches, idx);
 }
 
 /* Initialize a batch. */
-static __always_inline void batch_init(struct upcall_batch *batch)
-{
+static __always_inline void batch_init(struct upcall_batch *batch) {
     if (!batch)
-	return;
+        return;
 
     batch->processing = false;
     batch->leader_ts = 0;
@@ -106,35 +104,31 @@ static __always_inline void batch_init(struct upcall_batch *batch)
 }
 
 /* Set the batch in processing mode. */
-static __always_inline void batch_start_processing(struct upcall_batch *batch)
-{
+static __always_inline void batch_start_processing(struct upcall_batch *batch) {
     if (!batch)
-	return;
+        return;
     batch->current_upcall = 0;
     batch->processing = true;
 }
 
-static __always_inline bool batch_is_processing(const struct upcall_batch *batch)
-{
+static __always_inline bool batch_is_processing(const struct upcall_batch *batch) {
     if (!batch)
-	return false;
+        return false;
     return batch->processing;
 }
 
 /* Retrieve the current upcall being processed. */
-static __always_inline struct user_upcall_info *batch_current(struct upcall_batch *batch)
-{
+static __always_inline struct user_upcall_info *batch_current(struct upcall_batch *batch) {
     if (!batch || batch->current_upcall >= (UPCALL_MAX_BATCH - 1))
-	return NULL;
+        return NULL;
 
     return &batch->upcalls[batch->current_upcall];
 }
 
 /* Retrieve the next upcall. */
-static __always_inline struct user_upcall_info *batch_next(struct upcall_batch *batch)
-{
+static __always_inline struct user_upcall_info *batch_next(struct upcall_batch *batch) {
     if (!batch || batch->current_upcall >= (batch->total - 1) || batch->current_upcall >= (UPCALL_MAX_BATCH - 1))
-	return NULL;
+        return NULL;
 
     batch->current_upcall += 1;
 
@@ -142,15 +136,14 @@ static __always_inline struct user_upcall_info *batch_next(struct upcall_batch *
 }
 
 /* Put and return a new upcall in the batch. */
-static __always_inline struct user_upcall_info *batch_put(struct upcall_batch *batch)
-{
+static __always_inline struct user_upcall_info *batch_put(struct upcall_batch *batch) {
     struct user_upcall_info *dst;
 
     if (!batch) {
-	return NULL;
+        return NULL;
     }
     if (batch->total >= UPCALL_MAX_BATCH - 1) {
-	return NULL;
+        return NULL;
     }
 
     dst = &batch->upcalls[batch->total];
@@ -161,28 +154,27 @@ static __always_inline struct user_upcall_info *batch_put(struct upcall_batch *b
 }
 
 /* Process an upcall receive event. */
-static __always_inline struct upcall_batch *batch_process_recv(u64 timestamp, u32 queue_id, bool skip)
-{
+static __always_inline struct upcall_batch *batch_process_recv(u64 timestamp, u32 queue_id, bool skip) {
     struct upcall_batch *batch = batch_get();
     struct user_upcall_info *info;
 
     if (!batch)
-	return NULL;
+        return NULL;
 
     if (batch_is_processing(batch)) {
-	batch_init(batch);
+        batch_init(batch);
     }
 
     info = batch_put(batch);
     if (!info)
-	return NULL;
+        return NULL;
 
     info->queue_id = queue_id;
     info->skip_event = skip;
 
     if (batch->total == 1) {
-	/* First of the batch. */
-	batch->leader_ts = timestamp;
+        /* First of the batch. */
+        batch->leader_ts = timestamp;
     }
 
     return batch;
@@ -191,48 +183,47 @@ static __always_inline struct upcall_batch *batch_process_recv(u64 timestamp, u3
 /* Process an operation event and populate the event with the batch
  * information.
  * If an event is generated, it's returned in *op. */
-static __always_inline int batch_process_op(enum ovs_operation_type type, struct retis_raw_event *event, struct ovs_operation_event **op)
-{
+static __always_inline int batch_process_op(enum ovs_operation_type type, struct retis_raw_event *event, struct ovs_operation_event **op) {
     struct upcall_batch *batch;
     struct user_upcall_info *info;
     u8 op_flag = 0x1 << type;
 
     if (op)
-	*op = NULL;
+        *op = NULL;
 
     batch = batch_get();
     if (!batch)
-	return -1;
+        return -1;
 
     if (!batch->total)
-	/* There are no elements in this batch. This probably means
-     * we missed the recv_upcall event (e.g: we started collecting
-     * events after it happened). */
-	return 0;
+        /* There are no elements in this batch. This probably means
+         * we missed the recv_upcall event (e.g: we started collecting
+         * events after it happened). */
+        return 0;
 
     if (!batch_is_processing(batch)) {
-	batch_start_processing(batch);
+        batch_start_processing(batch);
     }
 
     info = batch_current(batch);
     if (!info)
-	return -1;
+        return -1;
 
     if (info->processed_ops & op_flag) {
-	/* An operation cannot be done twice on the same upcall.
-     * This event must correspond to the next upcall in the batch. */
-	info = batch_next(batch);
-	if (!info)
-	    return -1;
+        /* An operation cannot be done twice on the same upcall.
+         * This event must correspond to the next upcall in the batch. */
+        info = batch_next(batch);
+        if (!info)
+            return -1;
     }
     info->processed_ops |= op_flag;
 
     if (info->skip_event)
-	return 0;
+        return 0;
 
     struct ovs_operation_event *op_event = get_event_zsection(event, COLLECTOR_OVS, OVS_OPERATION, sizeof(*op_event));
     if (!op_event)
-	return 0;
+        return 0;
 
     op_event->type = type;
     op_event->queue_id = info->queue_id;
@@ -240,7 +231,7 @@ static __always_inline int batch_process_op(enum ovs_operation_type type, struct
     op_event->batch_idx = batch->current_upcall;
 
     if (op)
-	*op = op_event;
+        *op = op_event;
 
     return 0;
 }

@@ -5,12 +5,12 @@
 
 #include <01_common_defs.h>
 
-//请确保以下内容与对应的 Rust 版本保持一致。
-#define EVENTS_MAX	    8 * 1024
+// 请确保以下内容与对应的 Rust 版本保持一致。
+#define EVENTS_MAX 8 * 1024
 #define RAW_EVENT_DATA_SIZE 1024 - 2
-#define RETIS_MAX_COMM	    64
+#define RETIS_MAX_COMM 64
 
-#define LOG_MAX		    127
+#define LOG_MAX 127
 
 BINDING_DEF(LOG_EVENTS_MAX, 128)
 
@@ -57,46 +57,42 @@ struct {
     __uint(max_entries, sizeof(struct retis_log_event) * LOG_EVENTS_MAX);
 } log_map SEC(".maps");
 
-static __always_inline struct retis_raw_event *get_event()
-{
+static __always_inline struct retis_raw_event *get_event() {
     struct retis_raw_event *event;
 
     event = bpf_ringbuf_reserve(&events_map, sizeof(*event), 0);
     if (!event)
-	return NULL;
+        return NULL;
 
     event->size = 0;
     return event;
 }
 
-static __always_inline void discard_event(struct retis_raw_event *event)
-{
+static __always_inline void discard_event(struct retis_raw_event *event) {
     bpf_ringbuf_discard(event, 0);
 }
 
-static __always_inline void send_event(struct retis_raw_event *event)
-{
+static __always_inline void send_event(struct retis_raw_event *event) {
     bpf_ringbuf_submit(event, 0);
 }
 
-static __always_inline void *get_event_section(struct retis_raw_event *event, u8 owner, u8 data_type, u16 size)
-{
+static __always_inline void *get_event_section(struct retis_raw_event *event, u8 owner, u8 data_type, u16 size) {
     struct retis_raw_event_section_header *header;
     u16 requested, left;
     void *section;
 
     /* Keep the verifier happy, as we're going to substract one to the other
-   * below. This can't happen in practice.
-   */
+     * below. This can't happen in practice.
+     */
     if (unlikely(event->size > sizeof(event->data)))
-	return NULL;
+        return NULL;
 
     requested = sizeof(*header) + size;
     left = sizeof(event->data) - event->size;
 
     if (unlikely(requested > left)) {
-	log_error("Failed to get event section: no space left (%u > %u)", requested, left);
-	return NULL;
+        log_error("Failed to get event section: no space left (%u > %u)", requested, left);
+        return NULL;
     }
 
     header = (struct retis_raw_event_section_header *)(event->data + event->size);
@@ -111,19 +107,17 @@ static __always_inline void *get_event_section(struct retis_raw_event *event, u8
 }
 
 /* Similar to get_event_section but initialize the section data to 0s. */
-static __always_inline void *get_event_zsection(struct retis_raw_event *event, u8 owner, u8 data_type, const u16 size)
-{
+static __always_inline void *get_event_zsection(struct retis_raw_event *event, u8 owner, u8 data_type, const u16 size) {
     void *section = get_event_section(event, owner, data_type, size);
 
     if (!section)
-	return NULL;
+        return NULL;
 
     __builtin_memset(section, 0, size);
     return section;
 }
 
-static __always_inline u16 get_event_size(struct retis_raw_event *event)
-{
+static __always_inline u16 get_event_size(struct retis_raw_event *event) {
     return event->size;
 }
 

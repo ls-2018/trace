@@ -15,14 +15,14 @@ struct tracking_config {
     /* Function is freeing skbs */
     u8 free;
     /* Function is partially freeing skbs (head isn't freed but merge into
-   * another skb).
-   */
+     * another skb).
+     */
     u8 partial_free;
     /* Function is invalidating the head of skbs */
     u8 inv_head;
     /* Special case where no addition tracking data should be added by this
-   * probe. We can still read existing tracking data.
-   */
+     * probe. We can still read existing tracking data.
+     */
     u8 no_tracking;
 } __packed __binding;
 struct {
@@ -54,25 +54,23 @@ struct {
 } tracking_map SEC(".maps");
 
 /* Must be called with a valid skb pointer */
-static __always_inline struct tracking_info *skb_tracking_info(struct sk_buff *skb)
-{
+static __always_inline struct tracking_info *skb_tracking_info(struct sk_buff *skb) {
     struct tracking_info *ti = NULL;
     u64 head;
 
     head = (u64)BPF_CORE_READ(skb, head);
     if (!head)
-	return 0;
+        return 0;
 
     ti = bpf_map_lookup_elem(&tracking_map, &head);
     if (!ti)
-	/* It might be temporarily stored it using its skb address. */
-	ti = bpf_map_lookup_elem(&tracking_map, (u64 *)&skb);
+        /* It might be temporarily stored it using its skb address. */
+        ti = bpf_map_lookup_elem(&tracking_map, (u64 *)&skb);
 
     return ti;
 }
 
-static __always_inline int track_skb_start(struct retis_context *ctx)
-{
+static __always_inline int track_skb_start(struct retis_context *ctx) {
     bool inv_head = false, no_tracking = false;
     struct tracking_info *ti = NULL, new;
     struct tracking_config *cfg;
@@ -81,105 +79,104 @@ static __always_inline int track_skb_start(struct retis_context *ctx)
 
     skb = retis_get_sk_buff(ctx);
     if (!skb)
-	return 0;
+        return 0;
 
     /* Try to retrieve the tracking configuration for this symbol. Only
-   * specific ones will be found while we want to track skb in all
-   * functions taking an skb as a parameter. When no tracking
-   * configuration is found, the function being probed is just quite
-   * generic.
-   */
+     * specific ones will be found while we want to track skb in all
+     * functions taking an skb as a parameter. When no tracking
+     * configuration is found, the function being probed is just quite
+     * generic.
+     */
     cfg = bpf_map_lookup_elem(&tracking_config_map, &ksym);
     if (cfg) {
-	inv_head = cfg->inv_head;
-	no_tracking = cfg->no_tracking;
+        inv_head = cfg->inv_head;
+        no_tracking = cfg->no_tracking;
     }
 
     head = (u64)BPF_CORE_READ(skb, head);
     if (!head)
-	return 0;
+        return 0;
 
     ti = bpf_map_lookup_elem(&tracking_map, &head);
 
     /* No tracking info was found for this skb. */
     if (!ti) {
-	/* It might be temporarily stored it using its skb address. */
-	ti = bpf_map_lookup_elem(&tracking_map, (u64 *)&skb);
-	if (ti) {
-	    /* If found, index it by its data address from now on,
-       * as others.
-       */
-	    bpf_map_delete_elem(&tracking_map, (u64 *)&skb);
-	    bpf_map_update_elem(&tracking_map, &head, ti, BPF_NOEXIST);
-	}
+        /* It might be temporarily stored it using its skb address. */
+        ti = bpf_map_lookup_elem(&tracking_map, (u64 *)&skb);
+        if (ti) {
+            /* If found, index it by its data address from now on,
+             * as others.
+             */
+            bpf_map_delete_elem(&tracking_map, (u64 *)&skb);
+            bpf_map_update_elem(&tracking_map, &head, ti, BPF_NOEXIST);
+        }
     }
 
     /* Still NULL, this is the first time we see this skb. Create a new
-   * tracking info.
-   */
+     * tracking info.
+     */
     if (!ti) {
-	/* Tracking info doesn't exist and we don't want to add one,
-     * nothing more we can do here.
-     */
-	if (no_tracking)
-	    return 0;
+        /* Tracking info doesn't exist and we don't want to add one,
+         * nothing more we can do here.
+         */
+        if (no_tracking)
+            return 0;
 
-	ti = &new;
-	ti->timestamp = ctx->timestamp;
-	ti->last_seen = ctx->timestamp;
-	ti->orig_head = head;
+        ti = &new;
+        ti->timestamp = ctx->timestamp;
+        ti->last_seen = ctx->timestamp;
+        ti->orig_head = head;
 
-	/* No need to globally track it if the first time we see this
-     * skb is when it is freed.
-     */
-	bpf_map_update_elem(&tracking_map, &head, &new, BPF_NOEXIST);
+        /* No need to globally track it if the first time we see this
+         * skb is when it is freed.
+         */
+        bpf_map_update_elem(&tracking_map, &head, &new, BPF_NOEXIST);
     }
 
     /* Track when we last saw this skb, as it'll be useful to garbage
-   * collect tracking map entries if we miss some events.
-   */
+     * collect tracking map entries if we miss some events.
+     */
     ti->last_seen = ctx->timestamp;
 
     /* If the function invalidates the skb head, we can't know what will be
-   * the new head value. Temporarily track the skb using its skb address.
-   */
+     * the new head value. Temporarily track the skb using its skb address.
+     */
     if (inv_head)
-	bpf_map_update_elem(&tracking_map, (u64 *)&skb, ti, BPF_NOEXIST);
+        bpf_map_update_elem(&tracking_map, (u64 *)&skb, ti, BPF_NOEXIST);
 
     return 0;
 }
 
-static __always_inline int track_skb_end(struct retis_context *ctx)
-{
+static __always_inline int track_skb_end(struct retis_context *ctx) {
     struct tracking_config *cfg;
     u64 head, ksym = ctx->ksym;
     struct sk_buff *skb;
 
     cfg = bpf_map_lookup_elem(&tracking_config_map, &ksym);
     if (!cfg)
-	return 0;
+        return 0;
 
     /* We only supports free functions below */
     if (!cfg->free)
-	return 0;
+        return 0;
 
     skb = retis_get_sk_buff(ctx);
     if (!skb)
-	return 0;
+        return 0;
 
     head = (u64)BPF_CORE_READ(skb, head);
     if (!head)
-	return 0;
+        return 0;
 
     if (cfg->partial_free) {
-	/* See kfree_skb_partial */
-	bool stolen = retis_get_param(ctx, 1, bool);
+        /* See kfree_skb_partial */
+        bool stolen = retis_get_param(ctx, 1, bool);
 
-	/* If the head wasn't stolen in a partial free, it will be freed
-     * later and we'll catch it.
-     */
-	if (!stolen)
-	    return 0;
+        /* If the head wasn't stolen in a partial free, it will be freed
+         * later and we'll catch it.
+         */
+        if (!stolen)
+            return 0;
     }
 
     /* Skb is freed, remove it from our tracking list. */
@@ -189,8 +186,7 @@ static __always_inline int track_skb_end(struct retis_context *ctx)
 }
 
 /* Must be called with a valid skb pointer */
-static __always_inline bool skb_is_tracked(struct sk_buff *skb)
-{
+static __always_inline bool skb_is_tracked(struct sk_buff *skb) {
     return skb_tracking_info(skb) != NULL;
 }
 

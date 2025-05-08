@@ -18,11 +18,12 @@ struct ksym_desc {
     const char *name;
     int ref;
     int kind;
-    union {
-	/* used for kfunc */
-	int off;
-	/* used for typeless ksym */
-	bool typeless;
+    union
+    {
+        /* used for kfunc */
+        int off;
+        /* used for typeless ksym */
+        bool typeless;
     };
     int insn;
     bool is_ld64;

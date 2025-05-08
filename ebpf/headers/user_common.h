@@ -46,14 +46,13 @@ struct user_ctx {
  *
  * Do not forget to add the hook to build.rs
  */
-#define DEFINE_USDT_HOOK(inst)                                    \
-    SEC("ext/hook")                                               \
-    int hook(struct user_ctx *ctx, struct retis_raw_event *event) \
-    {                                                             \
-	/* Let the verifier be happy */                           \
-	if (!ctx || !event)                                       \
-	    return 0;                                             \
-	inst                                                      \
+#define DEFINE_USDT_HOOK(inst)                                      \
+    SEC("ext/hook")                                                 \
+    int hook(struct user_ctx *ctx, struct retis_raw_event *event) { \
+        /* Let the verifier be happy */                             \
+        if (!ctx || !event)                                         \
+            return 0;                                               \
+        inst                                                        \
     }
 
 #endif // __CORE_PROBE_USER_BPF_COMMON__

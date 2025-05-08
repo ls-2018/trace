@@ -1,13 +1,13 @@
 #if !defined(__GENERIC_VMLINUX_H__) || defined(__VMLINUX_H__)
-#error "Please do not include arch specific vmlinux header. Use #include <vmlinux.h>, instead."
+#    error "Please do not include arch specific vmlinux header. Use #include <vmlinux.h>, instead."
 #endif
 
 #ifndef __VMLINUX_H__
-#define __VMLINUX_H__
+#    define __VMLINUX_H__
 
-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-#pragma clang attribute push(__attribute__((preserve_access_index)), apply_to = record)
-#endif
+#    ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+#        pragma clang attribute push(__attribute__((preserve_access_index)), apply_to = record)
+#    endif
 
 typedef unsigned char __u8;
 
@@ -95,9 +95,10 @@ struct cpuinfo_x86 {
     __u8 x86_phys_bits;
     __u32 extended_cpuid_level;
     int cpuid_level;
-    union {
-	__u32 x86_capability[24];
-	long unsigned int x86_capability_alignment;
+    union
+    {
+        __u32 x86_capability[24];
+        long unsigned int x86_capability_alignment;
     };
     char x86_vendor_id[16];
     char x86_model_id[64];
@@ -267,86 +268,88 @@ struct edd_device_params {
     __u16 reserved3;
     __u8 host_bus_type[4];
     __u8 interface_type[8];
-    union {
-	struct {
-	    __u16 base_address;
-	    __u16 reserved1;
-	    __u32 reserved2;
-	} isa;
-	struct {
-	    __u8 bus;
-	    __u8 slot;
-	    __u8 function;
-	    __u8 channel;
-	    __u32 reserved;
-	} pci;
-	struct {
-	    __u64 reserved;
-	} ibnd;
-	struct {
-	    __u64 reserved;
-	} xprs;
-	struct {
-	    __u64 reserved;
-	} htpt;
-	struct {
-	    __u64 reserved;
-	} unknown;
+    union
+    {
+        struct {
+            __u16 base_address;
+            __u16 reserved1;
+            __u32 reserved2;
+        } isa;
+        struct {
+            __u8 bus;
+            __u8 slot;
+            __u8 function;
+            __u8 channel;
+            __u32 reserved;
+        } pci;
+        struct {
+            __u64 reserved;
+        } ibnd;
+        struct {
+            __u64 reserved;
+        } xprs;
+        struct {
+            __u64 reserved;
+        } htpt;
+        struct {
+            __u64 reserved;
+        } unknown;
     } interface_path;
-    union {
-	struct {
-	    __u8 device;
-	    __u8 reserved1;
-	    __u16 reserved2;
-	    __u32 reserved3;
-	    __u64 reserved4;
-	} ata;
-	struct {
-	    __u8 device;
-	    __u8 lun;
-	    __u8 reserved1;
-	    __u8 reserved2;
-	    __u32 reserved3;
-	    __u64 reserved4;
-	} atapi;
-	struct {
-	    __u16 id;
-	    __u64 lun;
-	    __u16 reserved1;
-	    __u32 reserved2;
-	} __attribute__((packed)) scsi;
-	struct {
-	    __u64 serial_number;
-	    __u64 reserved;
-	} usb;
-	struct {
-	    __u64 eui;
-	    __u64 reserved;
-	} i1394;
-	struct {
-	    __u64 wwid;
-	    __u64 lun;
-	} fibre;
-	struct {
-	    __u64 identity_tag;
-	    __u64 reserved;
-	} i2o;
-	struct {
-	    __u32 array_number;
-	    __u32 reserved1;
-	    __u64 reserved2;
-	} raid;
-	struct {
-	    __u8 device;
-	    __u8 reserved1;
-	    __u16 reserved2;
-	    __u32 reserved3;
-	    __u64 reserved4;
-	} sata;
-	struct {
-	    __u64 reserved1;
-	    __u64 reserved2;
-	} unknown;
+    union
+    {
+        struct {
+            __u8 device;
+            __u8 reserved1;
+            __u16 reserved2;
+            __u32 reserved3;
+            __u64 reserved4;
+        } ata;
+        struct {
+            __u8 device;
+            __u8 lun;
+            __u8 reserved1;
+            __u8 reserved2;
+            __u32 reserved3;
+            __u64 reserved4;
+        } atapi;
+        struct {
+            __u16 id;
+            __u64 lun;
+            __u16 reserved1;
+            __u32 reserved2;
+        } __attribute__((packed)) scsi;
+        struct {
+            __u64 serial_number;
+            __u64 reserved;
+        } usb;
+        struct {
+            __u64 eui;
+            __u64 reserved;
+        } i1394;
+        struct {
+            __u64 wwid;
+            __u64 lun;
+        } fibre;
+        struct {
+            __u64 identity_tag;
+            __u64 reserved;
+        } i2o;
+        struct {
+            __u32 array_number;
+            __u32 reserved1;
+            __u64 reserved2;
+        } raid;
+        struct {
+            __u8 device;
+            __u8 reserved1;
+            __u16 reserved2;
+            __u32 reserved3;
+            __u64 reserved4;
+        } sata;
+        struct {
+            __u64 reserved1;
+            __u64 reserved2;
+        } unknown;
     } device_path;
     __u8 reserved4;
     __u8 checksum;
@@ -508,15 +511,16 @@ struct start_info {
     uint32_t flags;
     xen_pfn_t store_mfn;
     uint32_t store_evtchn;
-    union {
-	struct {
-	    xen_pfn_t mfn;
-	    uint32_t evtchn;
-	} domU;
-	struct {
-	    uint32_t info_off;
-	    uint32_t info_size;
-	} dom0;
+    union
+    {
+        struct {
+            xen_pfn_t mfn;
+            uint32_t evtchn;
+        } domU;
+        struct {
+            uint32_t info_off;
+            uint32_t info_size;
+        } dom0;
     } console;
     long unsigned int pt_base;
     long unsigned int nr_pt_frames;
@@ -754,28 +758,30 @@ struct file_system_type {
 };
 
 struct qspinlock {
-    union {
-	atomic_t val;
-	struct {
-	    u8 locked;
-	    u8 pending;
-	};
-	struct {
-	    u16 locked_pending;
-	    u16 tail;
-	};
+    union
+    {
+        atomic_t val;
+        struct {
+            u8 locked;
+            u8 pending;
+        };
+        struct {
+            u16 locked_pending;
+            u16 tail;
+        };
     };
 };
 
 typedef struct qspinlock arch_spinlock_t;
 
 struct qrwlock {
-    union {
-	atomic_t cnts;
-	struct {
-	    u8 wlocked;
-	    u8 __lstate[3];
-	};
+    union
+    {
+        atomic_t cnts;
+        struct {
+            u8 wlocked;
+            u8 __lstate[3];
+        };
     };
     arch_spinlock_t wait_lock;
 };
@@ -810,10 +816,11 @@ struct static_key_mod;
 
 struct static_key {
     atomic_t enabled;
-    union {
-	long unsigned int type;
-	struct jump_entry *entries;
-	struct static_key_mod *next;
+    union
+    {
+        long unsigned int type;
+        struct jump_entry *entries;
+        struct static_key_mod *next;
     };
 };
 
@@ -833,9 +840,10 @@ struct _ddebug {
     unsigned int lineno : 18;
     unsigned int class_id : 6;
     unsigned int flags : 8;
-    union {
-	struct static_key_true dd_key_true;
-	struct static_key_false dd_key_false;
+    union
+    {
+        struct static_key_true dd_key_true;
+        struct static_key_false dd_key_false;
     } key;
 };
 
@@ -1188,31 +1196,33 @@ struct pollfd {
 struct restart_block {
     long unsigned int arch_data;
     long int (*fn)(struct restart_block *);
-    union {
-	struct {
-	    u32 *uaddr;
-	    u32 val;
-	    u32 flags;
-	    u32 bitset;
-	    u64 time;
-	    u32 *uaddr2;
-	} futex;
-	struct {
-	    clockid_t clockid;
-	    enum timespec_type type;
-	    union {
-		struct __kernel_timespec *rmtp;
-		struct old_timespec32 *compat_rmtp;
-	    };
-	    u64 expires;
-	} nanosleep;
-	struct {
-	    struct pollfd *ufds;
-	    int nfds;
-	    int has_timeout;
-	    long unsigned int tv_sec;
-	    long unsigned int tv_nsec;
-	} poll;
+    union
+    {
+        struct {
+            u32 *uaddr;
+            u32 val;
+            u32 flags;
+            u32 bitset;
+            u64 time;
+            u32 *uaddr2;
+        } futex;
+        struct {
+            clockid_t clockid;
+            enum timespec_type type;
+            union
+            {
+                struct __kernel_timespec *rmtp;
+                struct old_timespec32 *compat_rmtp;
+            };
+            u64 expires;
+        } nanosleep;
+        struct {
+            struct pollfd *ufds;
+            int nfds;
+            int has_timeout;
+            long unsigned int tv_sec;
+            long unsigned int tv_nsec;
+        } poll;
     };
 };
 
@@ -1229,9 +1239,10 @@ struct llist_node {
 
 struct __call_single_node {
     struct llist_node llist;
-    union {
-	unsigned int u_flags;
-	atomic_t a_flags;
+    union
+    {
+        unsigned int u_flags;
+        atomic_t a_flags;
     };
     u16 src;
     u16 dst;
@@ -1394,12 +1405,13 @@ struct cpumask {
 
 typedef struct cpumask cpumask_t;
 
-union rcu_special {
+union rcu_special
+{
     struct {
-	u8 blocked;
-	u8 need_qs;
-	u8 exp_hint;
-	u8 need_mb;
+        u8 blocked;
+        u8 need_qs;
+        u8 exp_hint;
+        u8 need_mb;
     } b;
     u32 s;
 };
@@ -1516,8 +1528,9 @@ struct syscall_user_dispatch {
 };
 
 struct spinlock {
-    union {
-	struct raw_spinlock rlock;
+    union
+    {
+        struct raw_spinlock rlock;
     };
 };
 
@@ -1590,7 +1603,8 @@ struct da_monitor {
     unsigned int curr_state;
 };
 
-union rv_task_monitor {
+union rv_task_monitor
+{
     struct da_monitor da_mon;
 };
 
@@ -1638,26 +1652,28 @@ struct fxregs_state {
     u16 swd;
     u16 twd;
     u16 fop;
-    union {
-	struct {
-	    u64 rip;
-	    u64 rdp;
-	};
-	struct {
-	    u32 fip;
-	    u32 fcs;
-	    u32 foo;
-	    u32 fos;
-	};
+    union
+    {
+        struct {
+            u64 rip;
+            u64 rdp;
+        };
+        struct {
+            u32 fip;
+            u32 fcs;
+            u32 foo;
+            u32 fos;
+        };
     };
     u32 mxcsr;
     u32 mxcsr_mask;
     u32 st_space[32];
     u32 xmm_space[64];
     u32 padding[12];
-    union {
-	u32 padding1[12];
-	u32 sw_reserved[12];
+    union
+    {
+        u32 padding1[12];
+        u32 sw_reserved[12];
     };
 };
 
@@ -1694,7 +1710,8 @@ struct xregs_state {
     u8 extended_state_area[0];
 };
 
-union fpregs_state {
+union fpregs_state
+{
     struct fregs_state fsave;
     struct fxregs_state fxsave;
     struct swregs_state soft;
@@ -2121,18 +2138,19 @@ struct task_struct {
 };
 
 struct pcpu_hot {
-    union {
-	struct {
-	    struct task_struct *current_task;
-	    int preempt_count;
-	    int cpu_number;
-	    u64 call_depth;
-	    long unsigned int top_of_stack;
-	    void *hardirq_stack_ptr;
-	    u16 softirq_pending;
-	    bool hardirq_stack_inuse;
-	};
-	u8 pad[64];
+    union
+    {
+        struct {
+            struct task_struct *current_task;
+            int preempt_count;
+            int cpu_number;
+            u64 call_depth;
+            long unsigned int top_of_stack;
+            void *hardirq_stack_ptr;
+            u16 softirq_pending;
+            bool hardirq_stack_inuse;
+        };
+        u8 pad[64];
     };
 };
 
@@ -2177,17 +2195,19 @@ struct pt_regs {
     long unsigned int di;
     long unsigned int orig_ax;
     long unsigned int ip;
-    union {
-	u16 cs;
-	u64 csx;
-	struct fred_cs fred_cs;
+    union
+    {
+        u16 cs;
+        u64 csx;
+        struct fred_cs fred_cs;
     };
     long unsigned int flags;
     long unsigned int sp;
-    union {
-	u16 ss;
-	u64 ssx;
-	struct fred_ss fred_ss;
+    union
+    {
+        u16 ss;
+        u64 ssx;
+        struct fred_ss fred_ss;
     };
 };
 
@@ -2203,43 +2223,47 @@ struct dev_pagemap;
 
 struct page {
     long unsigned int flags;
-    union {
-	struct {
-	    union {
-		struct list_head lru;
-		struct {
-		    void *__filler;
-		    unsigned int mlock_count;
-		};
-		struct list_head buddy_list;
-		struct list_head pcp_list;
-	    };
-	    struct address_space *mapping;
-	    union {
-		long unsigned int index;
-		long unsigned int share;
-	    };
-	    long unsigned int private;
-	};
-	struct {
-	    long unsigned int pp_magic;
-	    struct page_pool *pp;
-	    long unsigned int _pp_mapping_pad;
-	    long unsigned int dma_addr;
-	    atomic_long_t pp_ref_count;
-	};
-	struct {
-	    long unsigned int compound_head;
-	};
-	struct {
-	    struct dev_pagemap *pgmap;
-	    void *zone_device_data;
-	};
-	struct callback_head callback_head;
+    union
+    {
+        struct {
+            union
+            {
+                struct list_head lru;
+                struct {
+                    void *__filler;
+                    unsigned int mlock_count;
+                };
+                struct list_head buddy_list;
+                struct list_head pcp_list;
+            };
+            struct address_space *mapping;
+            union
+            {
+                long unsigned int index;
+                long unsigned int share;
+            };
+            long unsigned int private;
+        };
+        struct {
+            long unsigned int pp_magic;
+            struct page_pool *pp;
+            long unsigned int _pp_mapping_pad;
+            long unsigned int dma_addr;
+            atomic_long_t pp_ref_count;
+        };
+        struct {
+            long unsigned int compound_head;
+        };
+        struct {
+            struct dev_pagemap *pgmap;
+            void *zone_device_data;
+        };
+        struct callback_head callback_head;
     };
-    union {
-	atomic_t _mapcount;
-	unsigned int page_type;
+    union
+    {
+        atomic_t _mapcount;
+        unsigned int page_type;
     };
     atomic_t _refcount;
     long unsigned int memcg_data;
@@ -2258,9 +2282,10 @@ typedef struct {
 } lockdep_map_p;
 
 struct maple_tree {
-    union {
-	spinlock_t ma_lock;
-	lockdep_map_p ma_external_lock;
+    union
+    {
+        spinlock_t ma_lock;
+        lockdep_map_p ma_external_lock;
     };
     unsigned int ma_flags;
     void *ma_root;
@@ -2331,85 +2356,85 @@ struct iommu_mm_data;
 
 struct mm_struct {
     struct {
-	struct {
-	    atomic_t mm_count;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	};
-	struct maple_tree mm_mt;
-	long unsigned int (*get_unmapped_area)(struct file *, long unsigned int, long unsigned int, long unsigned int, long unsigned int);
-	long unsigned int mmap_base;
-	long unsigned int mmap_legacy_base;
-	long unsigned int mmap_compat_base;
-	long unsigned int mmap_compat_legacy_base;
-	long unsigned int task_size;
-	pgd_t *pgd;
-	atomic_t membarrier_state;
-	atomic_t mm_users;
-	struct mm_cid *pcpu_cid;
-	long unsigned int mm_cid_next_scan;
-	atomic_long_t pgtables_bytes;
-	int map_count;
-	spinlock_t page_table_lock;
-	struct rw_semaphore mmap_lock;
-	struct list_head mmlist;
-	int mm_lock_seq;
-	long unsigned int hiwater_rss;
-	long unsigned int hiwater_vm;
-	long unsigned int total_vm;
-	long unsigned int locked_vm;
-	atomic64_t pinned_vm;
-	long unsigned int data_vm;
-	long unsigned int exec_vm;
-	long unsigned int stack_vm;
-	long unsigned int def_flags;
-	seqcount_t write_protect_seq;
-	spinlock_t arg_lock;
-	long unsigned int start_code;
-	long unsigned int end_code;
-	long unsigned int start_data;
-	long unsigned int end_data;
-	long unsigned int start_brk;
-	long unsigned int brk;
-	long unsigned int start_stack;
-	long unsigned int arg_start;
-	long unsigned int arg_end;
-	long unsigned int env_start;
-	long unsigned int env_end;
-	long unsigned int saved_auxv[52];
-	struct percpu_counter rss_stat[4];
-	struct linux_binfmt *binfmt;
-	mm_context_t context;
-	long unsigned int flags;
-	spinlock_t ioctx_lock;
-	struct kioctx_table *ioctx_table;
-	struct task_struct *owner;
-	struct user_namespace *user_ns;
-	struct file *exe_file;
-	struct mmu_notifier_subscriptions *notifier_subscriptions;
-	long unsigned int numa_next_scan;
-	long unsigned int numa_scan_offset;
-	int numa_scan_seq;
-	atomic_t tlb_flush_pending;
-	atomic_t tlb_flush_batched;
-	struct uprobes_state uprobes_state;
-	atomic_long_t hugetlb_usage;
-	struct work_struct async_put_work;
-	struct iommu_mm_data *iommu_mm;
-	long unsigned int ksm_merging_pages;
-	long unsigned int ksm_rmap_items;
-	long unsigned int ksm_zero_pages;
-	struct {
-	    struct list_head list;
-	    long unsigned int bitmap;
-	    struct mem_cgroup *memcg;
-	} lru_gen;
-	long : 64;
+        struct {
+            atomic_t mm_count;
+            long : 64;
+            long : 64;
+            long : 64;
+            long : 64;
+            long : 64;
+            long : 64;
+            long : 64;
+        };
+        struct maple_tree mm_mt;
+        long unsigned int (*get_unmapped_area)(struct file *, long unsigned int, long unsigned int, long unsigned int, long unsigned int);
+        long unsigned int mmap_base;
+        long unsigned int mmap_legacy_base;
+        long unsigned int mmap_compat_base;
+        long unsigned int mmap_compat_legacy_base;
+        long unsigned int task_size;
+        pgd_t *pgd;
+        atomic_t membarrier_state;
+        atomic_t mm_users;
+        struct mm_cid *pcpu_cid;
+        long unsigned int mm_cid_next_scan;
+        atomic_long_t pgtables_bytes;
+        int map_count;
+        spinlock_t page_table_lock;
+        struct rw_semaphore mmap_lock;
+        struct list_head mmlist;
+        int mm_lock_seq;
+        long unsigned int hiwater_rss;
+        long unsigned int hiwater_vm;
+        long unsigned int total_vm;
+        long unsigned int locked_vm;
+        atomic64_t pinned_vm;
+        long unsigned int data_vm;
+        long unsigned int exec_vm;
+        long unsigned int stack_vm;
+        long unsigned int def_flags;
+        seqcount_t write_protect_seq;
+        spinlock_t arg_lock;
+        long unsigned int start_code;
+        long unsigned int end_code;
+        long unsigned int start_data;
+        long unsigned int end_data;
+        long unsigned int start_brk;
+        long unsigned int brk;
+        long unsigned int start_stack;
+        long unsigned int arg_start;
+        long unsigned int arg_end;
+        long unsigned int env_start;
+        long unsigned int env_end;
+        long unsigned int saved_auxv[52];
+        struct percpu_counter rss_stat[4];
+        struct linux_binfmt *binfmt;
+        mm_context_t context;
+        long unsigned int flags;
+        spinlock_t ioctx_lock;
+        struct kioctx_table *ioctx_table;
+        struct task_struct *owner;
+        struct user_namespace *user_ns;
+        struct file *exe_file;
+        struct mmu_notifier_subscriptions *notifier_subscriptions;
+        long unsigned int numa_next_scan;
+        long unsigned int numa_scan_offset;
+        int numa_scan_seq;
+        atomic_t tlb_flush_pending;
+        atomic_t tlb_flush_batched;
+        struct uprobes_state uprobes_state;
+        atomic_long_t hugetlb_usage;
+        struct work_struct async_put_work;
+        struct iommu_mm_data *iommu_mm;
+        long unsigned int ksm_merging_pages;
+        long unsigned int ksm_rmap_items;
+        long unsigned int ksm_zero_pages;
+        struct {
+            struct list_head list;
+            long unsigned int bitmap;
+            struct mem_cgroup *memcg;
+        } lru_gen;
+        long : 64;
     };
     long unsigned int cpu_bitmap[0];
 };
@@ -2431,25 +2456,27 @@ struct vm_operations_struct;
 struct vma_numab_state;
 
 struct vm_area_struct {
-    union {
-	struct {
-	    long unsigned int vm_start;
-	    long unsigned int vm_end;
-	};
-	struct callback_head vm_rcu;
+    union
+    {
+        struct {
+            long unsigned int vm_start;
+            long unsigned int vm_end;
+        };
+        struct callback_head vm_rcu;
     };
     struct mm_struct *vm_mm;
     pgprot_t vm_page_prot;
-    union {
-	const vm_flags_t vm_flags;
-	vm_flags_t __vm_flags;
+    union
+    {
+        const vm_flags_t vm_flags;
+        vm_flags_t __vm_flags;
     };
     int vm_lock_seq;
     struct vma_lock *vm_lock;
     bool detached;
     struct {
-	struct rb_node rb;
-	long unsigned int rb_subtree_last;
+        struct rb_node rb;
+        long unsigned int rb_subtree_last;
     } shared;
     struct list_head anon_vma_chain;
     struct anon_vma *anon_vma;
@@ -2481,10 +2508,11 @@ struct static_call_mod {
 
 struct static_call_key {
     void *func;
-    union {
-	long unsigned int type;
-	struct static_call_mod *mods;
-	struct static_call_site *sites;
+    union
+    {
+        long unsigned int type;
+        struct static_call_mod *mods;
+        struct static_call_site *sites;
     };
 };
 
@@ -2563,74 +2591,77 @@ typedef void __restorefn_t();
 
 typedef __restorefn_t *__sigrestore_t;
 
-union sigval {
+union sigval
+{
     int sival_int;
     void *sival_ptr;
 };
 
 typedef union sigval sigval_t;
 
-union __sifields {
+union __sifields
+{
     struct {
-	__kernel_pid_t _pid;
-	__kernel_uid32_t _uid;
+        __kernel_pid_t _pid;
+        __kernel_uid32_t _uid;
     } _kill;
     struct {
-	__kernel_timer_t _tid;
-	int _overrun;
-	sigval_t _sigval;
-	int _sys_private;
+        __kernel_timer_t _tid;
+        int _overrun;
+        sigval_t _sigval;
+        int _sys_private;
     } _timer;
     struct {
-	__kernel_pid_t _pid;
-	__kernel_uid32_t _uid;
-	sigval_t _sigval;
+        __kernel_pid_t _pid;
+        __kernel_uid32_t _uid;
+        sigval_t _sigval;
     } _rt;
     struct {
-	__kernel_pid_t _pid;
-	__kernel_uid32_t _uid;
-	int _status;
-	__kernel_clock_t _utime;
-	__kernel_clock_t _stime;
+        __kernel_pid_t _pid;
+        __kernel_uid32_t _uid;
+        int _status;
+        __kernel_clock_t _utime;
+        __kernel_clock_t _stime;
     } _sigchld;
     struct {
-	void *_addr;
-	union {
-	    int _trapno;
-	    short int _addr_lsb;
-	    struct {
-		char _dummy_bnd[8];
-		void *_lower;
-		void *_upper;
-	    } _addr_bnd;
-	    struct {
-		char _dummy_pkey[8];
-		__u32 _pkey;
-	    } _addr_pkey;
-	    struct {
-		long unsigned int _data;
-		__u32 _type;
-		__u32 _flags;
-	    } _perf;
-	};
+        void *_addr;
+        union
+        {
+            int _trapno;
+            short int _addr_lsb;
+            struct {
+                char _dummy_bnd[8];
+                void *_lower;
+                void *_upper;
+            } _addr_bnd;
+            struct {
+                char _dummy_pkey[8];
+                __u32 _pkey;
+            } _addr_pkey;
+            struct {
+                long unsigned int _data;
+                __u32 _type;
+                __u32 _flags;
+            } _perf;
+        };
     } _sigfault;
     struct {
-	long int _band;
-	int _fd;
+        long int _band;
+        int _fd;
     } _sigpoll;
     struct {
-	void *_call_addr;
-	int _syscall;
-	unsigned int _arch;
+        void *_call_addr;
+        int _syscall;
+        unsigned int _arch;
     } _sigsys;
 };
 
 struct kernel_siginfo {
     struct {
-	int si_signo;
-	int si_errno;
-	int si_code;
-	union __sifields _sifields;
+        int si_signo;
+        int si_errno;
+        int si_code;
+        union __sifields _sifields;
     };
 };
 
@@ -2819,9 +2850,10 @@ struct cred {
     struct user_namespace *user_ns;
     struct ucounts *ucounts;
     struct group_info *group_info;
-    union {
-	int non_rcu;
-	struct callback_head rcu;
+    union
+    {
+        int non_rcu;
+        struct callback_head rcu;
     };
 };
 
@@ -2835,19 +2867,21 @@ struct key_tag;
 
 struct keyring_index_key {
     long unsigned int hash;
-    union {
-	struct {
-	    u16 desc_len;
-	    char desc[6];
-	};
-	long unsigned int x;
+    union
+    {
+        struct {
+            u16 desc_len;
+            char desc[6];
+        };
+        long unsigned int x;
     };
     struct key_type *type;
     struct key_tag *domain_tag;
     const char *description;
 };
 
-union key_payload {
+union key_payload
+{
     void *rcu_data0;
     void *data[4];
 };
@@ -2868,17 +2902,19 @@ struct key_restriction;
 struct key {
     refcount_t usage;
     key_serial_t serial;
-    union {
-	struct list_head graveyard_link;
-	struct rb_node serial_node;
+    union
+    {
+        struct list_head graveyard_link;
+        struct rb_node serial_node;
     };
     struct watch_list *watchers;
     struct rw_semaphore sem;
     struct key_user *user;
     void *security;
-    union {
-	time64_t expiry;
-	time64_t revoked_at;
+    union
+    {
+        time64_t expiry;
+        time64_t revoked_at;
     };
     time64_t last_used_at;
     kuid_t uid;
@@ -2888,22 +2924,24 @@ struct key {
     short unsigned int datalen;
     short int state;
     long unsigned int flags;
-    union {
-	struct keyring_index_key index_key;
-	struct {
-	    long unsigned int hash;
-	    long unsigned int len_desc;
-	    struct key_type *type;
-	    struct key_tag *domain_tag;
-	    char *description;
-	};
+    union
+    {
+        struct keyring_index_key index_key;
+        struct {
+            long unsigned int hash;
+            long unsigned int len_desc;
+            struct key_type *type;
+            struct key_tag *domain_tag;
+            char *description;
+        };
     };
-    union {
-	union key_payload payload;
-	struct {
-	    struct list_head name_link;
-	    struct assoc_array keys;
-	};
+    union
+    {
+        union key_payload payload;
+        struct {
+            struct list_head name_link;
+            struct assoc_array keys;
+        };
     };
     struct key_restriction *restrict_link;
 };
@@ -3064,15 +3102,16 @@ struct return_instance;
 
 struct uprobe_task {
     enum uprobe_task_state state;
-    union {
-	struct {
-	    struct arch_uprobe_task autask;
-	    long unsigned int vaddr;
-	};
-	struct {
-	    struct callback_head dup_xol_work;
-	    long unsigned int dup_xol_addr;
-	};
+    union
+    {
+        struct {
+            struct arch_uprobe_task autask;
+            long unsigned int vaddr;
+        };
+        struct {
+            struct callback_head dup_xol_work;
+            long unsigned int dup_xol_addr;
+        };
     };
     struct uprobe *active_uprobe;
     long unsigned int xol_vaddr;
@@ -3139,22 +3178,25 @@ struct iov_iter {
     bool nofault;
     bool data_source;
     size_t iov_offset;
-    union {
-	struct iovec __ubuf_iovec;
-	struct {
-	    union {
-		const struct iovec *__iov;
-		const struct kvec *kvec;
-		const struct bio_vec *bvec;
-		struct xarray *xarray;
-		void *ubuf;
-	    };
-	    size_t count;
-	};
+    union
+    {
+        struct iovec __ubuf_iovec;
+        struct {
+            union
+            {
+                const struct iovec *__iov;
+                const struct kvec *kvec;
+                const struct bio_vec *bvec;
+                struct xarray *xarray;
+                void *ubuf;
+            };
+            size_t count;
+        };
     };
-    union {
-	long unsigned int nr_segs;
-	loff_t xarray_start;
+    union
+    {
+        long unsigned int nr_segs;
+        loff_t xarray_start;
     };
 };
 
@@ -3341,55 +3383,60 @@ typedef struct {
 } swp_entry_t;
 
 struct folio {
-    union {
-	struct {
-	    long unsigned int flags;
-	    union {
-		struct list_head lru;
-		struct {
-		    void *__filler;
-		    unsigned int mlock_count;
-		};
-	    };
-	    struct address_space *mapping;
-	    long unsigned int index;
-	    union {
-		void *private;
-		swp_entry_t swap;
-	    };
-	    atomic_t _mapcount;
-	    atomic_t _refcount;
-	    long unsigned int memcg_data;
-	};
-	struct page page;
+    union
+    {
+        struct {
+            long unsigned int flags;
+            union
+            {
+                struct list_head lru;
+                struct {
+                    void *__filler;
+                    unsigned int mlock_count;
+                };
+            };
+            struct address_space *mapping;
+            long unsigned int index;
+            union
+            {
+                void *private;
+                swp_entry_t swap;
+            };
+            atomic_t _mapcount;
+            atomic_t _refcount;
+            long unsigned int memcg_data;
+        };
+        struct page page;
     };
-    union {
-	struct {
-	    long unsigned int _flags_1;
-	    long unsigned int _head_1;
-	    long unsigned int _folio_avail;
-	    atomic_t _entire_mapcount;
-	    atomic_t _nr_pages_mapped;
-	    atomic_t _pincount;
-	    unsigned int _folio_nr_pages;
-	};
-	struct page __page_1;
+    union
+    {
+        struct {
+            long unsigned int _flags_1;
+            long unsigned int _head_1;
+            long unsigned int _folio_avail;
+            atomic_t _entire_mapcount;
+            atomic_t _nr_pages_mapped;
+            atomic_t _pincount;
+            unsigned int _folio_nr_pages;
+        };
+        struct page __page_1;
     };
-    union {
-	struct {
-	    long unsigned int _flags_2;
-	    long unsigned int _head_2;
-	    void *_hugetlb_subpool;
-	    void *_hugetlb_cgroup;
-	    void *_hugetlb_cgroup_rsvd;
-	    void *_hugetlb_hwpoison;
-	};
-	struct {
-	    long unsigned int _flags_2a;
-	    long unsigned int _head_2a;
-	    struct list_head _deferred_list;
-	};
-	struct page __page_2;
+    union
+    {
+        struct {
+            long unsigned int _flags_2;
+            long unsigned int _head_2;
+            void *_hugetlb_subpool;
+            void *_hugetlb_cgroup;
+            void *_hugetlb_cgroup_rsvd;
+            void *_hugetlb_hwpoison;
+        };
+        struct {
+            long unsigned int _flags_2a;
+            long unsigned int _head_2a;
+            struct list_head _deferred_list;
+        };
+        struct page __page_2;
     };
 };
 
@@ -3419,10 +3466,11 @@ struct path {
 };
 
 struct file {
-    union {
-	struct callback_head f_task_work;
-	struct llist_node f_llist;
-	unsigned int f_iocb_flags;
+    union
+    {
+        struct callback_head f_task_work;
+        struct llist_node f_llist;
+        unsigned int f_iocb_flags;
     };
     spinlock_t f_lock;
     fmode_t f_mode;
@@ -3675,10 +3723,11 @@ struct kernfs_node {
     unsigned int hash;
     short unsigned int flags;
     umode_t mode;
-    union {
-	struct kernfs_elem_dir dir;
-	struct kernfs_elem_symlink symlink;
-	struct kernfs_elem_attr attr;
+    union
+    {
+        struct kernfs_elem_dir dir;
+        struct kernfs_elem_symlink symlink;
+        struct kernfs_elem_attr attr;
     };
     u64 id;
     void *priv;
@@ -3915,9 +3964,10 @@ struct kiocb {
     void *private;
     int ki_flags;
     u16 ki_ioprio;
-    union {
-	struct wait_page_queue *ki_waitq;
-	ssize_t (*dio_complete)(void *);
+    union
+    {
+        struct wait_page_queue *ki_waitq;
+        ssize_t (*dio_complete)(void *);
     };
 };
 
@@ -3933,22 +3983,24 @@ struct hlist_bl_node {
 };
 
 struct lockref {
-    union {
-	__u64 lock_count;
-	struct {
-	    spinlock_t lock;
-	    int count;
-	};
+    union
+    {
+        __u64 lock_count;
+        struct {
+            spinlock_t lock;
+            int count;
+        };
     };
 };
 
 struct qstr {
-    union {
-	struct {
-	    u32 hash;
-	    u32 len;
-	};
-	u64 hash_len;
+    union
+    {
+        struct {
+            u32 hash;
+            u32 len;
+        };
+        u64 hash_len;
     };
     const unsigned char *name;
 };
@@ -3968,16 +4020,18 @@ struct dentry {
     struct super_block *d_sb;
     long unsigned int d_time;
     void *d_fsdata;
-    union {
-	struct list_head d_lru;
-	wait_queue_head_t *d_wait;
+    union
+    {
+        struct list_head d_lru;
+        wait_queue_head_t *d_wait;
     };
     struct hlist_node d_sib;
     struct hlist_head d_children;
-    union {
-	struct hlist_node d_alias;
-	struct hlist_bl_node d_in_lookup_hash;
-	struct callback_head d_rcu;
+    union
+    {
+        struct hlist_node d_alias;
+        struct hlist_bl_node d_in_lookup_hash;
+        struct callback_head d_rcu;
     } d_u;
 };
 
@@ -4019,9 +4073,10 @@ struct inode {
     struct address_space *i_mapping;
     void *i_security;
     long unsigned int i_ino;
-    union {
-	const unsigned int i_nlink;
-	unsigned int __i_nlink;
+    union
+    {
+        const unsigned int i_nlink;
+        unsigned int __i_nlink;
     };
     dev_t i_rdev;
     loff_t i_size;
@@ -4046,9 +4101,10 @@ struct inode {
     struct list_head i_lru;
     struct list_head i_sb_list;
     struct list_head i_wb_list;
-    union {
-	struct hlist_head i_dentry;
-	struct callback_head i_rcu;
+    union
+    {
+        struct hlist_head i_dentry;
+        struct callback_head i_rcu;
     };
     atomic64_t i_version;
     atomic64_t i_sequence;
@@ -4056,18 +4112,20 @@ struct inode {
     atomic_t i_dio_count;
     atomic_t i_writecount;
     atomic_t i_readcount;
-    union {
-	const struct file_operations *i_fop;
-	void (*free_inode)(struct inode *);
+    union
+    {
+        const struct file_operations *i_fop;
+        void (*free_inode)(struct inode *);
     };
     struct file_lock_context *i_flctx;
     struct address_space i_data;
     struct list_head i_devices;
-    union {
-	struct pipe_inode_info *i_pipe;
-	struct cdev *i_cdev;
-	char *i_link;
-	unsigned int i_dir_seq;
+    union
+    {
+        struct pipe_inode_info *i_pipe;
+        struct cdev *i_cdev;
+        char *i_link;
+        unsigned int i_dir_seq;
     };
     __u32 i_generation;
     __u32 i_fsnotify_mask;
@@ -4403,13 +4461,15 @@ struct kmem_cache;
 struct io_cq {
     struct request_queue *q;
     struct io_context *ioc;
-    union {
-	struct list_head q_node;
-	struct kmem_cache *__rcu_icq_cache;
+    union
+    {
+        struct list_head q_node;
+        struct kmem_cache *__rcu_icq_cache;
     };
-    union {
-	struct hlist_node ioc_node;
-	struct callback_head __rcu_head;
+    union
+    {
+        struct hlist_node ioc_node;
+        struct callback_head __rcu_head;
     };
     unsigned int flags;
 };
@@ -4435,13 +4495,15 @@ enum kmalloc_cache_type {
 struct iattr {
     unsigned int ia_valid;
     umode_t ia_mode;
-    union {
-	kuid_t ia_uid;
-	vfsuid_t ia_vfsuid;
+    union
+    {
+        kuid_t ia_uid;
+        vfsuid_t ia_vfsuid;
     };
-    union {
-	kgid_t ia_gid;
-	vfsgid_t ia_vfsgid;
+    union
+    {
+        kgid_t ia_gid;
+        vfsgid_t ia_vfsgid;
     };
     loff_t ia_size;
     struct timespec64 ia_atime;
@@ -4463,10 +4525,11 @@ enum quota_type {
 };
 
 struct kqid {
-    union {
-	kuid_t uid;
-	kgid_t gid;
-	kprojid_t projid;
+    union
+    {
+        kuid_t uid;
+        kgid_t gid;
+        kprojid_t projid;
     };
     enum quota_type type;
 };
@@ -4875,10 +4938,11 @@ struct kernel_param {
     const u16 perm;
     s8 level;
     u8 flags;
-    union {
-	void *arg;
-	const struct kparam_string *str;
-	const struct kparam_array *arr;
+    union
+    {
+        void *arg;
+        const struct kparam_string *str;
+        const struct kparam_array *arr;
     };
 };
 
@@ -4976,34 +5040,35 @@ typedef uint32_t *__guest_handle_uint32_t;
 
 struct dom0_vga_console_info {
     uint8_t video_type;
-    union {
-	struct {
-	    uint16_t font_height;
-	    uint16_t cursor_x;
-	    uint16_t cursor_y;
-	    uint16_t rows;
-	    uint16_t columns;
-	} text_mode_3;
-	struct {
-	    uint16_t width;
-	    uint16_t height;
-	    uint16_t bytes_per_line;
-	    uint16_t bits_per_pixel;
-	    uint32_t lfb_base;
-	    uint32_t lfb_size;
-	    uint8_t red_pos;
-	    uint8_t red_size;
-	    uint8_t green_pos;
-	    uint8_t green_size;
-	    uint8_t blue_pos;
-	    uint8_t blue_size;
-	    uint8_t rsvd_pos;
-	    uint8_t rsvd_size;
-	    uint32_t gbl_caps;
-	    uint16_t mode_attrs;
-	    uint16_t pad;
-	    uint32_t ext_lfb_base;
-	} vesa_lfb;
+    union
+    {
+        struct {
+            uint16_t font_height;
+            uint16_t cursor_x;
+            uint16_t cursor_y;
+            uint16_t rows;
+            uint16_t columns;
+        } text_mode_3;
+        struct {
+            uint16_t width;
+            uint16_t height;
+            uint16_t bytes_per_line;
+            uint16_t bits_per_pixel;
+            uint32_t lfb_base;
+            uint32_t lfb_size;
+            uint8_t red_pos;
+            uint8_t red_size;
+            uint8_t green_pos;
+            uint8_t green_size;
+            uint8_t blue_pos;
+            uint8_t blue_size;
+            uint8_t rsvd_pos;
+            uint8_t rsvd_size;
+            uint32_t gbl_caps;
+            uint16_t mode_attrs;
+            uint16_t pad;
+            uint32_t ext_lfb_base;
+        } vesa_lfb;
     } u;
 };
 
@@ -5078,95 +5143,98 @@ struct xenpf_efi_runtime_call {
     uint32_t function;
     uint32_t misc;
     xen_ulong_t status;
-    union {
-	struct {
-	    struct xenpf_efi_time time;
-	    uint32_t resolution;
-	    uint32_t accuracy;
-	} get_time;
-	struct xenpf_efi_time set_time;
-	struct xenpf_efi_time get_wakeup_time;
-	struct xenpf_efi_time set_wakeup_time;
-	struct {
-	    __guest_handle_void name;
-	    xen_ulong_t size;
-	    __guest_handle_void data;
-	    struct xenpf_efi_guid vendor_guid;
-	} get_variable;
-	struct {
-	    __guest_handle_void name;
-	    xen_ulong_t size;
-	    __guest_handle_void data;
-	    struct xenpf_efi_guid vendor_guid;
-	} set_variable;
-	struct {
-	    xen_ulong_t size;
-	    __guest_handle_void name;
-	    struct xenpf_efi_guid vendor_guid;
-	} get_next_variable_name;
-	struct {
-	    uint32_t attr;
-	    uint64_t max_store_size;
-	    uint64_t remain_store_size;
-	    uint64_t max_size;
-	} query_variable_info;
-	struct {
-	    __guest_handle_void capsule_header_array;
-	    xen_ulong_t capsule_count;
-	    uint64_t max_capsule_size;
-	    uint32_t reset_type;
-	} query_capsule_capabilities;
-	struct {
-	    __guest_handle_void capsule_header_array;
-	    xen_ulong_t capsule_count;
-	    uint64_t sg_list;
-	} update_capsule;
+    union
+    {
+        struct {
+            struct xenpf_efi_time time;
+            uint32_t resolution;
+            uint32_t accuracy;
+        } get_time;
+        struct xenpf_efi_time set_time;
+        struct xenpf_efi_time get_wakeup_time;
+        struct xenpf_efi_time set_wakeup_time;
+        struct {
+            __guest_handle_void name;
+            xen_ulong_t size;
+            __guest_handle_void data;
+            struct xenpf_efi_guid vendor_guid;
+        } get_variable;
+        struct {
+            __guest_handle_void name;
+            xen_ulong_t size;
+            __guest_handle_void data;
+            struct xenpf_efi_guid vendor_guid;
+        } set_variable;
+        struct {
+            xen_ulong_t size;
+            __guest_handle_void name;
+            struct xenpf_efi_guid vendor_guid;
+        } get_next_variable_name;
+        struct {
+            uint32_t attr;
+            uint64_t max_store_size;
+            uint64_t remain_store_size;
+            uint64_t max_size;
+        } query_variable_info;
+        struct {
+            __guest_handle_void capsule_header_array;
+            xen_ulong_t capsule_count;
+            uint64_t max_capsule_size;
+            uint32_t reset_type;
+        } query_capsule_capabilities;
+        struct {
+            __guest_handle_void capsule_header_array;
+            xen_ulong_t capsule_count;
+            uint64_t sg_list;
+        } update_capsule;
     } u;
 };
 
-union xenpf_efi_info {
+union xenpf_efi_info
+{
     uint32_t version;
     struct {
-	uint64_t addr;
-	uint32_t nent;
+        uint64_t addr;
+        uint32_t nent;
     } cfg;
     struct {
-	uint32_t revision;
-	uint32_t bufsz;
-	__guest_handle_void name;
+        uint32_t revision;
+        uint32_t bufsz;
+        __guest_handle_void name;
     } vendor;
     struct {
-	uint64_t addr;
-	uint64_t size;
-	uint64_t attr;
-	uint32_t type;
+        uint64_t addr;
+        uint64_t size;
+        uint64_t attr;
+        uint32_t type;
     } mem;
 };
 
 struct xenpf_firmware_info {
     uint32_t type;
     uint32_t index;
-    union {
-	struct {
-	    uint8_t device;
-	    uint8_t version;
-	    uint16_t interface_support;
-	    uint16_t legacy_max_cylinder;
-	    uint8_t legacy_max_head;
-	    uint8_t legacy_sectors_per_track;
-	    __guest_handle_void edd_params;
-	} disk_info;
-	struct {
-	    uint8_t device;
-	    uint32_t mbr_signature;
-	} disk_mbr_signature;
-	struct {
-	    uint8_t capabilities;
-	    uint8_t edid_transfer_time;
-	    __guest_handle_uchar edid;
-	} vbeddc_info;
-	union xenpf_efi_info efi_info;
-	uint8_t kbd_shift_flags;
+    union
+    {
+        struct {
+            uint8_t device;
+            uint8_t version;
+            uint16_t interface_support;
+            uint16_t legacy_max_cylinder;
+            uint8_t legacy_max_head;
+            uint8_t legacy_sectors_per_track;
+            __guest_handle_void edd_params;
+        } disk_info;
+        struct {
+            uint8_t device;
+            uint32_t mbr_signature;
+        } disk_mbr_signature;
+        struct {
+            uint8_t capabilities;
+            uint8_t edid_transfer_time;
+            __guest_handle_uchar edid;
+        } vbeddc_info;
+        union xenpf_efi_info efi_info;
+        uint8_t kbd_shift_flags;
     } u;
 };
 
@@ -5274,10 +5342,11 @@ struct xen_processor_performance {
 struct xenpf_set_processor_pminfo {
     uint32_t id;
     uint32_t type;
-    union {
-	struct xen_processor_power power;
-	struct xen_processor_performance perf;
-	__guest_handle_uint32_t pdc;
+    union
+    {
+        struct xen_processor_power power;
+        struct xen_processor_performance perf;
+        __guest_handle_uint32_t pdc;
     };
 };
 
@@ -5322,28 +5391,29 @@ struct xenpf_symdata {
 struct xen_platform_op {
     uint32_t cmd;
     uint32_t interface_version;
-    union {
-	struct xenpf_settime32 settime32;
-	struct xenpf_settime64 settime64;
-	struct xenpf_add_memtype add_memtype;
-	struct xenpf_del_memtype del_memtype;
-	struct xenpf_read_memtype read_memtype;
-	struct xenpf_microcode_update microcode;
-	struct xenpf_platform_quirk platform_quirk;
-	struct xenpf_efi_runtime_call efi_runtime_call;
-	struct xenpf_firmware_info firmware_info;
-	struct xenpf_enter_acpi_sleep enter_acpi_sleep;
-	struct xenpf_change_freq change_freq;
-	struct xenpf_getidletime getidletime;
-	struct xenpf_set_processor_pminfo set_pminfo;
-	struct xenpf_pcpuinfo pcpu_info;
-	struct xenpf_cpu_ol cpu_ol;
-	struct xenpf_cpu_hotadd cpu_add;
-	struct xenpf_mem_hotadd mem_add;
-	struct xenpf_core_parking core_parking;
-	struct xenpf_symdata symdata;
-	struct dom0_vga_console_info dom0_console;
-	uint8_t pad[128];
+    union
+    {
+        struct xenpf_settime32 settime32;
+        struct xenpf_settime64 settime64;
+        struct xenpf_add_memtype add_memtype;
+        struct xenpf_del_memtype del_memtype;
+        struct xenpf_read_memtype read_memtype;
+        struct xenpf_microcode_update microcode;
+        struct xenpf_platform_quirk platform_quirk;
+        struct xenpf_efi_runtime_call efi_runtime_call;
+        struct xenpf_firmware_info firmware_info;
+        struct xenpf_enter_acpi_sleep enter_acpi_sleep;
+        struct xenpf_change_freq change_freq;
+        struct xenpf_getidletime getidletime;
+        struct xenpf_set_processor_pminfo set_pminfo;
+        struct xenpf_pcpuinfo pcpu_info;
+        struct xenpf_cpu_ol cpu_ol;
+        struct xenpf_cpu_hotadd cpu_add;
+        struct xenpf_mem_hotadd mem_add;
+        struct xenpf_core_parking core_parking;
+        struct xenpf_symdata symdata;
+        struct dom0_vga_console_info dom0_console;
+        uint8_t pad[128];
     } u;
 };
 
@@ -5595,9 +5665,10 @@ struct perf_event_attr {
     __u32 type;
     __u32 size;
     __u64 config;
-    union {
-	__u64 sample_period;
-	__u64 sample_freq;
+    union
+    {
+        __u64 sample_period;
+        __u64 sample_freq;
     };
     __u64 sample_type;
     __u64 read_format;
@@ -5639,22 +5710,25 @@ struct perf_event_attr {
     __u64 remove_on_exec : 1;
     __u64 sigtrap : 1;
     __u64 __reserved_1 : 26;
-    union {
-	__u32 wakeup_events;
-	__u32 wakeup_watermark;
+    union
+    {
+        __u32 wakeup_events;
+        __u32 wakeup_watermark;
     };
     __u32 bp_type;
-    union {
-	__u64 bp_addr;
-	__u64 kprobe_func;
-	__u64 uprobe_path;
-	__u64 config1;
+    union
+    {
+        __u64 bp_addr;
+        __u64 kprobe_func;
+        __u64 uprobe_path;
+        __u64 config1;
     };
-    union {
-	__u64 bp_len;
-	__u64 kprobe_addr;
-	__u64 probe_offset;
-	__u64 config2;
+    union
+    {
+        __u64 bp_len;
+        __u64 kprobe_addr;
+        __u64 probe_offset;
+        __u64 config2;
     };
     __u64 branch_sample_type;
     __u64 sample_regs_user;
@@ -5694,40 +5768,41 @@ struct rhlist_head {
 };
 
 struct hw_perf_event {
-    union {
-	struct {
-	    u64 config;
-	    u64 last_tag;
-	    long unsigned int config_base;
-	    long unsigned int event_base;
-	    int event_base_rdpmc;
-	    int idx;
-	    int last_cpu;
-	    int flags;
-	    struct hw_perf_event_extra extra_reg;
-	    struct hw_perf_event_extra branch_reg;
-	};
-	struct {
-	    struct hrtimer hrtimer;
-	};
-	struct {
-	    struct list_head tp_list;
-	};
-	struct {
-	    u64 pwr_acc;
-	    u64 ptsc;
-	};
-	struct {
-	    struct arch_hw_breakpoint info;
-	    struct rhlist_head bp_list;
-	};
-	struct {
-	    u8 iommu_bank;
-	    u8 iommu_cntr;
-	    u16 padding;
-	    u64 conf;
-	    u64 conf1;
-	};
+    union
+    {
+        struct {
+            u64 config;
+            u64 last_tag;
+            long unsigned int config_base;
+            long unsigned int event_base;
+            int event_base_rdpmc;
+            int idx;
+            int last_cpu;
+            int flags;
+            struct hw_perf_event_extra extra_reg;
+            struct hw_perf_event_extra branch_reg;
+        };
+        struct {
+            struct hrtimer hrtimer;
+        };
+        struct {
+            struct list_head tp_list;
+        };
+        struct {
+            u64 pwr_acc;
+            u64 ptsc;
+        };
+        struct {
+            struct arch_hw_breakpoint info;
+            struct rhlist_head bp_list;
+        };
+        struct {
+            u8 iommu_bank;
+            u8 iommu_cntr;
+            u16 padding;
+            u64 conf;
+            u64 conf1;
+        };
     };
     struct task_struct *target;
     void *addr_filters;
@@ -5735,15 +5810,16 @@ struct hw_perf_event {
     int state;
     local64_t prev_count;
     u64 sample_period;
-    union {
-	struct {
-	    u64 last_period;
-	    local64_t period_left;
-	};
-	struct {
-	    u64 saved_metric;
-	    u64 saved_slots;
-	};
+    union
+    {
+        struct {
+            u64 last_period;
+            local64_t period_left;
+        };
+        struct {
+            u64 saved_metric;
+            u64 saved_slots;
+        };
     };
     u64 interrupts_seq;
     u64 interrupts;
@@ -6194,9 +6270,10 @@ struct mem_cgroup {
     long : 64;
     long : 64;
     struct page_counter memory;
-    union {
-	struct page_counter swap;
-	struct page_counter memsw;
+    union
+    {
+        struct page_counter swap;
+        struct page_counter memsw;
     };
     struct page_counter kmem;
     struct page_counter tcpmem;
@@ -6267,9 +6344,10 @@ struct obj_cgroup {
     struct percpu_ref refcnt;
     struct mem_cgroup *memcg;
     atomic_t nr_charged_bytes;
-    union {
-	struct list_head list;
-	struct callback_head rcu;
+    union
+    {
+        struct list_head list;
+        struct callback_head rcu;
     };
 };
 
@@ -6305,13 +6383,14 @@ struct dev_pagemap {
     const struct dev_pagemap_ops *ops;
     void *owner;
     int nr_range;
-    union {
-	struct range range;
-	struct {
-	    struct {
-	    } __empty_ranges;
-	    struct range ranges[0];
-	};
+    union
+    {
+        struct range range;
+        struct {
+            struct {
+            } __empty_ranges;
+            struct range ranges[0];
+        };
     };
 };
 
@@ -6323,12 +6402,13 @@ struct uid_gid_extent {
 
 struct uid_gid_map {
     u32 nr_extents;
-    union {
-	struct uid_gid_extent extent[5];
-	struct {
-	    struct uid_gid_extent *forward;
-	    struct uid_gid_extent *reverse;
-	};
+    union
+    {
+        struct uid_gid_extent extent[5];
+        struct {
+            struct uid_gid_extent *forward;
+            struct uid_gid_extent *reverse;
+        };
     };
 };
 
@@ -6343,15 +6423,16 @@ struct ctl_dir;
 struct ctl_node;
 
 struct ctl_table_header {
-    union {
-	struct {
-	    struct ctl_table *ctl_table;
-	    int ctl_table_size;
-	    int used;
-	    int count;
-	    int nreg;
-	};
-	struct callback_head rcu;
+    union
+    {
+        struct {
+            struct ctl_table *ctl_table;
+            int ctl_table_size;
+            int used;
+            int count;
+            int nreg;
+        };
+        struct callback_head rcu;
     };
     struct completion *unregistering;
     struct ctl_table *ctl_table_arg;
@@ -6416,18 +6497,19 @@ enum fault_flag {
 
 struct vm_fault {
     const struct {
-	struct vm_area_struct *vma;
-	gfp_t gfp_mask;
-	long unsigned int pgoff;
-	long unsigned int address;
-	long unsigned int real_address;
+        struct vm_area_struct *vma;
+        gfp_t gfp_mask;
+        long unsigned int pgoff;
+        long unsigned int address;
+        long unsigned int real_address;
     };
     enum fault_flag flags;
     pmd_t *pmd;
     pud_t *pud;
-    union {
-	pte_t orig_pte;
-	pmd_t orig_pmd;
+    union
+    {
+        pte_t orig_pte;
+        pmd_t orig_pmd;
     };
     struct page *cow_page;
     struct page *page;
@@ -7075,8 +7157,8 @@ struct ctl_table {
     int maxlen;
     umode_t mode;
     enum {
-	SYSCTL_TABLE_TYPE_DEFAULT = 0,
-	SYSCTL_TABLE_TYPE_PERMANENTLY_EMPTY = 1,
+        SYSCTL_TABLE_TYPE_DEFAULT = 0,
+        SYSCTL_TABLE_TYPE_PERMANENTLY_EMPTY = 1,
     } type;
     proc_handler *proc_handler;
     struct ctl_table_poll *poll;
@@ -7356,9 +7438,10 @@ struct bdi_writeback {
     struct list_head blkcg_node;
     struct list_head b_attached;
     struct list_head offline_node;
-    union {
-	struct work_struct release_work;
-	struct callback_head rcu;
+    union
+    {
+        struct work_struct release_work;
+        struct callback_head rcu;
     };
 };
 
@@ -7476,8 +7559,9 @@ struct bio {
     struct bio_issue bi_issue;
     u64 bi_iocost_cost;
     struct bio_crypt_ctx *bi_crypt_context;
-    union {
-	struct bio_integrity_payload *bi_integrity;
+    union
+    {
+        struct bio_integrity_payload *bi_integrity;
     };
     short unsigned int bi_vcnt;
     short unsigned int bi_max_vecs;
@@ -7650,19 +7734,22 @@ struct xen_pmu_regs {
 };
 
 struct xen_pmu_arch {
-    union {
-	struct xen_pmu_regs regs;
-	uint8_t pad[64];
+    union
+    {
+        struct xen_pmu_regs regs;
+        uint8_t pad[64];
     } r;
     uint64_t pmu_flags;
-    union {
-	uint32_t lapic_lvtpc;
-	uint64_t pad;
+    union
+    {
+        uint32_t lapic_lvtpc;
+        uint64_t pad;
     } l;
-    union {
-	struct xen_pmu_amd_ctxt amd;
-	struct xen_pmu_intel_ctxt intel;
-	uint8_t pad[128];
+    union
+    {
+        struct xen_pmu_amd_ctxt amd;
+        struct xen_pmu_intel_ctxt intel;
+        uint8_t pad[128];
     } c;
 };
 
@@ -7674,8 +7761,8 @@ struct dev_pagemap_ops {
 
 struct xen_pmu_params {
     struct {
-	uint32_t maj;
-	uint32_t min;
+        uint32_t maj;
+        uint32_t min;
     } version;
     uint64_t val;
     uint32_t vcpu;
@@ -7768,20 +7855,21 @@ enum perf_hw_cache_op_result_id {
     PERF_COUNT_HW_CACHE_RESULT_MAX = 2,
 };
 
-union perf_mem_data_src {
+union perf_mem_data_src
+{
     __u64 val;
     struct {
-	__u64 mem_op : 5;
-	__u64 mem_lvl : 14;
-	__u64 mem_snoop : 5;
-	__u64 mem_lock : 2;
-	__u64 mem_dtlb : 7;
-	__u64 mem_lvl_num : 4;
-	__u64 mem_remote : 1;
-	__u64 mem_snoopx : 2;
-	__u64 mem_blk : 3;
-	__u64 mem_hops : 3;
-	__u64 mem_rsvd : 18;
+        __u64 mem_op : 5;
+        __u64 mem_lvl : 14;
+        __u64 mem_snoop : 5;
+        __u64 mem_lock : 2;
+        __u64 mem_dtlb : 7;
+        __u64 mem_lvl_num : 4;
+        __u64 mem_remote : 1;
+        __u64 mem_snoopx : 2;
+        __u64 mem_blk : 3;
+        __u64 mem_hops : 3;
+        __u64 mem_rsvd : 18;
     };
 };
 
@@ -7800,12 +7888,13 @@ struct perf_branch_entry {
     __u64 reserved : 31;
 };
 
-union perf_sample_weight {
+union perf_sample_weight
+{
     __u64 full;
     struct {
-	__u32 var1_dw;
-	__u16 var2_w;
-	__u16 var3_w;
+        __u32 var1_dw;
+        __u16 var2_w;
+        __u16 var3_w;
     };
 };
 
@@ -8371,9 +8460,10 @@ struct bpf_cgroup_storage;
 
 struct bpf_prog_array_item {
     struct bpf_prog *prog;
-    union {
-	struct bpf_cgroup_storage *cgroup_storage[2];
-	u64 bpf_cookie;
+    union
+    {
+        struct bpf_cgroup_storage *cgroup_storage[2];
+        u64 bpf_cookie;
     };
 };
 
@@ -8665,265 +8755,280 @@ enum bpf_attach_type {
     __MAX_BPF_ATTACH_TYPE = 56,
 };
 
-union bpf_attr {
+union bpf_attr
+{
     struct {
-	__u32 map_type;
-	__u32 key_size;
-	__u32 value_size;
-	__u32 max_entries;
-	__u32 map_flags;
-	__u32 inner_map_fd;
-	__u32 numa_node;
-	char map_name[16];
-	__u32 map_ifindex;
-	__u32 btf_fd;
-	__u32 btf_key_type_id;
-	__u32 btf_value_type_id;
-	__u32 btf_vmlinux_value_type_id;
-	__u64 map_extra;
-	__s32 value_type_btf_obj_fd;
-	__s32 map_token_fd;
+        __u32 map_type;
+        __u32 key_size;
+        __u32 value_size;
+        __u32 max_entries;
+        __u32 map_flags;
+        __u32 inner_map_fd;
+        __u32 numa_node;
+        char map_name[16];
+        __u32 map_ifindex;
+        __u32 btf_fd;
+        __u32 btf_key_type_id;
+        __u32 btf_value_type_id;
+        __u32 btf_vmlinux_value_type_id;
+        __u64 map_extra;
+        __s32 value_type_btf_obj_fd;
+        __s32 map_token_fd;
     };
     struct {
-	__u32 map_fd;
-	__u64 key;
-	union {
-	    __u64 value;
-	    __u64 next_key;
-	};
-	__u64 flags;
+        __u32 map_fd;
+        __u64 key;
+        union
+        {
+            __u64 value;
+            __u64 next_key;
+        };
+        __u64 flags;
     };
     struct {
-	__u64 in_batch;
-	__u64 out_batch;
-	__u64 keys;
-	__u64 values;
-	__u32 count;
-	__u32 map_fd;
-	__u64 elem_flags;
-	__u64 flags;
+        __u64 in_batch;
+        __u64 out_batch;
+        __u64 keys;
+        __u64 values;
+        __u32 count;
+        __u32 map_fd;
+        __u64 elem_flags;
+        __u64 flags;
     } batch;
     struct {
-	__u32 prog_type;
-	__u32 insn_cnt;
-	__u64 insns;
-	__u64 license;
-	__u32 log_level;
-	__u32 log_size;
-	__u64 log_buf;
-	__u32 kern_version;
-	__u32 prog_flags;
-	char prog_name[16];
-	__u32 prog_ifindex;
-	__u32 expected_attach_type;
-	__u32 prog_btf_fd;
-	__u32 func_info_rec_size;
-	__u64 func_info;
-	__u32 func_info_cnt;
-	__u32 line_info_rec_size;
-	__u64 line_info;
-	__u32 line_info_cnt;
-	__u32 attach_btf_id;
-	union {
-	    __u32 attach_prog_fd;
-	    __u32 attach_btf_obj_fd;
-	};
-	__u32 core_relo_cnt;
-	__u64 fd_array;
-	__u64 core_relos;
-	__u32 core_relo_rec_size;
-	__u32 log_true_size;
-	__s32 prog_token_fd;
+        __u32 prog_type;
+        __u32 insn_cnt;
+        __u64 insns;
+        __u64 license;
+        __u32 log_level;
+        __u32 log_size;
+        __u64 log_buf;
+        __u32 kern_version;
+        __u32 prog_flags;
+        char prog_name[16];
+        __u32 prog_ifindex;
+        __u32 expected_attach_type;
+        __u32 prog_btf_fd;
+        __u32 func_info_rec_size;
+        __u64 func_info;
+        __u32 func_info_cnt;
+        __u32 line_info_rec_size;
+        __u64 line_info;
+        __u32 line_info_cnt;
+        __u32 attach_btf_id;
+        union
+        {
+            __u32 attach_prog_fd;
+            __u32 attach_btf_obj_fd;
+        };
+        __u32 core_relo_cnt;
+        __u64 fd_array;
+        __u64 core_relos;
+        __u32 core_relo_rec_size;
+        __u32 log_true_size;
+        __s32 prog_token_fd;
     };
     struct {
-	__u64 pathname;
-	__u32 bpf_fd;
-	__u32 file_flags;
-	__s32 path_fd;
+        __u64 pathname;
+        __u32 bpf_fd;
+        __u32 file_flags;
+        __s32 path_fd;
     };
     struct {
-	union {
-	    __u32 target_fd;
-	    __u32 target_ifindex;
-	};
-	__u32 attach_bpf_fd;
-	__u32 attach_type;
-	__u32 attach_flags;
-	__u32 replace_bpf_fd;
-	union {
-	    __u32 relative_fd;
-	    __u32 relative_id;
-	};
-	__u64 expected_revision;
+        union
+        {
+            __u32 target_fd;
+            __u32 target_ifindex;
+        };
+        __u32 attach_bpf_fd;
+        __u32 attach_type;
+        __u32 attach_flags;
+        __u32 replace_bpf_fd;
+        union
+        {
+            __u32 relative_fd;
+            __u32 relative_id;
+        };
+        __u64 expected_revision;
     };
     struct {
-	__u32 prog_fd;
-	__u32 retval;
-	__u32 data_size_in;
-	__u32 data_size_out;
-	__u64 data_in;
-	__u64 data_out;
-	__u32 repeat;
-	__u32 duration;
-	__u32 ctx_size_in;
-	__u32 ctx_size_out;
-	__u64 ctx_in;
-	__u64 ctx_out;
-	__u32 flags;
-	__u32 cpu;
-	__u32 batch_size;
+        __u32 prog_fd;
+        __u32 retval;
+        __u32 data_size_in;
+        __u32 data_size_out;
+        __u64 data_in;
+        __u64 data_out;
+        __u32 repeat;
+        __u32 duration;
+        __u32 ctx_size_in;
+        __u32 ctx_size_out;
+        __u64 ctx_in;
+        __u64 ctx_out;
+        __u32 flags;
+        __u32 cpu;
+        __u32 batch_size;
     } test;
     struct {
-	union {
-	    __u32 start_id;
-	    __u32 prog_id;
-	    __u32 map_id;
-	    __u32 btf_id;
-	    __u32 link_id;
-	};
-	__u32 next_id;
-	__u32 open_flags;
+        union
+        {
+            __u32 start_id;
+            __u32 prog_id;
+            __u32 map_id;
+            __u32 btf_id;
+            __u32 link_id;
+        };
+        __u32 next_id;
+        __u32 open_flags;
     };
     struct {
-	__u32 bpf_fd;
-	__u32 info_len;
-	__u64 info;
+        __u32 bpf_fd;
+        __u32 info_len;
+        __u64 info;
     } info;
     struct {
-	union {
-	    __u32 target_fd;
-	    __u32 target_ifindex;
-	};
-	__u32 attach_type;
-	__u32 query_flags;
-	__u32 attach_flags;
-	__u64 prog_ids;
-	union {
-	    __u32 prog_cnt;
-	    __u32 count;
-	};
-	__u64 prog_attach_flags;
-	__u64 link_ids;
-	__u64 link_attach_flags;
-	__u64 revision;
+        union
+        {
+            __u32 target_fd;
+            __u32 target_ifindex;
+        };
+        __u32 attach_type;
+        __u32 query_flags;
+        __u32 attach_flags;
+        __u64 prog_ids;
+        union
+        {
+            __u32 prog_cnt;
+            __u32 count;
+        };
+        __u64 prog_attach_flags;
+        __u64 link_ids;
+        __u64 link_attach_flags;
+        __u64 revision;
     } query;
     struct {
-	__u64 name;
-	__u32 prog_fd;
+        __u64 name;
+        __u32 prog_fd;
     } raw_tracepoint;
     struct {
-	__u64 btf;
-	__u64 btf_log_buf;
-	__u32 btf_size;
-	__u32 btf_log_size;
-	__u32 btf_log_level;
-	__u32 btf_log_true_size;
-	__u32 btf_flags;
-	__s32 btf_token_fd;
+        __u64 btf;
+        __u64 btf_log_buf;
+        __u32 btf_size;
+        __u32 btf_log_size;
+        __u32 btf_log_level;
+        __u32 btf_log_true_size;
+        __u32 btf_flags;
+        __s32 btf_token_fd;
     };
     struct {
-	__u32 pid;
-	__u32 fd;
-	__u32 flags;
-	__u32 buf_len;
-	__u64 buf;
-	__u32 prog_id;
-	__u32 fd_type;
-	__u64 probe_offset;
-	__u64 probe_addr;
+        __u32 pid;
+        __u32 fd;
+        __u32 flags;
+        __u32 buf_len;
+        __u64 buf;
+        __u32 prog_id;
+        __u32 fd_type;
+        __u64 probe_offset;
+        __u64 probe_addr;
     } task_fd_query;
     struct {
-	union {
-	    __u32 prog_fd;
-	    __u32 map_fd;
-	};
-	union {
-	    __u32 target_fd;
-	    __u32 target_ifindex;
-	};
-	__u32 attach_type;
-	__u32 flags;
-	union {
-	    __u32 target_btf_id;
-	    struct {
-		__u64 iter_info;
-		__u32 iter_info_len;
-	    };
-	    struct {
-		__u64 bpf_cookie;
-	    } perf_event;
-	    struct {
-		__u32 flags;
-		__u32 cnt;
-		__u64 syms;
-		__u64 addrs;
-		__u64 cookies;
-	    } kprobe_multi;
-	    struct {
-		__u32 target_btf_id;
-		__u64 cookie;
-	    } tracing;
-	    struct {
-		__u32 pf;
-		__u32 hooknum;
-		__s32 priority;
-		__u32 flags;
-	    } netfilter;
-	    struct {
-		union {
-		    __u32 relative_fd;
-		    __u32 relative_id;
-		};
-		__u64 expected_revision;
-	    } tcx;
-	    struct {
-		__u64 path;
-		__u64 offsets;
-		__u64 ref_ctr_offsets;
-		__u64 cookies;
-		__u32 cnt;
-		__u32 flags;
-		__u32 pid;
-	    } uprobe_multi;
-	    struct {
-		union {
-		    __u32 relative_fd;
-		    __u32 relative_id;
-		};
-		__u64 expected_revision;
-	    } netkit;
-	};
+        union
+        {
+            __u32 prog_fd;
+            __u32 map_fd;
+        };
+        union
+        {
+            __u32 target_fd;
+            __u32 target_ifindex;
+        };
+        __u32 attach_type;
+        __u32 flags;
+        union
+        {
+            __u32 target_btf_id;
+            struct {
+                __u64 iter_info;
+                __u32 iter_info_len;
+            };
+            struct {
+                __u64 bpf_cookie;
+            } perf_event;
+            struct {
+                __u32 flags;
+                __u32 cnt;
+                __u64 syms;
+                __u64 addrs;
+                __u64 cookies;
+            } kprobe_multi;
+            struct {
+                __u32 target_btf_id;
+                __u64 cookie;
+            } tracing;
+            struct {
+                __u32 pf;
+                __u32 hooknum;
+                __s32 priority;
+                __u32 flags;
+            } netfilter;
+            struct {
+                union
+                {
+                    __u32 relative_fd;
+                    __u32 relative_id;
+                };
+                __u64 expected_revision;
+            } tcx;
+            struct {
+                __u64 path;
+                __u64 offsets;
+                __u64 ref_ctr_offsets;
+                __u64 cookies;
+                __u32 cnt;
+                __u32 flags;
+                __u32 pid;
+            } uprobe_multi;
+            struct {
+                union
+                {
+                    __u32 relative_fd;
+                    __u32 relative_id;
+                };
+                __u64 expected_revision;
+            } netkit;
+        };
     } link_create;
     struct {
-	__u32 link_fd;
-	union {
-	    __u32 new_prog_fd;
-	    __u32 new_map_fd;
-	};
-	__u32 flags;
-	union {
-	    __u32 old_prog_fd;
-	    __u32 old_map_fd;
-	};
+        __u32 link_fd;
+        union
+        {
+            __u32 new_prog_fd;
+            __u32 new_map_fd;
+        };
+        __u32 flags;
+        union
+        {
+            __u32 old_prog_fd;
+            __u32 old_map_fd;
+        };
     } link_update;
     struct {
-	__u32 link_fd;
+        __u32 link_fd;
     } link_detach;
     struct {
-	__u32 type;
+        __u32 type;
     } enable_stats;
     struct {
-	__u32 link_fd;
-	__u32 flags;
+        __u32 link_fd;
+        __u32 flags;
     } iter_create;
     struct {
-	__u32 prog_fd;
-	__u32 map_fd;
-	__u32 flags;
+        __u32 prog_fd;
+        __u32 map_fd;
+        __u32 flags;
     } prog_bind_map;
     struct {
-	__u32 flags;
-	__u32 bpffs_fd;
+        __u32 flags;
+        __u32 bpffs_fd;
     } token_create;
 };
 
@@ -8949,9 +9054,10 @@ struct sock_filter {
 struct btf_type {
     __u32 name_off;
     __u32 info;
-    union {
-	__u32 size;
-	__u32 type;
+    union
+    {
+        __u32 size;
+        __u32 type;
     };
 };
 
@@ -8988,17 +9094,18 @@ struct bpf_prog {
     unsigned int (*bpf_func)(const void *, const struct bpf_insn *);
     struct bpf_prog_aux *aux;
     struct sock_fprog_kern *orig_prog;
-    union {
-	struct {
-	    struct {
-	    } __empty_insns;
-	    struct sock_filter insns[0];
-	};
-	struct {
-	    struct {
-	    } __empty_insnsi;
-	    struct bpf_insn insnsi[0];
-	};
+    union
+    {
+        struct {
+            struct {
+            } __empty_insns;
+            struct sock_filter insns[0];
+        };
+        struct {
+            struct {
+            } __empty_insnsi;
+            struct bpf_insn insnsi[0];
+        };
     };
 };
 
@@ -9042,9 +9149,10 @@ struct btf_field {
     u32 offset;
     u32 size;
     enum btf_field_type type;
-    union {
-	struct btf_field_kptr kptr;
-	struct btf_field_graph_root graph_root;
+    union
+    {
+        struct btf_field_kptr kptr;
+        struct btf_field_graph_root graph_root;
     };
 };
 
@@ -9171,12 +9279,12 @@ struct bpf_map;
 struct bpf_iter_aux_info {
     struct bpf_map *map;
     struct {
-	struct cgroup *start;
-	enum bpf_cgroup_iter_order order;
+        struct cgroup *start;
+        enum bpf_cgroup_iter_order order;
     } cgroup;
     struct {
-	enum bpf_iter_task_type type;
-	u32 pid;
+        enum bpf_iter_task_type type;
+        u32 pid;
     } task;
 };
 
@@ -9263,16 +9371,17 @@ struct bpf_map {
     struct mutex freeze_mutex;
     atomic64_t refcnt;
     atomic64_t usercnt;
-    union {
-	struct work_struct work;
-	struct callback_head rcu;
+    union
+    {
+        struct work_struct work;
+        struct callback_head rcu;
     };
     atomic64_t writecnt;
     struct {
-	spinlock_t lock;
-	enum bpf_prog_type type;
-	bool jited;
-	bool xdp_has_frags;
+        spinlock_t lock;
+        enum bpf_prog_type type;
+        bool jited;
+        bool xdp_has_frags;
     } owner;
     bool bypass_spec_v1;
     bool frozen;
@@ -9426,9 +9535,10 @@ struct bpf_prog_aux {
     struct module *mod;
     u32 num_exentries;
     struct exception_table_entry *extable;
-    union {
-	struct work_struct work;
-	struct callback_head rcu;
+    union
+    {
+        struct work_struct work;
+        struct callback_head rcu;
     };
 };
 
@@ -9499,9 +9609,10 @@ struct bpf_tramp_image {
     struct percpu_ref pcref;
     void *ip_after_call;
     void *ip_epilogue;
-    union {
-	struct callback_head rcu;
-	struct work_struct work;
+    union
+    {
+        struct callback_head rcu;
+        struct work_struct work;
     };
 };
 
@@ -9513,9 +9624,9 @@ struct bpf_trampoline {
     u32 flags;
     u64 key;
     struct {
-	struct btf_func_model model;
-	void *addr;
-	bool ftrace_managed;
+        struct btf_func_model model;
+        void *addr;
+        bool ftrace_managed;
     } func;
     struct bpf_prog *extension_prog;
     struct hlist_head progs_hlist[3];
@@ -9535,11 +9646,12 @@ struct bpf_jit_poke_descriptor {
     void *tailcall_bypass;
     void *bypass_addr;
     void *aux;
-    union {
-	struct {
-	    struct bpf_map *map;
-	    u32 key;
-	} tail_call;
+    union
+    {
+        struct {
+            struct bpf_map *map;
+            u32 key;
+        } tail_call;
     };
     bool tailcall_target_stable;
     u8 adj_off;
@@ -9578,9 +9690,10 @@ struct perf_callchain_entry {
 typedef long unsigned int (*perf_copy_f)(void *, const void *, long unsigned int, long unsigned int);
 
 struct perf_raw_frag {
-    union {
-	struct perf_raw_frag *next;
-	long unsigned int pad;
+    union
+    {
+        struct perf_raw_frag *next;
+        long unsigned int pad;
     };
     perf_copy_f copy;
     void *data;
@@ -9632,9 +9745,10 @@ struct perf_output_handle {
     long unsigned int wakeup;
     long unsigned int size;
     u64 aux_flags;
-    union {
-	void *addr;
-	long unsigned int head;
+    union
+    {
+        void *addr;
+        long unsigned int head;
     };
     int page;
 };
@@ -9650,14 +9764,14 @@ struct perf_sample_data {
     u64 dyn_size;
     u64 type;
     struct {
-	u32 pid;
-	u32 tid;
+        u32 pid;
+        u32 tid;
     } tid_entry;
     u64 time;
     u64 id;
     struct {
-	u32 cpu;
-	u32 reserved;
+        u32 cpu;
+        u32 reserved;
     } cpu_entry;
     u64 ip;
     struct perf_callchain_entry *callchain;
@@ -9710,9 +9824,10 @@ enum extra_reg_type {
 };
 
 struct event_constraint {
-    union {
-	long unsigned int idxmsk[1];
-	u64 idxmsk64;
+    union
+    {
+        long unsigned int idxmsk[1];
+        u64 idxmsk64;
     };
     u64 code;
     u64 cmask;
@@ -9778,9 +9893,10 @@ struct intel_excl_states {
 struct intel_excl_cntrs {
     raw_spinlock_t lock;
     struct intel_excl_states states[2];
-    union {
-	u16 has_exclusive[2];
-	u32 exclusive_present;
+    union
+    {
+        u16 has_exclusive[2];
+        u32 exclusive_present;
     };
     int refcnt;
     unsigned int core_id;
@@ -9827,9 +9943,10 @@ struct cpu_hw_events {
     struct perf_branch_stack lbr_stack;
     struct perf_branch_entry lbr_entries[32];
     u64 lbr_counters[32];
-    union {
-	struct er_account *lbr_sel;
-	struct er_account *lbr_ctl;
+    union
+    {
+        struct er_account *lbr_sel;
+        struct er_account *lbr_ctl;
     };
     u64 br_sel;
     void *last_task_ctx;
@@ -9863,19 +9980,20 @@ struct extra_reg {
     bool extra_msr_access;
 };
 
-union perf_capabilities {
+union perf_capabilities
+{
     struct {
-	u64 lbr_format : 6;
-	u64 pebs_trap : 1;
-	u64 pebs_arch_reg : 1;
-	u64 pebs_format : 4;
-	u64 smm_freeze : 1;
-	u64 full_width_write : 1;
-	u64 pebs_baseline : 1;
-	u64 perf_metrics : 1;
-	u64 pebs_output_pt_available : 1;
-	u64 pebs_timing_info : 1;
-	u64 anythread_deprecated : 1;
+        u64 lbr_format : 6;
+        u64 pebs_trap : 1;
+        u64 pebs_arch_reg : 1;
+        u64 pebs_format : 4;
+        u64 smm_freeze : 1;
+        u64 full_width_write : 1;
+        u64 pebs_baseline : 1;
+        u64 perf_metrics : 1;
+        u64 pebs_output_pt_available : 1;
+        u64 pebs_timing_info : 1;
+        u64 anythread_deprecated : 1;
     };
     u64 capabilities;
 };
@@ -9953,9 +10071,10 @@ struct x86_pmu {
     int num_counters_fixed;
     int cntval_bits;
     u64 cntval_mask;
-    union {
-	long unsigned int events_maskl;
-	long unsigned int events_mask[1];
+    union
+    {
+        long unsigned int events_maskl;
+        long unsigned int events_mask[1];
     };
     int events_mask_len;
     int apic;
@@ -10010,13 +10129,15 @@ struct x86_pmu {
     unsigned int lbr_to;
     unsigned int lbr_info;
     unsigned int lbr_nr;
-    union {
-	u64 lbr_sel_mask;
-	u64 lbr_ctl_mask;
+    union
+    {
+        u64 lbr_sel_mask;
+        u64 lbr_ctl_mask;
     };
-    union {
-	const int *lbr_sel_map;
-	int *lbr_ctl_map;
+    union
+    {
+        const int *lbr_sel_map;
+        int *lbr_ctl_map;
     };
     bool lbr_double_abort;
     bool lbr_pt_coexist;
@@ -11087,9 +11208,10 @@ struct tlb_context {
 
 struct tlb_state {
     struct mm_struct *loaded_mm;
-    union {
-	struct mm_struct *last_user_mm;
-	long unsigned int last_user_mm_spec;
+    union
+    {
+        struct mm_struct *last_user_mm;
+        long unsigned int last_user_mm_spec;
     };
     u16 loaded_mm_asid;
     u16 next_asid;
@@ -11130,16 +11252,18 @@ struct trace_event_class;
 struct trace_event_call {
     struct list_head list;
     struct trace_event_class *class;
-    union {
-	char *name;
-	struct tracepoint *tp;
+    union
+    {
+        char *name;
+        struct tracepoint *tp;
     };
     struct trace_event event;
     char *print_fmt;
     struct event_filter *filter;
-    union {
-	void *module;
-	atomic_t refcnt;
+    union
+    {
+        void *module;
+        atomic_t refcnt;
     };
     void *data;
     int flags;
@@ -11214,15 +11338,17 @@ enum irqchip_irq_state {
     IRQCHIP_STATE_LINE_LEVEL = 3,
 };
 
-union text_poke_insn {
+union text_poke_insn
+{
     u8 text[5];
     struct {
-	u8 opcode;
-	s32 disp;
+        u8 opcode;
+        s32 disp;
     } __attribute__((packed));
 };
 
-union msi_instance_cookie {
+union msi_instance_cookie
+{
     u64 value;
     void *ptr;
 };
@@ -11738,14 +11864,16 @@ struct trap_info {
 
 struct mmuext_op {
     unsigned int cmd;
-    union {
-	xen_pfn_t mfn;
-	long unsigned int linear_addr;
+    union
+    {
+        xen_pfn_t mfn;
+        long unsigned int linear_addr;
     } arg1;
-    union {
-	unsigned int nr_ents;
-	void *vcpumask;
-	xen_pfn_t src_mfn;
+    union
+    {
+        unsigned int nr_ents;
+        void *vcpumask;
+        xen_pfn_t src_mfn;
     } arg2;
 };
 
@@ -11832,24 +11960,25 @@ struct irq_desc {
 };
 
 struct x86_msi_addr_lo {
-    union {
-	struct {
-	    u32 reserved_0 : 2;
-	    u32 dest_mode_logical : 1;
-	    u32 redirect_hint : 1;
-	    u32 reserved_1 : 1;
-	    u32 virt_destid_8_14 : 7;
-	    u32 destid_0_7 : 8;
-	    u32 base_address : 12;
-	};
-	struct {
-	    u32 dmar_reserved_0 : 2;
-	    u32 dmar_index_15 : 1;
-	    u32 dmar_subhandle_valid : 1;
-	    u32 dmar_format : 1;
-	    u32 dmar_index_0_14 : 15;
-	    u32 dmar_base_address : 12;
-	};
+    union
+    {
+        struct {
+            u32 reserved_0 : 2;
+            u32 dest_mode_logical : 1;
+            u32 redirect_hint : 1;
+            u32 reserved_1 : 1;
+            u32 virt_destid_8_14 : 7;
+            u32 destid_0_7 : 8;
+            u32 base_address : 12;
+        };
+        struct {
+            u32 dmar_reserved_0 : 2;
+            u32 dmar_index_15 : 1;
+            u32 dmar_subhandle_valid : 1;
+            u32 dmar_format : 1;
+            u32 dmar_index_0_14 : 15;
+            u32 dmar_base_address : 12;
+        };
     };
 };
 
@@ -11863,57 +11992,64 @@ struct x86_msi_addr_hi {
 typedef struct x86_msi_addr_hi arch_msi_msg_addr_hi_t;
 
 struct x86_msi_data {
-    union {
-	struct {
-	    u32 vector : 8;
-	    u32 delivery_mode : 3;
-	    u32 dest_mode_logical : 1;
-	    u32 reserved : 2;
-	    u32 active_low : 1;
-	    u32 is_level : 1;
-	};
-	u32 dmar_subhandle;
+    union
+    {
+        struct {
+            u32 vector : 8;
+            u32 delivery_mode : 3;
+            u32 dest_mode_logical : 1;
+            u32 reserved : 2;
+            u32 active_low : 1;
+            u32 is_level : 1;
+        };
+        u32 dmar_subhandle;
     };
 };
 
 typedef struct x86_msi_data arch_msi_msg_data_t;
 
 struct msi_msg {
-    union {
-	u32 address_lo;
-	arch_msi_msg_addr_lo_t arch_addr_lo;
+    union
+    {
+        u32 address_lo;
+        arch_msi_msg_addr_lo_t arch_addr_lo;
     };
-    union {
-	u32 address_hi;
-	arch_msi_msg_addr_hi_t arch_addr_hi;
+    union
+    {
+        u32 address_hi;
+        arch_msi_msg_addr_hi_t arch_addr_hi;
     };
-    union {
-	u32 data;
-	arch_msi_msg_data_t arch_data;
+    union
+    {
+        u32 data;
+        arch_msi_msg_data_t arch_data;
     };
 };
 
 struct pci_msi_desc {
-    union {
-	u32 msi_mask;
-	u32 msix_ctrl;
+    union
+    {
+        u32 msi_mask;
+        u32 msix_ctrl;
     };
     struct {
-	u8 is_msix : 1;
-	u8 multiple : 3;
-	u8 multi_cap : 3;
-	u8 can_mask : 1;
-	u8 is_64 : 1;
-	u8 is_virtual : 1;
-	unsigned int default_irq;
+        u8 is_msix : 1;
+        u8 multiple : 3;
+        u8 multi_cap : 3;
+        u8 can_mask : 1;
+        u8 is_64 : 1;
+        u8 is_virtual : 1;
+        unsigned int default_irq;
     } msi_attrib;
-    union {
-	u8 mask_pos;
-	void *mask_base;
+    union
+    {
+        u8 mask_pos;
+        void *mask_base;
     };
 };
 
-union msi_domain_cookie {
+union msi_domain_cookie
+{
     u64 value;
     void *ptr;
     void *iobase;
@@ -11935,9 +12071,10 @@ struct msi_desc {
     void (*write_msi_msg)(struct msi_desc *, void *);
     void *write_msi_msg_data;
     u16 msi_index;
-    union {
-	struct pci_msi_desc pci;
-	struct msi_desc_data data;
+    union
+    {
+        struct pci_msi_desc pci;
+        struct msi_desc_data data;
     };
 };
 
@@ -12010,9 +12147,10 @@ struct irq_alloc_info {
     const struct cpumask *mask;
     struct msi_desc *desc;
     void *data;
-    union {
-	struct ioapic_alloc_info ioapic;
-	struct uv_alloc_info uv;
+    union
+    {
+        struct ioapic_alloc_info ioapic;
+        struct uv_alloc_info uv;
     };
 };
 
@@ -12242,16 +12380,17 @@ enum trace_reg {
 
 struct trace_event_fields {
     const char *type;
-    union {
-	struct {
-	    const char *name;
-	    const int size;
-	    const int align;
-	    const int is_signed;
-	    const int filter_type;
-	    const int len;
-	};
-	int (*define_fields)(struct trace_event_call *);
+    union
+    {
+        struct {
+            const char *name;
+            const int size;
+            const int align;
+            const int is_signed;
+            const int filter_type;
+            const int len;
+        };
+        int (*define_fields)(struct trace_event_call *);
     };
 };
 
@@ -12339,10 +12478,11 @@ enum dev_pm_qos_req_type {
 
 struct dev_pm_qos_request {
     enum dev_pm_qos_req_type type;
-    union {
-	struct plist_node pnode;
-	struct pm_qos_flags_request flr;
-	struct freq_qos_request freq;
+    union
+    {
+        struct plist_node pnode;
+        struct pm_qos_flags_request flr;
+        struct freq_qos_request freq;
     } data;
     struct device *dev;
 };
@@ -12442,19 +12582,20 @@ struct hv_x64_segment_register {
     u64 base;
     u32 limit;
     u16 selector;
-    union {
-	struct {
-	    u16 segment_type : 4;
-	    u16 non_system_segment : 1;
-	    u16 descriptor_privilege_level : 2;
-	    u16 present : 1;
-	    u16 reserved : 4;
-	    u16 available : 1;
-	    u16 _long : 1;
-	    u16 _default : 1;
-	    u16 granularity : 1;
-	};
-	u16 attributes;
+    union
+    {
+        struct {
+            u16 segment_type : 4;
+            u16 non_system_segment : 1;
+            u16 descriptor_privilege_level : 2;
+            u16 present : 1;
+            u16 reserved : 4;
+            u16 available : 1;
+            u16 _long : 1;
+            u16 _default : 1;
+            u16 granularity : 1;
+        };
+        u16 attributes;
     };
 };
 
@@ -12485,12 +12626,13 @@ struct hv_init_vp_context {
     u64 msr_cr_pat;
 };
 
-union hv_input_vtl {
+union hv_input_vtl
+{
     u8 as_uint8;
     struct {
-	u8 target_vtl : 4;
-	u8 use_target_vtl : 1;
-	u8 reserved_z : 3;
+        u8 target_vtl : 4;
+        u8 use_target_vtl : 1;
+        u8 reserved_z : 3;
     };
 };
 
@@ -12636,36 +12778,40 @@ enum es_result {
     ES_RETRY = 5,
 };
 
-union hv_ghcb {
+union hv_ghcb
+{
     struct ghcb ghcb;
     struct {
-	u64 hypercalldata[509];
-	u64 outputgpa;
-	union {
-	    union {
-		struct {
-		    u32 callcode : 16;
-		    u32 isfast : 1;
-		    u32 reserved1 : 14;
-		    u32 isnested : 1;
-		    u32 countofelements : 12;
-		    u32 reserved2 : 4;
-		    u32 repstartindex : 12;
-		    u32 reserved3 : 4;
-		};
-		u64 asuint64;
-	    } hypercallinput;
-	    union {
-		struct {
-		    u16 callstatus;
-		    u16 reserved1;
-		    u32 elementsprocessed : 12;
-		    u32 reserved2 : 20;
-		};
-		u64 asunit64;
-	    } hypercalloutput;
-	};
-	u64 reserved2;
+        u64 hypercalldata[509];
+        u64 outputgpa;
+        union
+        {
+            union
+            {
+                struct {
+                    u32 callcode : 16;
+                    u32 isfast : 1;
+                    u32 reserved1 : 14;
+                    u32 isnested : 1;
+                    u32 countofelements : 12;
+                    u32 reserved2 : 4;
+                    u32 repstartindex : 12;
+                    u32 reserved3 : 4;
+                };
+                u64 asuint64;
+            } hypercallinput;
+            union
+            {
+                struct {
+                    u16 callstatus;
+                    u16 reserved1;
+                    u32 elementsprocessed : 12;
+                    u32 reserved2 : 20;
+                };
+                u64 asunit64;
+            } hypercalloutput;
+        };
+        u64 reserved2;
     } hypercall;
 };
 
@@ -12678,22 +12824,24 @@ struct ms_hyperv_info {
     u32 max_vp_index;
     u32 max_lp_index;
     u8 vtl;
-    union {
-	u32 isolation_config_a;
-	struct {
-	    u32 paravisor_present : 1;
-	    u32 reserved_a1 : 31;
-	};
+    union
+    {
+        u32 isolation_config_a;
+        struct {
+            u32 paravisor_present : 1;
+            u32 reserved_a1 : 31;
+        };
     };
-    union {
-	u32 isolation_config_b;
-	struct {
-	    u32 cvm_type : 4;
-	    u32 reserved_b1 : 1;
-	    u32 shared_gpa_boundary_active : 1;
-	    u32 shared_gpa_boundary_bits : 6;
-	    u32 reserved_b2 : 20;
-	};
+    union
+    {
+        u32 isolation_config_b;
+        struct {
+            u32 cvm_type : 4;
+            u32 reserved_b1 : 1;
+            u32 shared_gpa_boundary_active : 1;
+            u32 shared_gpa_boundary_bits : 6;
+            u32 reserved_b2 : 20;
+        };
     };
     u64 shared_gpa_boundary;
 };
@@ -13083,9 +13231,10 @@ struct crypto_alg {
     char cra_name[128];
     char cra_driver_name[128];
     const struct crypto_type *cra_type;
-    union {
-	struct cipher_alg cipher;
-	struct compress_alg compress;
+    union
+    {
+        struct cipher_alg cipher;
+        struct compress_alg compress;
     } cra_u;
     int (*cra_init)(struct crypto_tfm *);
     void (*cra_exit)(struct crypto_tfm *);
@@ -13117,9 +13266,10 @@ struct crypto_spawn;
 struct crypto_instance {
     struct crypto_alg alg;
     struct crypto_template *tmpl;
-    union {
-	struct hlist_node list;
-	struct crypto_spawn *spawns;
+    union
+    {
+        struct hlist_node list;
+        struct crypto_spawn *spawns;
     };
     struct work_struct free_work;
     void *__ctx[0];
@@ -13128,9 +13278,10 @@ struct crypto_instance {
 struct crypto_spawn {
     struct list_head list;
     struct crypto_alg *alg;
-    union {
-	struct crypto_instance *inst;
-	struct crypto_spawn *next;
+    union
+    {
+        struct crypto_instance *inst;
+        struct crypto_spawn *next;
     };
     const struct crypto_type *frontend;
     u32 mask;
@@ -13179,20 +13330,22 @@ struct shash_alg {
     void (*exit_tfm)(struct crypto_shash *);
     int (*clone_tfm)(struct crypto_shash *, struct crypto_shash *);
     unsigned int descsize;
-    union {
-	struct {
-	    unsigned int digestsize;
-	    unsigned int statesize;
-	    struct crypto_alg base;
-	};
-	struct hash_alg_common halg;
+    union
+    {
+        struct {
+            unsigned int digestsize;
+            unsigned int statesize;
+            struct crypto_alg base;
+        };
+        struct hash_alg_common halg;
     };
 };
 
 struct poly1305_key {
-    union {
-	u32 r[5];
-	u64 r64[3];
+    union
+    {
+        u32 r[5];
+        u64 r64[3];
     };
 };
 
@@ -13202,9 +13355,10 @@ struct poly1305_core_key {
 };
 
 struct poly1305_state {
-    union {
-	u32 h[5];
-	u64 h64[3];
+    union
+    {
+        u32 h[5];
+        u64 h64[3];
     };
 };
 
@@ -13215,27 +13369,29 @@ struct poly1305_desc_ctx {
     bool sset;
     u32 s[4];
     struct poly1305_state h;
-    union {
-	struct poly1305_key opaque_r[11];
-	struct poly1305_core_key core_r;
+    union
+    {
+        struct poly1305_key opaque_r[11];
+        struct poly1305_core_key core_r;
     };
 };
 
 struct poly1305_arch_internal {
-    union {
-	struct {
-	    u32 h[5];
-	    u32 is_base2_26;
-	};
-	u64 hs[3];
+    union
+    {
+        struct {
+            u32 h[5];
+            u32 is_base2_26;
+        };
+        u64 hs[3];
     };
     u64 r[2];
     u64 pad;
     struct {
-	u32 r2;
-	u32 r1;
-	u32 r4;
-	u32 r3;
+        u32 r2;
+        u32 r1;
+        u32 r4;
+        u32 r3;
     } rn[9];
 };
 
@@ -13284,9 +13440,10 @@ struct pool_workqueue;
 struct worker_pool;
 
 struct worker {
-    union {
-	struct list_head entry;
-	struct hlist_node hentry;
+    union
+    {
+        struct list_head entry;
+        struct hlist_node hentry;
     };
     struct work_struct *current_work;
     work_func_t current_func;
@@ -13577,12 +13734,12 @@ struct load_info {
     bool sig_ok;
     long unsigned int mod_kallsyms_init_off;
     struct {
-	unsigned int sym;
-	unsigned int str;
-	unsigned int mod;
-	unsigned int vers;
-	unsigned int info;
-	unsigned int pcpu;
+        unsigned int sym;
+        unsigned int str;
+        unsigned int mod;
+        unsigned int vers;
+        unsigned int info;
+        unsigned int pcpu;
     } index;
 };
 
@@ -13812,11 +13969,12 @@ enum fs_value_type {
 struct fs_parameter {
     const char *key;
     enum fs_value_type type : 8;
-    union {
-	char *string;
-	void *blob;
-	struct filename *name;
-	struct file *file;
+    union
+    {
+        char *string;
+        void *blob;
+        struct filename *name;
+        struct file *file;
     };
     size_t size;
     int dirfd;
@@ -13842,11 +14000,12 @@ struct fs_context_operations {
 
 struct fs_parse_result {
     bool negated;
-    union {
-	bool boolean;
-	int int_32;
-	unsigned int uint_32;
-	u64 uint_64;
+    union
+    {
+        bool boolean;
+        int int_32;
+        unsigned int uint_32;
+        u64 uint_64;
     };
 };
 
@@ -13870,8 +14029,8 @@ enum cgroup_filetype {
 
 struct cgroup_pidlist {
     struct {
-	enum cgroup_filetype type;
-	struct pid_namespace *ns;
+        enum cgroup_filetype type;
+        struct pid_namespace *ns;
     } key;
     pid_t *list;
     int length;
@@ -13883,14 +14042,14 @@ struct cgroup_pidlist {
 struct cgroup_file_ctx {
     struct cgroup_namespace *ns;
     struct {
-	void *trigger;
+        void *trigger;
     } psi;
     struct {
-	bool started;
-	struct css_task_iter iter;
+        bool started;
+        struct css_task_iter iter;
     } procs;
     struct {
-	struct cgroup_pidlist *pidlist;
+        struct cgroup_pidlist *pidlist;
     } procs1;
 };
 
@@ -14356,109 +14515,113 @@ struct bpf_link_info {
     __u32 type;
     __u32 id;
     __u32 prog_id;
-    union {
-	struct {
-	    __u64 tp_name;
-	    __u32 tp_name_len;
-	} raw_tracepoint;
-	struct {
-	    __u32 attach_type;
-	    __u32 target_obj_id;
-	    __u32 target_btf_id;
-	} tracing;
-	struct {
-	    __u64 cgroup_id;
-	    __u32 attach_type;
-	} cgroup;
-	struct {
-	    __u64 target_name;
-	    __u32 target_name_len;
-	    union {
-		struct {
-		    __u32 map_id;
-		} map;
-	    };
-	    union {
-		struct {
-		    __u64 cgroup_id;
-		    __u32 order;
-		} cgroup;
-		struct {
-		    __u32 tid;
-		    __u32 pid;
-		} task;
-	    };
-	} iter;
-	struct {
-	    __u32 netns_ino;
-	    __u32 attach_type;
-	} netns;
-	struct {
-	    __u32 ifindex;
-	} xdp;
-	struct {
-	    __u32 map_id;
-	} struct_ops;
-	struct {
-	    __u32 pf;
-	    __u32 hooknum;
-	    __s32 priority;
-	    __u32 flags;
-	} netfilter;
-	struct {
-	    __u64 addrs;
-	    __u32 count;
-	    __u32 flags;
-	    __u64 missed;
-	    __u64 cookies;
-	} kprobe_multi;
-	struct {
-	    __u64 path;
-	    __u64 offsets;
-	    __u64 ref_ctr_offsets;
-	    __u64 cookies;
-	    __u32 path_size;
-	    __u32 count;
-	    __u32 flags;
-	    __u32 pid;
-	} uprobe_multi;
-	struct {
-	    __u32 type;
-	    union {
-		struct {
-		    __u64 file_name;
-		    __u32 name_len;
-		    __u32 offset;
-		    __u64 cookie;
-		} uprobe;
-		struct {
-		    __u64 func_name;
-		    __u32 name_len;
-		    __u32 offset;
-		    __u64 addr;
-		    __u64 missed;
-		    __u64 cookie;
-		} kprobe;
-		struct {
-		    __u64 tp_name;
-		    __u32 name_len;
-		    __u64 cookie;
-		} tracepoint;
-		struct {
-		    __u64 config;
-		    __u32 type;
-		    __u64 cookie;
-		} event;
-	    };
-	} perf_event;
-	struct {
-	    __u32 ifindex;
-	    __u32 attach_type;
-	} tcx;
-	struct {
-	    __u32 ifindex;
-	    __u32 attach_type;
-	} netkit;
+    union
+    {
+        struct {
+            __u64 tp_name;
+            __u32 tp_name_len;
+        } raw_tracepoint;
+        struct {
+            __u32 attach_type;
+            __u32 target_obj_id;
+            __u32 target_btf_id;
+        } tracing;
+        struct {
+            __u64 cgroup_id;
+            __u32 attach_type;
+        } cgroup;
+        struct {
+            __u64 target_name;
+            __u32 target_name_len;
+            union
+            {
+                struct {
+                    __u32 map_id;
+                } map;
+            };
+            union
+            {
+                struct {
+                    __u64 cgroup_id;
+                    __u32 order;
+                } cgroup;
+                struct {
+                    __u32 tid;
+                    __u32 pid;
+                } task;
+            };
+        } iter;
+        struct {
+            __u32 netns_ino;
+            __u32 attach_type;
+        } netns;
+        struct {
+            __u32 ifindex;
+        } xdp;
+        struct {
+            __u32 map_id;
+        } struct_ops;
+        struct {
+            __u32 pf;
+            __u32 hooknum;
+            __s32 priority;
+            __u32 flags;
+        } netfilter;
+        struct {
+            __u64 addrs;
+            __u32 count;
+            __u32 flags;
+            __u64 missed;
+            __u64 cookies;
+        } kprobe_multi;
+        struct {
+            __u64 path;
+            __u64 offsets;
+            __u64 ref_ctr_offsets;
+            __u64 cookies;
+            __u32 path_size;
+            __u32 count;
+            __u32 flags;
+            __u32 pid;
+        } uprobe_multi;
+        struct {
+            __u32 type;
+            union
+            {
+                struct {
+                    __u64 file_name;
+                    __u32 name_len;
+                    __u32 offset;
+                    __u64 cookie;
+                } uprobe;
+                struct {
+                    __u64 func_name;
+                    __u32 name_len;
+                    __u32 offset;
+                    __u64 addr;
+                    __u64 missed;
+                    __u64 cookie;
+                } kprobe;
+                struct {
+                    __u64 tp_name;
+                    __u32 name_len;
+                    __u64 cookie;
+                } tracepoint;
+                struct {
+                    __u64 config;
+                    __u32 type;
+                    __u64 cookie;
+                } event;
+            };
+        } perf_event;
+        struct {
+            __u32 ifindex;
+            __u32 attach_type;
+        } tcx;
+        struct {
+            __u32 ifindex;
+            __u32 attach_type;
+        } netkit;
     };
 };
 
@@ -14554,13 +14717,14 @@ typedef __kernel_sa_family_t sa_family_t;
 
 struct sockaddr {
     sa_family_t sa_family;
-    union {
-	char sa_data_min[14];
-	struct {
-	    struct {
-	    } __empty_sa_data;
-	    char sa_data[0];
-	};
+    union
+    {
+        char sa_data_min[14];
+        struct {
+            struct {
+            } __empty_sa_data;
+            char sa_data[0];
+        };
     };
 };
 
@@ -14571,9 +14735,10 @@ struct msghdr {
     int msg_namelen;
     int msg_inq;
     struct iov_iter msg_iter;
-    union {
-	void *msg_control;
-	void *msg_control_user;
+    union
+    {
+        void *msg_control;
+        void *msg_control_user;
     };
     bool msg_control_is_user : 1;
     bool msg_get_inq : 1;
@@ -14599,10 +14764,11 @@ typedef struct {
 } possible_net_t;
 
 struct in6_addr {
-    union {
-	__u8 u6_addr8[16];
-	__be16 u6_addr16[8];
-	__be32 u6_addr32[4];
+    union
+    {
+        __u8 u6_addr8[16];
+        __be16 u6_addr16[8];
+        __be32 u6_addr32[4];
     } in6_u;
 };
 
@@ -14611,23 +14777,26 @@ struct proto;
 struct inet_timewait_death_row;
 
 struct sock_common {
-    union {
-	__addrpair skc_addrpair;
-	struct {
-	    __be32 skc_daddr;
-	    __be32 skc_rcv_saddr;
-	};
+    union
+    {
+        __addrpair skc_addrpair;
+        struct {
+            __be32 skc_daddr;
+            __be32 skc_rcv_saddr;
+        };
     };
-    union {
-	unsigned int skc_hash;
-	__u16 skc_u16hashes[2];
+    union
+    {
+        unsigned int skc_hash;
+        __u16 skc_u16hashes[2];
     };
-    union {
-	__portpair skc_portpair;
-	struct {
-	    __be16 skc_dport;
-	    __u16 skc_num;
-	};
+    union
+    {
+        __portpair skc_portpair;
+        struct {
+            __be16 skc_dport;
+            __u16 skc_num;
+        };
     };
     short unsigned int skc_family;
     volatile unsigned char skc_state;
@@ -14636,38 +14805,43 @@ struct sock_common {
     unsigned char skc_ipv6only : 1;
     unsigned char skc_net_refcnt : 1;
     int skc_bound_dev_if;
-    union {
-	struct hlist_node skc_bind_node;
-	struct hlist_node skc_portaddr_node;
+    union
+    {
+        struct hlist_node skc_bind_node;
+        struct hlist_node skc_portaddr_node;
     };
     struct proto *skc_prot;
     possible_net_t skc_net;
     struct in6_addr skc_v6_daddr;
     struct in6_addr skc_v6_rcv_saddr;
     atomic64_t skc_cookie;
-    union {
-	long unsigned int skc_flags;
-	struct sock *skc_listener;
-	struct inet_timewait_death_row *skc_tw_dr;
+    union
+    {
+        long unsigned int skc_flags;
+        struct sock *skc_listener;
+        struct inet_timewait_death_row *skc_tw_dr;
     };
     int skc_dontcopy_begin[0];
-    union {
-	struct hlist_node skc_node;
-	struct hlist_nulls_node skc_nulls_node;
+    union
+    {
+        struct hlist_node skc_node;
+        struct hlist_nulls_node skc_nulls_node;
     };
     short unsigned int skc_tx_queue_mapping;
     short unsigned int skc_rx_queue_mapping;
-    union {
-	int skc_incoming_cpu;
-	u32 skc_rcv_wnd;
-	u32 skc_tw_rcv_nxt;
+    union
+    {
+        int skc_incoming_cpu;
+        u32 skc_rcv_wnd;
+        u32 skc_tw_rcv_nxt;
     };
     refcount_t skc_refcnt;
     int skc_dontcopy_end[0];
-    union {
-	u32 skc_rxhash;
-	u32 skc_window_clamp;
-	u32 skc_tw_snd_nxt;
+    union
+    {
+        u32 skc_rxhash;
+        u32 skc_window_clamp;
+        u32 skc_tw_snd_nxt;
     };
 };
 
@@ -14677,12 +14851,13 @@ struct sk_buff_list {
 };
 
 struct sk_buff_head {
-    union {
-	struct {
-	    struct sk_buff *next;
-	    struct sk_buff *prev;
-	};
-	struct sk_buff_list list;
+    union
+    {
+        struct {
+            struct sk_buff *next;
+            struct sk_buff *prev;
+        };
+        struct sk_buff_list list;
     };
     __u32 qlen;
     spinlock_t lock;
@@ -14725,10 +14900,10 @@ struct sock {
     struct sk_buff_head sk_error_queue;
     struct sk_buff_head sk_receive_queue;
     struct {
-	atomic_t rmem_alloc;
-	int len;
-	struct sk_buff *head;
-	struct sk_buff *tail;
+        atomic_t rmem_alloc;
+        int len;
+        struct sk_buff *head;
+        struct sk_buff *tail;
     } sk_backlog;
     __u8 __cacheline_group_end__sock_write_rx[0];
     __u8 __cacheline_group_begin__sock_read_rx[0];
@@ -14742,9 +14917,10 @@ struct sock {
     u8 sk_userlocks;
     int sk_rcvbuf;
     struct sk_filter *sk_filter;
-    union {
-	struct socket_wq *sk_wq;
-	struct socket_wq *sk_wq_raw;
+    union
+    {
+        struct socket_wq *sk_wq;
+        struct socket_wq *sk_wq_raw;
     };
     void (*sk_data_ready)(struct sock *);
     long int sk_rcvtimeo;
@@ -14769,9 +14945,10 @@ struct sock {
     int sk_wmem_queued;
     refcount_t sk_wmem_alloc;
     long unsigned int sk_tsq_flags;
-    union {
-	struct sk_buff *sk_send_head;
-	struct rb_root tcp_rtx_queue;
+    union
+    {
+        struct sk_buff *sk_send_head;
+        struct rb_root tcp_rtx_queue;
     };
     struct sk_buff_head sk_write_queue;
     u32 sk_dst_pending_confirm;
@@ -14842,32 +15019,36 @@ typedef unsigned int sk_buff_data_t;
 struct skb_ext;
 
 struct sk_buff {
-    union {
-	struct {
-	    struct sk_buff *next;
-	    struct sk_buff *prev;
-	    union {
-		struct net_device *dev;
-		long unsigned int dev_scratch;
-	    };
-	};
-	struct rb_node rbnode;
-	struct list_head list;
-	struct llist_node ll_node;
+    union
+    {
+        struct {
+            struct sk_buff *next;
+            struct sk_buff *prev;
+            union
+            {
+                struct net_device *dev;
+                long unsigned int dev_scratch;
+            };
+        };
+        struct rb_node rbnode;
+        struct list_head list;
+        struct llist_node ll_node;
     };
     struct sock *sk;
-    union {
-	ktime_t tstamp;
-	u64 skb_mstamp_ns;
+    union
+    {
+        ktime_t tstamp;
+        u64 skb_mstamp_ns;
     };
     char cb[48];
-    union {
-	struct {
-	    long unsigned int _skb_refdst;
-	    void (*destructor)(struct sk_buff *);
-	};
-	struct list_head tcp_tsorted_anchor;
-	long unsigned int _sk_redir;
+    union
+    {
+        struct {
+            long unsigned int _skb_refdst;
+            void (*destructor)(struct sk_buff *);
+        };
+        struct list_head tcp_tsorted_anchor;
+        long unsigned int _sk_redir;
     };
     long unsigned int _nfct;
     unsigned int len;
@@ -14884,155 +15065,166 @@ struct sk_buff {
     __u8 pfmemalloc : 1;
     __u8 pp_recycle : 1;
     __u8 active_extensions;
-    union {
-	struct {
-	    __u8 __pkt_type_offset[0];
-	    __u8 pkt_type : 3;
-	    __u8 ignore_df : 1;
-	    __u8 dst_pending_confirm : 1;
-	    __u8 ip_summed : 2;
-	    __u8 ooo_okay : 1;
-	    __u8 __mono_tc_offset[0];
-	    __u8 mono_delivery_time : 1;
-	    __u8 tc_at_ingress : 1;
-	    __u8 tc_skip_classify : 1;
-	    __u8 remcsum_offload : 1;
-	    __u8 csum_complete_sw : 1;
-	    __u8 csum_level : 2;
-	    __u8 inner_protocol_type : 1;
-	    __u8 l4_hash : 1;
-	    __u8 sw_hash : 1;
-	    __u8 wifi_acked_valid : 1;
-	    __u8 wifi_acked : 1;
-	    __u8 no_fcs : 1;
-	    __u8 encapsulation : 1;
-	    __u8 encap_hdr_csum : 1;
-	    __u8 csum_valid : 1;
-	    __u8 ndisc_nodetype : 2;
-	    __u8 ipvs_property : 1;
-	    __u8 nf_trace : 1;
-	    __u8 offload_fwd_mark : 1;
-	    __u8 offload_l3_fwd_mark : 1;
-	    __u8 redirected : 1;
-	    __u8 from_ingress : 1;
-	    __u8 nf_skip_egress : 1;
-	    __u8 decrypted : 1;
-	    __u8 slow_gro : 1;
-	    __u8 csum_not_inet : 1;
-	    __u16 tc_index;
-	    u16 alloc_cpu;
-	    union {
-		__wsum csum;
-		struct {
-		    __u16 csum_start;
-		    __u16 csum_offset;
-		};
-	    };
-	    __u32 priority;
-	    int skb_iif;
-	    __u32 hash;
-	    union {
-		u32 vlan_all;
-		struct {
-		    __be16 vlan_proto;
-		    __u16 vlan_tci;
-		};
-	    };
-	    union {
-		unsigned int napi_id;
-		unsigned int sender_cpu;
-	    };
-	    __u32 secmark;
-	    union {
-		__u32 mark;
-		__u32 reserved_tailroom;
-	    };
-	    union {
-		__be16 inner_protocol;
-		__u8 inner_ipproto;
-	    };
-	    __u16 inner_transport_header;
-	    __u16 inner_network_header;
-	    __u16 inner_mac_header;
-	    __be16 protocol;
-	    __u16 transport_header;
-	    __u16 network_header;
-	    __u16 mac_header;
-	};
-	struct {
-	    __u8 __pkt_type_offset[0];
-	    __u8 pkt_type : 3;
-	    __u8 ignore_df : 1;
-	    __u8 dst_pending_confirm : 1;
-	    __u8 ip_summed : 2;
-	    __u8 ooo_okay : 1;
-	    __u8 __mono_tc_offset[0];
-	    __u8 mono_delivery_time : 1;
-	    __u8 tc_at_ingress : 1;
-	    __u8 tc_skip_classify : 1;
-	    __u8 remcsum_offload : 1;
-	    __u8 csum_complete_sw : 1;
-	    __u8 csum_level : 2;
-	    __u8 inner_protocol_type : 1;
-	    __u8 l4_hash : 1;
-	    __u8 sw_hash : 1;
-	    __u8 wifi_acked_valid : 1;
-	    __u8 wifi_acked : 1;
-	    __u8 no_fcs : 1;
-	    __u8 encapsulation : 1;
-	    __u8 encap_hdr_csum : 1;
-	    __u8 csum_valid : 1;
-	    __u8 ndisc_nodetype : 2;
-	    __u8 ipvs_property : 1;
-	    __u8 nf_trace : 1;
-	    __u8 offload_fwd_mark : 1;
-	    __u8 offload_l3_fwd_mark : 1;
-	    __u8 redirected : 1;
-	    __u8 from_ingress : 1;
-	    __u8 nf_skip_egress : 1;
-	    __u8 decrypted : 1;
-	    __u8 slow_gro : 1;
-	    __u8 csum_not_inet : 1;
-	    __u16 tc_index;
-	    u16 alloc_cpu;
-	    union {
-		__wsum csum;
-		struct {
-		    __u16 csum_start;
-		    __u16 csum_offset;
-		};
-	    };
-	    __u32 priority;
-	    int skb_iif;
-	    __u32 hash;
-	    union {
-		u32 vlan_all;
-		struct {
-		    __be16 vlan_proto;
-		    __u16 vlan_tci;
-		};
-	    };
-	    union {
-		unsigned int napi_id;
-		unsigned int sender_cpu;
-	    };
-	    __u32 secmark;
-	    union {
-		__u32 mark;
-		__u32 reserved_tailroom;
-	    };
-	    union {
-		__be16 inner_protocol;
-		__u8 inner_ipproto;
-	    };
-	    __u16 inner_transport_header;
-	    __u16 inner_network_header;
-	    __u16 inner_mac_header;
-	    __be16 protocol;
-	    __u16 transport_header;
-	    __u16 network_header;
-	    __u16 mac_header;
-	} headers;
+    union
+    {
+        struct {
+            __u8 __pkt_type_offset[0];
+            __u8 pkt_type : 3;
+            __u8 ignore_df : 1;
+            __u8 dst_pending_confirm : 1;
+            __u8 ip_summed : 2;
+            __u8 ooo_okay : 1;
+            __u8 __mono_tc_offset[0];
+            __u8 mono_delivery_time : 1;
+            __u8 tc_at_ingress : 1;
+            __u8 tc_skip_classify : 1;
+            __u8 remcsum_offload : 1;
+            __u8 csum_complete_sw : 1;
+            __u8 csum_level : 2;
+            __u8 inner_protocol_type : 1;
+            __u8 l4_hash : 1;
+            __u8 sw_hash : 1;
+            __u8 wifi_acked_valid : 1;
+            __u8 wifi_acked : 1;
+            __u8 no_fcs : 1;
+            __u8 encapsulation : 1;
+            __u8 encap_hdr_csum : 1;
+            __u8 csum_valid : 1;
+            __u8 ndisc_nodetype : 2;
+            __u8 ipvs_property : 1;
+            __u8 nf_trace : 1;
+            __u8 offload_fwd_mark : 1;
+            __u8 offload_l3_fwd_mark : 1;
+            __u8 redirected : 1;
+            __u8 from_ingress : 1;
+            __u8 nf_skip_egress : 1;
+            __u8 decrypted : 1;
+            __u8 slow_gro : 1;
+            __u8 csum_not_inet : 1;
+            __u16 tc_index;
+            u16 alloc_cpu;
+            union
+            {
+                __wsum csum;
+                struct {
+                    __u16 csum_start;
+                    __u16 csum_offset;
+                };
+            };
+            __u32 priority;
+            int skb_iif;
+            __u32 hash;
+            union
+            {
+                u32 vlan_all;
+                struct {
+                    __be16 vlan_proto;
+                    __u16 vlan_tci;
+                };
+            };
+            union
+            {
+                unsigned int napi_id;
+                unsigned int sender_cpu;
+            };
+            __u32 secmark;
+            union
+            {
+                __u32 mark;
+                __u32 reserved_tailroom;
+            };
+            union
+            {
+                __be16 inner_protocol;
+                __u8 inner_ipproto;
+            };
+            __u16 inner_transport_header;
+            __u16 inner_network_header;
+            __u16 inner_mac_header;
+            __be16 protocol;
+            __u16 transport_header;
+            __u16 network_header;
+            __u16 mac_header;
+        };
+        struct {
+            __u8 __pkt_type_offset[0];
+            __u8 pkt_type : 3;
+            __u8 ignore_df : 1;
+            __u8 dst_pending_confirm : 1;
+            __u8 ip_summed : 2;
+            __u8 ooo_okay : 1;
+            __u8 __mono_tc_offset[0];
+            __u8 mono_delivery_time : 1;
+            __u8 tc_at_ingress : 1;
+            __u8 tc_skip_classify : 1;
+            __u8 remcsum_offload : 1;
+            __u8 csum_complete_sw : 1;
+            __u8 csum_level : 2;
+            __u8 inner_protocol_type : 1;
+            __u8 l4_hash : 1;
+            __u8 sw_hash : 1;
+            __u8 wifi_acked_valid : 1;
+            __u8 wifi_acked : 1;
+            __u8 no_fcs : 1;
+            __u8 encapsulation : 1;
+            __u8 encap_hdr_csum : 1;
+            __u8 csum_valid : 1;
+            __u8 ndisc_nodetype : 2;
+            __u8 ipvs_property : 1;
+            __u8 nf_trace : 1;
+            __u8 offload_fwd_mark : 1;
+            __u8 offload_l3_fwd_mark : 1;
+            __u8 redirected : 1;
+            __u8 from_ingress : 1;
+            __u8 nf_skip_egress : 1;
+            __u8 decrypted : 1;
+            __u8 slow_gro : 1;
+            __u8 csum_not_inet : 1;
+            __u16 tc_index;
+            u16 alloc_cpu;
+            union
+            {
+                __wsum csum;
+                struct {
+                    __u16 csum_start;
+                    __u16 csum_offset;
+                };
+            };
+            __u32 priority;
+            int skb_iif;
+            __u32 hash;
+            union
+            {
+                u32 vlan_all;
+                struct {
+                    __be16 vlan_proto;
+                    __u16 vlan_tci;
+                };
+            };
+            union
+            {
+                unsigned int napi_id;
+                unsigned int sender_cpu;
+            };
+            __u32 secmark;
+            union
+            {
+                __u32 mark;
+                __u32 reserved_tailroom;
+            };
+            union
+            {
+                __be16 inner_protocol;
+                __u8 inner_ipproto;
+            };
+            __u16 inner_transport_header;
+            __u16 inner_network_header;
+            __u16 inner_mac_header;
+            __be16 protocol;
+            __u16 transport_header;
+            __u16 network_header;
+            __u16 mac_header;
+        } headers;
     };
     sk_buff_data_t tail;
     sk_buff_data_t end;
@@ -15106,36 +15298,39 @@ struct ifmap {
 struct if_settings {
     unsigned int type;
     unsigned int size;
-    union {
-	raw_hdlc_proto *raw_hdlc;
-	cisco_proto *cisco;
-	fr_proto *fr;
-	fr_proto_pvc *fr_pvc;
-	fr_proto_pvc_info *fr_pvc_info;
-	x25_hdlc_proto *x25;
-	sync_serial_settings *sync;
-	te1_settings *te1;
+    union
+    {
+        raw_hdlc_proto *raw_hdlc;
+        cisco_proto *cisco;
+        fr_proto *fr;
+        fr_proto_pvc *fr_pvc;
+        fr_proto_pvc_info *fr_pvc_info;
+        x25_hdlc_proto *x25;
+        sync_serial_settings *sync;
+        te1_settings *te1;
     } ifs_ifsu;
 };
 
 struct ifreq {
-    union {
-	char ifrn_name[16];
+    union
+    {
+        char ifrn_name[16];
     } ifr_ifrn;
-    union {
-	struct sockaddr ifru_addr;
-	struct sockaddr ifru_dstaddr;
-	struct sockaddr ifru_broadaddr;
-	struct sockaddr ifru_netmask;
-	struct sockaddr ifru_hwaddr;
-	short int ifru_flags;
-	int ifru_ivalue;
-	int ifru_mtu;
-	struct ifmap ifru_map;
-	char ifru_slave[16];
-	char ifru_newname[16];
-	void *ifru_data;
-	struct if_settings ifru_settings;
+    union
+    {
+        struct sockaddr ifru_addr;
+        struct sockaddr ifru_dstaddr;
+        struct sockaddr ifru_broadaddr;
+        struct sockaddr ifru_netmask;
+        struct sockaddr ifru_hwaddr;
+        short int ifru_flags;
+        int ifru_ivalue;
+        int ifru_mtu;
+        struct ifmap ifru_map;
+        char ifru_slave[16];
+        char ifru_newname[16];
+        void *ifru_data;
+        struct if_settings ifru_settings;
     } ifr_ifru;
 };
 
@@ -15177,14 +15372,16 @@ struct xa_node {
     unsigned char nr_values;
     struct xa_node *parent;
     struct xarray *array;
-    union {
-	struct list_head private_list;
-	struct callback_head callback_head;
+    union
+    {
+        struct list_head private_list;
+        struct callback_head callback_head;
     };
     void *slots[64];
-    union {
-	long unsigned int tags[3];
-	long unsigned int marks[3];
+    union
+    {
+        long unsigned int tags[3];
+        long unsigned int marks[3];
     };
 };
 
@@ -15195,9 +15392,10 @@ struct radix_tree_preload {
 };
 
 typedef struct {
-    union {
-	void *kernel;
-	void *user;
+    union
+    {
+        void *kernel;
+        void *user;
     };
     bool is_kernel : 1;
 } sockptr_t;
@@ -15634,9 +15832,9 @@ struct netns_ipv6 {
     struct fib_notifier_ops *ip6mr_notifier_ops;
     unsigned int ipmr_seq;
     struct {
-	struct hlist_head head;
-	spinlock_t lock;
-	u32 seq;
+        struct hlist_head head;
+        spinlock_t lock;
+        u32 seq;
     } ip6addrlbl_table;
     struct ioam6_pernet_data *ioam6_data;
     long : 64;
@@ -16057,9 +16255,10 @@ enum bpf_arg_type {
 
 struct bpf_subprog_arg_info {
     enum bpf_arg_type arg_type;
-    union {
-	u32 mem_size;
-	u32 btf_id;
+    union
+    {
+        u32 mem_size;
+        u32 btf_id;
     };
 };
 
@@ -16146,14 +16345,15 @@ struct bpf_verifier_env {
     const struct bpf_line_info *prev_linfo;
     struct bpf_verifier_log log;
     struct bpf_subprog_info subprog_info[258];
-    union {
-	struct bpf_idmap idmap_scratch;
-	struct bpf_idset idset_scratch;
+    union
+    {
+        struct bpf_idmap idmap_scratch;
+        struct bpf_idset idset_scratch;
     };
     struct {
-	int *insn_state;
-	int *insn_stack;
-	int cur_stack;
+        int *insn_state;
+        int *insn_stack;
+        int cur_stack;
     } cfg;
     struct backtrack_state bt;
     struct bpf_jmp_history_entry *cur_hist_ent;
@@ -16207,35 +16407,36 @@ enum bpf_reg_liveness {
 struct bpf_reg_state {
     enum bpf_reg_type type;
     s32 off;
-    union {
-	int range;
-	struct {
-	    struct bpf_map *map_ptr;
-	    u32 map_uid;
-	};
-	struct {
-	    struct btf *btf;
-	    u32 btf_id;
-	};
-	struct {
-	    u32 mem_size;
-	    u32 dynptr_id;
-	};
-	struct {
-	    enum bpf_dynptr_type type;
-	    bool first_slot;
-	} dynptr;
-	struct {
-	    struct btf *btf;
-	    u32 btf_id;
-	    enum bpf_iter_state state : 2;
-	    int depth : 30;
-	} iter;
-	struct {
-	    long unsigned int raw1;
-	    long unsigned int raw2;
-	} raw;
-	u32 subprogno;
+    union
+    {
+        int range;
+        struct {
+            struct bpf_map *map_ptr;
+            u32 map_uid;
+        };
+        struct {
+            struct btf *btf;
+            u32 btf_id;
+        };
+        struct {
+            u32 mem_size;
+            u32 dynptr_id;
+        };
+        struct {
+            enum bpf_dynptr_type type;
+            bool first_slot;
+        } dynptr;
+        struct {
+            struct btf *btf;
+            u32 btf_id;
+            enum bpf_iter_state state : 2;
+            int depth : 30;
+        } iter;
+        struct {
+            long unsigned int raw1;
+            long unsigned int raw2;
+        } raw;
+        u32 subprogno;
     };
     struct tnum var_off;
     s64 smin_value;
@@ -16317,97 +16518,120 @@ typedef rx_handler_result_t rx_handler_func_t(struct sk_buff **);
 typedef u32 xdp_features_t;
 
 struct net_device_stats {
-    union {
-	long unsigned int rx_packets;
-	atomic_long_t __rx_packets;
+    union
+    {
+        long unsigned int rx_packets;
+        atomic_long_t __rx_packets;
     };
-    union {
-	long unsigned int tx_packets;
-	atomic_long_t __tx_packets;
+    union
+    {
+        long unsigned int tx_packets;
+        atomic_long_t __tx_packets;
     };
-    union {
-	long unsigned int rx_bytes;
-	atomic_long_t __rx_bytes;
+    union
+    {
+        long unsigned int rx_bytes;
+        atomic_long_t __rx_bytes;
     };
-    union {
-	long unsigned int tx_bytes;
-	atomic_long_t __tx_bytes;
+    union
+    {
+        long unsigned int tx_bytes;
+        atomic_long_t __tx_bytes;
     };
-    union {
-	long unsigned int rx_errors;
-	atomic_long_t __rx_errors;
+    union
+    {
+        long unsigned int rx_errors;
+        atomic_long_t __rx_errors;
     };
-    union {
-	long unsigned int tx_errors;
-	atomic_long_t __tx_errors;
+    union
+    {
+        long unsigned int tx_errors;
+        atomic_long_t __tx_errors;
     };
-    union {
-	long unsigned int rx_dropped;
-	atomic_long_t __rx_dropped;
+    union
+    {
+        long unsigned int rx_dropped;
+        atomic_long_t __rx_dropped;
     };
-    union {
-	long unsigned int tx_dropped;
-	atomic_long_t __tx_dropped;
+    union
+    {
+        long unsigned int tx_dropped;
+        atomic_long_t __tx_dropped;
     };
-    union {
-	long unsigned int multicast;
-	atomic_long_t __multicast;
+    union
+    {
+        long unsigned int multicast;
+        atomic_long_t __multicast;
     };
-    union {
-	long unsigned int collisions;
-	atomic_long_t __collisions;
+    union
+    {
+        long unsigned int collisions;
+        atomic_long_t __collisions;
     };
-    union {
-	long unsigned int rx_length_errors;
-	atomic_long_t __rx_length_errors;
+    union
+    {
+        long unsigned int rx_length_errors;
+        atomic_long_t __rx_length_errors;
     };
-    union {
-	long unsigned int rx_over_errors;
-	atomic_long_t __rx_over_errors;
+    union
+    {
+        long unsigned int rx_over_errors;
+        atomic_long_t __rx_over_errors;
     };
-    union {
-	long unsigned int rx_crc_errors;
-	atomic_long_t __rx_crc_errors;
+    union
+    {
+        long unsigned int rx_crc_errors;
+        atomic_long_t __rx_crc_errors;
     };
-    union {
-	long unsigned int rx_frame_errors;
-	atomic_long_t __rx_frame_errors;
+    union
+    {
+        long unsigned int rx_frame_errors;
+        atomic_long_t __rx_frame_errors;
     };
-    union {
-	long unsigned int rx_fifo_errors;
-	atomic_long_t __rx_fifo_errors;
+    union
+    {
+        long unsigned int rx_fifo_errors;
+        atomic_long_t __rx_fifo_errors;
     };
-    union {
-	long unsigned int rx_missed_errors;
-	atomic_long_t __rx_missed_errors;
+    union
+    {
+        long unsigned int rx_missed_errors;
+        atomic_long_t __rx_missed_errors;
     };
-    union {
-	long unsigned int tx_aborted_errors;
-	atomic_long_t __tx_aborted_errors;
+    union
+    {
+        long unsigned int tx_aborted_errors;
+        atomic_long_t __tx_aborted_errors;
     };
-    union {
-	long unsigned int tx_carrier_errors;
-	atomic_long_t __tx_carrier_errors;
+    union
+    {
+        long unsigned int tx_carrier_errors;
+        atomic_long_t __tx_carrier_errors;
     };
-    union {
-	long unsigned int tx_fifo_errors;
-	atomic_long_t __tx_fifo_errors;
+    union
+    {
+        long unsigned int tx_fifo_errors;
+        atomic_long_t __tx_fifo_errors;
     };
-    union {
-	long unsigned int tx_heartbeat_errors;
-	atomic_long_t __tx_heartbeat_errors;
+    union
+    {
+        long unsigned int tx_heartbeat_errors;
+        atomic_long_t __tx_heartbeat_errors;
     };
-    union {
-	long unsigned int tx_window_errors;
-	atomic_long_t __tx_window_errors;
+    union
+    {
+        long unsigned int tx_window_errors;
+        atomic_long_t __tx_window_errors;
     };
-    union {
-	long unsigned int rx_compressed;
-	atomic_long_t __rx_compressed;
+    union
+    {
+        long unsigned int rx_compressed;
+        atomic_long_t __rx_compressed;
     };
-    union {
-	long unsigned int tx_compressed;
-	atomic_long_t __tx_compressed;
+    union
+    {
+        long unsigned int tx_compressed;
+        atomic_long_t __tx_compressed;
     };
 };
 
@@ -16557,10 +16781,11 @@ struct net_device {
     struct bpf_mprog_entry *tcx_egress;
     __u8 __cacheline_group_end__net_device_read_tx[0];
     __u8 __cacheline_group_begin__net_device_read_txrx[0];
-    union {
-	struct pcpu_lstats *lstats;
-	struct pcpu_sw_netstats *tstats;
-	struct pcpu_dstats *dstats;
+    union
+    {
+        struct pcpu_lstats *lstats;
+        struct pcpu_sw_netstats *tstats;
+        struct pcpu_dstats *dstats;
     };
     long unsigned int state;
     unsigned int flags;
@@ -16596,8 +16821,8 @@ struct net_device {
     struct list_head close_list;
     struct list_head ptype_all;
     struct {
-	struct list_head upper;
-	struct list_head lower;
+        struct list_head upper;
+        struct list_head lower;
     } adj_list;
     xdp_features_t xdp_features;
     const struct xdp_metadata_ops *xdp_metadata_ops;
@@ -16682,8 +16907,8 @@ struct net_device {
     u8 reg_state;
     bool dismantle;
     enum {
-	RTNL_LINK_INITIALIZED = 0,
-	RTNL_LINK_INITIALIZING = 1,
+        RTNL_LINK_INITIALIZED = 0,
+        RTNL_LINK_INITIALIZING = 1,
     } rtnl_link_state : 16;
     bool needs_free_netdev;
     void (*priv_destructor)(struct net_device *);
@@ -16775,33 +17000,35 @@ struct bpf_func_proto {
     bool pkt_access;
     bool might_sleep;
     enum bpf_return_type ret_type;
-    union {
-	struct {
-	    enum bpf_arg_type arg1_type;
-	    enum bpf_arg_type arg2_type;
-	    enum bpf_arg_type arg3_type;
-	    enum bpf_arg_type arg4_type;
-	    enum bpf_arg_type arg5_type;
-	};
-	enum bpf_arg_type arg_type[5];
+    union
+    {
+        struct {
+            enum bpf_arg_type arg1_type;
+            enum bpf_arg_type arg2_type;
+            enum bpf_arg_type arg3_type;
+            enum bpf_arg_type arg4_type;
+            enum bpf_arg_type arg5_type;
+        };
+        enum bpf_arg_type arg_type[5];
     };
-    union {
-	struct {
-	    u32 *arg1_btf_id;
-	    u32 *arg2_btf_id;
-	    u32 *arg3_btf_id;
-	    u32 *arg4_btf_id;
-	    u32 *arg5_btf_id;
-	};
-	u32 *arg_btf_id[5];
-	struct {
-	    size_t arg1_size;
-	    size_t arg2_size;
-	    size_t arg3_size;
-	    size_t arg4_size;
-	    size_t arg5_size;
-	};
-	size_t arg_size[5];
+    union
+    {
+        struct {
+            u32 *arg1_btf_id;
+            u32 *arg2_btf_id;
+            u32 *arg3_btf_id;
+            u32 *arg4_btf_id;
+            u32 *arg5_btf_id;
+        };
+        u32 *arg_btf_id[5];
+        struct {
+            size_t arg1_size;
+            size_t arg2_size;
+            size_t arg3_size;
+            size_t arg4_size;
+            size_t arg5_size;
+        };
+        size_t arg_size[5];
     };
     int *ret_btf_id;
     bool (*allowed)(const struct bpf_prog *);
@@ -16814,12 +17041,13 @@ enum bpf_access_type {
 
 struct bpf_insn_access_aux {
     enum bpf_reg_type reg_type;
-    union {
-	int ctx_field_size;
-	struct {
-	    struct btf *btf;
-	    u32 btf_id;
-	};
+    union
+    {
+        int ctx_field_size;
+        struct {
+            struct btf *btf;
+            u32 btf_id;
+        };
     };
     struct bpf_verifier_log *log;
 };
@@ -16841,9 +17069,10 @@ struct bpf_link {
     enum bpf_link_type type;
     const struct bpf_link_ops *ops;
     struct bpf_prog *prog;
-    union {
-	struct callback_head rcu;
-	struct work_struct work;
+    union
+    {
+        struct callback_head rcu;
+        struct work_struct work;
     };
 };
 
@@ -16910,9 +17139,10 @@ struct bpf_storage_buffer;
 struct bpf_cgroup_storage_map;
 
 struct bpf_cgroup_storage {
-    union {
-	struct bpf_storage_buffer *buf;
-	void *percpu_buf;
+    union
+    {
+        struct bpf_storage_buffer *buf;
+        void *percpu_buf;
     };
     struct bpf_cgroup_storage_map *map;
     struct bpf_cgroup_storage_key key;
@@ -16964,18 +17194,19 @@ struct flowi_common {
     struct flowi_tunnel flowic_tun_key;
 };
 
-union flowi_uli {
+union flowi_uli
+{
     struct {
-	__be16 dport;
-	__be16 sport;
+        __be16 dport;
+        __be16 sport;
     } ports;
     struct {
-	__u8 type;
-	__u8 code;
+        __u8 type;
+        __u8 code;
     } icmpt;
     __be32 gre_key;
     struct {
-	__u8 type;
+        __u8 type;
     } mht;
 };
 
@@ -16996,10 +17227,11 @@ struct flowi6 {
 };
 
 struct flowi {
-    union {
-	struct flowi_common __fl_common;
-	struct flowi4 ip4;
-	struct flowi6 ip6;
+    union
+    {
+        struct flowi_common __fl_common;
+        struct flowi4 ip4;
+        struct flowi6 ip6;
     } u;
 };
 
@@ -17109,9 +17341,10 @@ struct frag_v6_compare_key {
 
 struct inet_frag_queue {
     struct rhash_head node;
-    union {
-	struct frag_v4_compare_key v4;
-	struct frag_v6_compare_key v6;
+    union
+    {
+        struct frag_v4_compare_key v4;
+        struct frag_v6_compare_key v6;
     } key;
     struct timer_list timer;
     spinlock_t lock;
@@ -17339,9 +17572,10 @@ struct scatterlist {
 };
 
 struct skb_shared_hwtstamps {
-    union {
-	ktime_t hwtstamp;
-	void *netdev_data;
+    union
+    {
+        ktime_t hwtstamp;
+        void *netdev_data;
     };
 };
 
@@ -17528,9 +17762,10 @@ struct socket {
 typedef struct {
     size_t written;
     size_t count;
-    union {
-	char *buf;
-	void *data;
+    union
+    {
+        char *buf;
+        void *data;
     } arg;
     int error;
 } read_descriptor_t;
@@ -17604,19 +17839,20 @@ struct nla_policy {
     u8 type;
     u8 validation_type;
     u16 len;
-    union {
-	u16 strict_start_type;
-	const u32 bitfield32_valid;
-	const u32 mask;
-	const char *reject_message;
-	const struct nla_policy *nested_policy;
-	const struct netlink_range_validation *range;
-	const struct netlink_range_validation_signed *range_signed;
-	struct {
-	    s16 min;
-	    s16 max;
-	};
-	int (*validate)(const struct nlattr *, struct netlink_ext_ack *);
+    union
+    {
+        u16 strict_start_type;
+        const u32 bitfield32_valid;
+        const u32 mask;
+        const char *reject_message;
+        const struct nla_policy *nested_policy;
+        const struct netlink_range_validation *range;
+        const struct netlink_range_validation_signed *range_signed;
+        struct {
+            s16 min;
+            s16 max;
+        };
+        int (*validate)(const struct nlattr *, struct netlink_ext_ack *);
     };
 };
 
@@ -17635,9 +17871,10 @@ struct netlink_callback {
     unsigned int seq;
     int flags;
     bool strict_check;
-    union {
-	u8 ctx[48];
-	long int args[6];
+    union
+    {
+        u8 ctx[48];
+        long int args[6];
     };
 };
 
@@ -17942,33 +18179,34 @@ enum net_device_path_type {
 struct net_device_path {
     enum net_device_path_type type;
     const struct net_device *dev;
-    union {
-	struct {
-	    u16 id;
-	    __be16 proto;
-	    u8 h_dest[6];
-	} encap;
-	struct {
-	    enum {
-		DEV_PATH_BR_VLAN_KEEP = 0,
-		DEV_PATH_BR_VLAN_TAG = 1,
-		DEV_PATH_BR_VLAN_UNTAG = 2,
-		DEV_PATH_BR_VLAN_UNTAG_HW = 3,
-	    } vlan_mode;
-	    u16 vlan_id;
-	    __be16 vlan_proto;
-	} bridge;
-	struct {
-	    int port;
-	    u16 proto;
-	} dsa;
-	struct {
-	    u8 wdma_idx;
-	    u8 queue;
-	    u16 wcid;
-	    u8 bss;
-	    u8 amsdu;
-	} mtk_wdma;
+    union
+    {
+        struct {
+            u16 id;
+            __be16 proto;
+            u8 h_dest[6];
+        } encap;
+        struct {
+            enum {
+                DEV_PATH_BR_VLAN_KEEP = 0,
+                DEV_PATH_BR_VLAN_TAG = 1,
+                DEV_PATH_BR_VLAN_UNTAG = 2,
+                DEV_PATH_BR_VLAN_UNTAG_HW = 3,
+            } vlan_mode;
+            u16 vlan_id;
+            __be16 vlan_proto;
+        } bridge;
+        struct {
+            int port;
+            u16 proto;
+        } dsa;
+        struct {
+            u8 wdma_idx;
+            u8 queue;
+            u16 wcid;
+            u8 bss;
+            u8 amsdu;
+        } mtk_wdma;
     };
 };
 
@@ -17977,8 +18215,8 @@ struct net_device_path_ctx {
     u8 daddr[6];
     int num_vlans;
     struct {
-	u16 id;
-	__be16 proto;
+        u16 id;
+        __be16 proto;
     } vlan[2];
 };
 
@@ -18016,19 +18254,20 @@ enum bpf_netdev_command {
 
 struct netdev_bpf {
     enum bpf_netdev_command command;
-    union {
-	struct {
-	    u32 flags;
-	    struct bpf_prog *prog;
-	    struct netlink_ext_ack *extack;
-	};
-	struct {
-	    struct bpf_offloaded_map *offmap;
-	};
-	struct {
-	    struct xsk_buff_pool *pool;
-	    u16 queue_id;
-	} xsk;
+    union
+    {
+        struct {
+            u32 flags;
+            struct bpf_prog *prog;
+            struct netlink_ext_ack *extack;
+        };
+        struct {
+            struct bpf_offloaded_map *offmap;
+        };
+        struct {
+            struct xsk_buff_pool *pool;
+            u16 queue_id;
+        } xsk;
     };
 };
 
@@ -18818,11 +19057,12 @@ struct proto {
     unsigned int *orphan_count;
     struct request_sock_ops *rsk_prot;
     struct timewait_sock_ops *twsk_prot;
-    union {
-	struct inet_hashinfo *hashinfo;
-	struct udp_table *udp_table;
-	struct raw_hashinfo *raw_hash;
-	struct smc_hashinfo *smc_hash;
+    union
+    {
+        struct inet_hashinfo *hashinfo;
+        struct udp_table *udp_table;
+        struct raw_hashinfo *raw_hash;
+        struct smc_hashinfo *smc_hash;
     } h;
     struct module *owner;
     char name[32];
@@ -18941,8 +19181,8 @@ struct tcf_block {
     unsigned int nooffloaddevcnt;
     unsigned int lockeddevcnt;
     struct {
-	struct tcf_chain *chain;
-	struct list_head filter_chain_list;
+        struct tcf_chain *chain;
+        struct list_head filter_chain_list;
     } chain0;
     struct callback_head rcu;
     struct hlist_head proto_destroy_ht[128];
@@ -18970,12 +19210,13 @@ struct tcf_proto {
 };
 
 struct tcf_result {
-    union {
-	struct {
-	    long unsigned int class;
-	    u32 classid;
-	};
-	const struct tcf_proto *goto_tp;
+    union
+    {
+        struct {
+            long unsigned int class;
+            u32 classid;
+        };
+        const struct tcf_proto *goto_tp;
     };
 };
 
@@ -19109,30 +19350,33 @@ struct bpf_loop_inline_state {
 };
 
 struct bpf_insn_aux_data {
-    union {
-	enum bpf_reg_type ptr_type;
-	long unsigned int map_ptr_state;
-	s32 call_imm;
-	u32 alu_limit;
-	struct {
-	    u32 map_index;
-	    u32 map_off;
-	};
-	struct {
-	    enum bpf_reg_type reg_type;
-	    union {
-		struct {
-		    struct btf *btf;
-		    u32 btf_id;
-		};
-		u32 mem_size;
-	    };
-	} btf_var;
-	struct bpf_loop_inline_state loop_inline_state;
+    union
+    {
+        enum bpf_reg_type ptr_type;
+        long unsigned int map_ptr_state;
+        s32 call_imm;
+        u32 alu_limit;
+        struct {
+            u32 map_index;
+            u32 map_off;
+        };
+        struct {
+            enum bpf_reg_type reg_type;
+            union
+            {
+                struct {
+                    struct btf *btf;
+                    u32 btf_id;
+                };
+                u32 mem_size;
+            };
+        } btf_var;
+        struct bpf_loop_inline_state loop_inline_state;
     };
-    union {
-	u64 obj_new_size;
-	u64 insert_off;
+    union
+    {
+        u64 obj_new_size;
+        u64 insert_off;
     };
     struct btf_struct_meta *kptr_struct_meta;
     u64 map_key_state;
@@ -19340,9 +19584,10 @@ struct mempolicy {
     short unsigned int flags;
     nodemask_t nodes;
     int home_node;
-    union {
-	nodemask_t cpuset_mems_allowed;
-	nodemask_t user_nodemask;
+    union
+    {
+        nodemask_t cpuset_mems_allowed;
+        nodemask_t user_nodemask;
     } w;
 };
 
@@ -19790,10 +20035,11 @@ enum damos_filter_type {
 struct damos_filter {
     enum damos_filter_type type;
     bool matching;
-    union {
-	short unsigned int memcg_id;
-	struct damon_addr_range addr_range;
-	int target_idx;
+    union
+    {
+        short unsigned int memcg_id;
+        struct damon_addr_range addr_range;
+        int target_idx;
     };
     struct list_head list;
 };
@@ -20027,8 +20273,8 @@ struct btf_id_set8 {
     u32 cnt;
     u32 flags;
     struct {
-	u32 id;
-	u32 flags;
+        u32 id;
+        u32 flags;
     } pairs[0];
 };
 
@@ -20278,9 +20524,10 @@ typedef void bh_end_io_t(struct buffer_head *, int);
 struct buffer_head {
     long unsigned int b_state;
     struct buffer_head *b_this_page;
-    union {
-	struct page *b_page;
-	struct folio *b_folio;
+    union
+    {
+        struct page *b_page;
+        struct folio *b_folio;
     };
     sector_t b_blocknr;
     size_t b_size;
@@ -20357,15 +20604,15 @@ struct transaction_s {
     journal_t *t_journal;
     tid_t t_tid;
     enum {
-	T_RUNNING = 0,
-	T_LOCKED = 1,
-	T_SWITCH = 2,
-	T_FLUSH = 3,
-	T_COMMIT = 4,
-	T_COMMIT_DFLUSH = 5,
-	T_COMMIT_JFLUSH = 6,
-	T_COMMIT_CALLBACK = 7,
-	T_FINISHED = 8,
+        T_RUNNING = 0,
+        T_LOCKED = 1,
+        T_SWITCH = 2,
+        T_FLUSH = 3,
+        T_COMMIT = 4,
+        T_COMMIT_DFLUSH = 5,
+        T_COMMIT_JFLUSH = 6,
+        T_COMMIT_CALLBACK = 7,
+        T_FINISHED = 8,
     } t_state;
     long unsigned int t_log_start;
     int t_nr_buffers;
@@ -20551,9 +20798,10 @@ struct jbd2_journal_handle;
 typedef struct jbd2_journal_handle handle_t;
 
 struct jbd2_journal_handle {
-    union {
-	transaction_t *h_transaction;
-	journal_t *h_journal;
+    union
+    {
+        transaction_t *h_transaction;
+        journal_t *h_journal;
     };
     handle_t *h_rsv_handle;
     int h_total_credits;
@@ -20766,7 +21014,8 @@ struct fscrypt_policy_v2 {
     __u8 master_key_identifier[16];
 };
 
-union fscrypt_policy {
+union fscrypt_policy
+{
     u8 version;
     struct fscrypt_policy_v1 v1;
     struct fscrypt_policy_v2 v2;
@@ -20905,9 +21154,10 @@ struct ext4_inode_info {
     ext4_lblk_t i_dir_start_lookup;
     long unsigned int i_flags;
     struct rw_semaphore xattr_sem;
-    union {
-	struct list_head i_orphan;
-	unsigned int i_orphan_idx;
+    union
+    {
+        struct list_head i_orphan;
+        unsigned int i_orphan_idx;
     };
     struct list_head i_fc_dilist;
     struct list_head i_fc_list;
@@ -21393,18 +21643,19 @@ struct btrfs_fs_info;
 struct btrfs_bio {
     struct btrfs_inode *inode;
     u64 file_offset;
-    union {
-	struct {
-	    u8 *csum;
-	    u8 csum_inline[64];
-	    struct bvec_iter saved_iter;
-	};
-	struct {
-	    struct btrfs_ordered_extent *ordered;
-	    struct btrfs_ordered_sum *sums;
-	    u64 orig_physical;
-	};
-	struct btrfs_tree_parent_check parent_check;
+    union
+    {
+        struct {
+            u8 *csum;
+            u8 csum_inline[64];
+            struct bvec_iter saved_iter;
+        };
+        struct {
+            struct btrfs_ordered_extent *ordered;
+            struct btrfs_ordered_sum *sums;
+            u64 orig_physical;
+        };
+        struct btrfs_tree_parent_check parent_check;
     };
     btrfs_bio_end_io_t end_io;
     void *private;
@@ -21423,9 +21674,10 @@ struct compressed_bio {
     unsigned int compressed_len;
     u8 compress_type;
     bool writeback;
-    union {
-	struct btrfs_bio *orig_bbio;
-	struct work_struct write_end_work;
+    union
+    {
+        struct btrfs_bio *orig_bbio;
+        struct work_struct write_end_work;
     };
     struct btrfs_bio bbio;
 };
@@ -21657,9 +21909,10 @@ struct extent_map_tree {
 
 struct extent_io_tree {
     struct rb_root state;
-    union {
-	struct btrfs_fs_info *fs_info;
-	struct btrfs_inode *inode;
+    union
+    {
+        struct btrfs_fs_info *fs_info;
+        struct btrfs_inode *inode;
     };
     u8 owner;
     spinlock_t lock;
@@ -21716,13 +21969,15 @@ struct btrfs_inode {
     u64 logged_trans;
     int last_sub_trans;
     int last_log_commit;
-    union {
-	u64 delalloc_bytes;
-	u64 first_dir_index_to_log;
+    union
+    {
+        u64 delalloc_bytes;
+        u64 first_dir_index_to_log;
     };
-    union {
-	u64 new_delalloc_bytes;
-	u64 last_dir_index_offset;
+    union
+    {
+        u64 new_delalloc_bytes;
+        u64 last_dir_index_offset;
     };
     u64 defrag_bytes;
     u64 disk_i_size;
@@ -22441,15 +22696,16 @@ struct landlock_ruleset {
     struct rb_root root_inode;
     struct rb_root root_net_port;
     struct landlock_hierarchy *hierarchy;
-    union {
-	struct work_struct work_free;
-	struct {
-	    struct mutex lock;
-	    refcount_t usage;
-	    u32 num_rules;
-	    u32 num_layers;
-	    access_masks_t access_masks[0];
-	};
+    union
+    {
+        struct work_struct work_free;
+        struct {
+            struct mutex lock;
+            refcount_t usage;
+            u32 num_rules;
+            u32 num_layers;
+            access_masks_t access_masks[0];
+        };
     };
 };
 
@@ -22598,9 +22854,10 @@ struct blkcg_gq {
     struct blkg_policy_data *pd[6];
     spinlock_t async_bio_lock;
     struct bio_list async_bios;
-    union {
-	struct work_struct async_bio_work;
-	struct work_struct free_work;
+    union
+    {
+        struct work_struct async_bio_work;
+        struct work_struct free_work;
     };
     atomic_t use_delay;
     atomic64_t delay_nsec;
@@ -22682,9 +22939,9 @@ struct blk_mq_ctxs;
 
 struct blk_mq_ctx {
     struct {
-	spinlock_t lock;
-	struct list_head rq_lists[3];
-	long : 64;
+        spinlock_t lock;
+        struct list_head rq_lists[3];
+        long : 64;
     };
     unsigned int cpu;
     short unsigned int index_hw[3];
@@ -22725,9 +22982,10 @@ struct request {
     sector_t __sector;
     struct bio *bio;
     struct bio *biotail;
-    union {
-	struct list_head queuelist;
-	struct request *rq_next;
+    union
+    {
+        struct list_head queuelist;
+        struct request *rq_next;
     };
     struct block_device *part;
     u64 alloc_time_ns;
@@ -22744,21 +23002,23 @@ struct request {
     enum mq_rq_state state;
     atomic_t ref;
     long unsigned int deadline;
-    union {
-	struct hlist_node hash;
-	struct llist_node ipi_list;
+    union
+    {
+        struct hlist_node hash;
+        struct llist_node ipi_list;
     };
-    union {
-	struct rb_node rb_node;
-	struct bio_vec special_vec;
+    union
+    {
+        struct rb_node rb_node;
+        struct bio_vec special_vec;
     };
     struct {
-	struct io_cq *icq;
-	void *priv[2];
+        struct io_cq *icq;
+        void *priv[2];
     } elv;
     struct {
-	unsigned int seq;
-	rq_end_io_fn *saved_end_io;
+        unsigned int seq;
+        rq_end_io_fn *saved_end_io;
     } flush;
     u64 fifo_time;
     rq_end_io_fn *end_io;
@@ -22848,13 +23108,13 @@ struct blk_mq_tag_set {
 
 struct blk_mq_hw_ctx {
     struct {
-	spinlock_t lock;
-	struct list_head dispatch;
-	long unsigned int state;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        spinlock_t lock;
+        struct list_head dispatch;
+        long unsigned int state;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     };
     struct delayed_work run_work;
     cpumask_var_t cpumask;
@@ -23162,30 +23422,31 @@ struct fat_boot_sector {
     __le16 heads;
     __le32 hidden;
     __le32 total_sect;
-    union {
-	struct {
-	    __u8 drive_number;
-	    __u8 state;
-	    __u8 signature;
-	    __u8 vol_id[4];
-	    __u8 vol_label[11];
-	    __u8 fs_type[8];
-	} fat16;
-	struct {
-	    __le32 length;
-	    __le16 flags;
-	    __u8 version[2];
-	    __le32 root_cluster;
-	    __le16 info_sector;
-	    __le16 backup_boot;
-	    __le16 reserved2[6];
-	    __u8 drive_number;
-	    __u8 state;
-	    __u8 signature;
-	    __u8 vol_id[4];
-	    __u8 vol_label[11];
-	    __u8 fs_type[8];
-	} fat32;
+    union
+    {
+        struct {
+            __u8 drive_number;
+            __u8 state;
+            __u8 signature;
+            __u8 vol_id[4];
+            __u8 vol_label[11];
+            __u8 fs_type[8];
+        } fat16;
+        struct {
+            __le32 length;
+            __le16 flags;
+            __u8 version[2];
+            __le32 root_cluster;
+            __le16 info_sector;
+            __le16 backup_boot;
+            __le16 reserved2[6];
+            __u8 drive_number;
+            __u8 state;
+            __u8 signature;
+            __u8 vol_id[4];
+            __u8 vol_label[11];
+            __u8 fs_type[8];
+        } fat32;
     };
 };
 
@@ -23227,11 +23488,11 @@ struct parsed_partitions {
     struct gendisk *disk;
     char name[32];
     struct {
-	sector_t from;
-	sector_t size;
-	int flags;
-	bool has_info;
-	struct partition_meta_info info;
+        sector_t from;
+        sector_t size;
+        int flags;
+        bool has_info;
+        struct partition_meta_info info;
     } *parts;
     int next;
     int limit;
@@ -23361,13 +23622,13 @@ struct io_uring_task {
     long : 64;
     long : 64;
     struct {
-	struct llist_head task_list;
-	struct callback_head task_work;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        struct llist_head task_list;
+        struct callback_head task_work;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     };
 };
 
@@ -23379,9 +23640,10 @@ struct fsnotify_mark_connector {
     spinlock_t lock;
     short unsigned int type;
     short unsigned int flags;
-    union {
-	fsnotify_connp_t *obj;
-	struct fsnotify_mark_connector *destroy_next;
+    union
+    {
+        fsnotify_connp_t *obj;
+        struct fsnotify_mark_connector *destroy_next;
     };
     struct hlist_head list;
 };
@@ -23391,69 +23653,75 @@ struct io_uring_sqe {
     __u8 flags;
     __u16 ioprio;
     __s32 fd;
-    union {
-	__u64 off;
-	__u64 addr2;
-	struct {
-	    __u32 cmd_op;
-	    __u32 __pad1;
-	};
+    union
+    {
+        __u64 off;
+        __u64 addr2;
+        struct {
+            __u32 cmd_op;
+            __u32 __pad1;
+        };
     };
-    union {
-	__u64 addr;
-	__u64 splice_off_in;
-	struct {
-	    __u32 level;
-	    __u32 optname;
-	};
+    union
+    {
+        __u64 addr;
+        __u64 splice_off_in;
+        struct {
+            __u32 level;
+            __u32 optname;
+        };
     };
     __u32 len;
-    union {
-	__kernel_rwf_t rw_flags;
-	__u32 fsync_flags;
-	__u16 poll_events;
-	__u32 poll32_events;
-	__u32 sync_range_flags;
-	__u32 msg_flags;
-	__u32 timeout_flags;
-	__u32 accept_flags;
-	__u32 cancel_flags;
-	__u32 open_flags;
-	__u32 statx_flags;
-	__u32 fadvise_advice;
-	__u32 splice_flags;
-	__u32 rename_flags;
-	__u32 unlink_flags;
-	__u32 hardlink_flags;
-	__u32 xattr_flags;
-	__u32 msg_ring_flags;
-	__u32 uring_cmd_flags;
-	__u32 waitid_flags;
-	__u32 futex_flags;
-	__u32 install_fd_flags;
+    union
+    {
+        __kernel_rwf_t rw_flags;
+        __u32 fsync_flags;
+        __u16 poll_events;
+        __u32 poll32_events;
+        __u32 sync_range_flags;
+        __u32 msg_flags;
+        __u32 timeout_flags;
+        __u32 accept_flags;
+        __u32 cancel_flags;
+        __u32 open_flags;
+        __u32 statx_flags;
+        __u32 fadvise_advice;
+        __u32 splice_flags;
+        __u32 rename_flags;
+        __u32 unlink_flags;
+        __u32 hardlink_flags;
+        __u32 xattr_flags;
+        __u32 msg_ring_flags;
+        __u32 uring_cmd_flags;
+        __u32 waitid_flags;
+        __u32 futex_flags;
+        __u32 install_fd_flags;
     };
     __u64 user_data;
-    union {
-	__u16 buf_index;
-	__u16 buf_group;
+    union
+    {
+        __u16 buf_index;
+        __u16 buf_group;
     };
     __u16 personality;
-    union {
-	__s32 splice_fd_in;
-	__u32 file_index;
-	__u32 optlen;
-	struct {
-	    __u16 addr_len;
-	    __u16 __pad3[1];
-	};
+    union
+    {
+        __s32 splice_fd_in;
+        __u32 file_index;
+        __u32 optlen;
+        struct {
+            __u16 addr_len;
+            __u16 __pad3[1];
+        };
     };
-    union {
-	struct {
-	    __u64 addr3;
-	    __u64 __pad2[1];
-	};
-	__u64 optval;
-	__u8 cmd[0];
+    union
+    {
+        struct {
+            __u64 addr3;
+            __u64 __pad2[1];
+        };
+        __u64 optval;
+        __u8 cmd[0];
     };
 };
 
@@ -23582,76 +23850,76 @@ struct io_wq_hash;
 
 struct io_ring_ctx {
     struct {
-	unsigned int flags;
-	unsigned int drain_next : 1;
-	unsigned int restricted : 1;
-	unsigned int off_timeout_used : 1;
-	unsigned int drain_active : 1;
-	unsigned int has_evfd : 1;
-	unsigned int task_complete : 1;
-	unsigned int lockless_cq : 1;
-	unsigned int syscall_iopoll : 1;
-	unsigned int poll_activated : 1;
-	unsigned int drain_disabled : 1;
-	unsigned int compat : 1;
-	unsigned int iowq_limits_set : 1;
-	struct task_struct *submitter_task;
-	struct io_rings *rings;
-	struct percpu_ref refs;
-	enum task_work_notify_mode notify_method;
-	unsigned int sq_thread_idle;
-	long : 64;
-	long : 64;
+        unsigned int flags;
+        unsigned int drain_next : 1;
+        unsigned int restricted : 1;
+        unsigned int off_timeout_used : 1;
+        unsigned int drain_active : 1;
+        unsigned int has_evfd : 1;
+        unsigned int task_complete : 1;
+        unsigned int lockless_cq : 1;
+        unsigned int syscall_iopoll : 1;
+        unsigned int poll_activated : 1;
+        unsigned int drain_disabled : 1;
+        unsigned int compat : 1;
+        unsigned int iowq_limits_set : 1;
+        struct task_struct *submitter_task;
+        struct io_rings *rings;
+        struct percpu_ref refs;
+        enum task_work_notify_mode notify_method;
+        unsigned int sq_thread_idle;
+        long : 64;
+        long : 64;
     };
     struct {
-	struct mutex uring_lock;
-	u32 *sq_array;
-	struct io_uring_sqe *sq_sqes;
-	unsigned int cached_sq_head;
-	unsigned int sq_entries;
-	struct io_rsrc_node *rsrc_node;
-	atomic_t cancel_seq;
-	bool poll_multi_queue;
-	struct io_wq_work_list iopoll_list;
-	struct io_file_table file_table;
-	struct io_mapped_ubuf **user_bufs;
-	unsigned int nr_user_files;
-	unsigned int nr_user_bufs;
-	struct io_submit_state submit_state;
-	struct xarray io_bl_xa;
-	struct io_hash_table cancel_table_locked;
-	struct io_alloc_cache apoll_cache;
-	struct io_alloc_cache netmsg_cache;
-	struct hlist_head cancelable_uring_cmd;
-	long : 64;
+        struct mutex uring_lock;
+        u32 *sq_array;
+        struct io_uring_sqe *sq_sqes;
+        unsigned int cached_sq_head;
+        unsigned int sq_entries;
+        struct io_rsrc_node *rsrc_node;
+        atomic_t cancel_seq;
+        bool poll_multi_queue;
+        struct io_wq_work_list iopoll_list;
+        struct io_file_table file_table;
+        struct io_mapped_ubuf **user_bufs;
+        unsigned int nr_user_files;
+        unsigned int nr_user_bufs;
+        struct io_submit_state submit_state;
+        struct xarray io_bl_xa;
+        struct io_hash_table cancel_table_locked;
+        struct io_alloc_cache apoll_cache;
+        struct io_alloc_cache netmsg_cache;
+        struct hlist_head cancelable_uring_cmd;
+        long : 64;
     };
     struct {
-	struct io_uring_cqe *cqe_cached;
-	struct io_uring_cqe *cqe_sentinel;
-	unsigned int cached_cq_tail;
-	unsigned int cq_entries;
-	struct io_ev_fd *io_ev_fd;
-	unsigned int cq_extra;
-	long : 64;
-	long : 64;
-	long : 64;
+        struct io_uring_cqe *cqe_cached;
+        struct io_uring_cqe *cqe_sentinel;
+        unsigned int cached_cq_tail;
+        unsigned int cq_entries;
+        struct io_ev_fd *io_ev_fd;
+        unsigned int cq_extra;
+        long : 64;
+        long : 64;
+        long : 64;
     };
     struct {
-	struct llist_head work_llist;
-	long unsigned int check_cq;
-	atomic_t cq_wait_nr;
-	atomic_t cq_timeouts;
-	struct wait_queue_head cq_wait;
-	long : 64;
-	long : 64;
+        struct llist_head work_llist;
+        long unsigned int check_cq;
+        atomic_t cq_wait_nr;
+        atomic_t cq_timeouts;
+        struct wait_queue_head cq_wait;
+        long : 64;
+        long : 64;
     };
     struct {
-	spinlock_t timeout_lock;
-	struct list_head timeout_list;
-	struct list_head ltimeout_list;
-	unsigned int cq_last_tm_flush;
-	long : 64;
-	long : 64;
+        spinlock_t timeout_lock;
+        struct list_head timeout_list;
+        struct list_head ltimeout_list;
+        unsigned int cq_last_tm_flush;
+        long : 64;
+        long : 64;
     };
     struct io_uring_cqe completion_cqes[16];
     spinlock_t completion_lock;
@@ -23743,9 +24011,10 @@ typedef u64 io_req_flags_t;
 struct io_cqe {
     __u64 user_data;
     __s32 res;
-    union {
-	__u32 flags;
-	int fd;
+    union
+    {
+        __u32 flags;
+        int fd;
     };
 };
 
@@ -23765,9 +24034,10 @@ struct io_buffer_list;
 struct async_poll;
 
 struct io_kiocb {
-    union {
-	struct file *file;
-	struct io_cmd_data cmd;
+    union
+    {
+        struct file *file;
+        struct io_cmd_data cmd;
     };
     u8 opcode;
     u8 iopoll_completed;
@@ -23777,14 +24047,16 @@ struct io_kiocb {
     struct io_cqe cqe;
     struct io_ring_ctx *ctx;
     struct task_struct *task;
-    union {
-	struct io_mapped_ubuf *imu;
-	struct io_buffer *kbuf;
-	struct io_buffer_list *buf_list;
+    union
+    {
+        struct io_mapped_ubuf *imu;
+        struct io_buffer *kbuf;
+        struct io_buffer_list *buf_list;
     };
-    union {
-	struct io_wq_work_node comp_list;
-	__poll_t apoll_events;
+    union
+    {
+        struct io_wq_work_node comp_list;
+        __poll_t apoll_events;
     };
     struct io_rsrc_node *rsrc_node;
     atomic_t refs;
@@ -23797,8 +24069,8 @@ struct io_kiocb {
     const struct cred *creds;
     struct io_wq_work work;
     struct {
-	u64 extra1;
-	u64 extra2;
+        u64 extra1;
+        u64 extra2;
     } big_cqe;
 };
 
@@ -24041,9 +24313,10 @@ struct gpio_irq_chip {
     struct lock_class_key *lock_key;
     struct lock_class_key *request_key;
     irq_flow_handler_t parent_handler;
-    union {
-	void *parent_handler_data;
-	void **parent_handler_data_array;
+    union
+    {
+        void *parent_handler_data;
+        void **parent_handler_data_array;
     };
     unsigned int num_parents;
     unsigned int *parents;
@@ -24106,7 +24379,8 @@ struct gpio_chip {
     long unsigned int *valid_mask;
 };
 
-union gpio_irq_fwspec {
+union gpio_irq_fwspec
+{
     struct irq_fwspec fwspec;
     msi_alloc_info_t msiinfo;
 };
@@ -24177,10 +24451,11 @@ enum gpio_v2_line_attr_id {
 struct gpio_v2_line_attribute {
     __u32 id;
     __u32 padding;
-    union {
-	__u64 flags;
-	__u64 values;
-	__u32 debounce_period_us;
+    union
+    {
+        __u64 flags;
+        __u64 values;
+        __u32 debounce_period_us;
     };
 };
 
@@ -24329,15 +24604,16 @@ struct linereq {
     struct notifier_block device_unregistered_nb;
     u32 event_buffer_size;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct gpio_v2_line_event *type;
-	    const struct gpio_v2_line_event *const_type;
-	    char (*rectype)[0];
-	    struct gpio_v2_line_event *ptr;
-	    const struct gpio_v2_line_event *ptr_const;
-	};
-	struct gpio_v2_line_event buf[0];
+        union
+        {
+            struct __kfifo kfifo;
+            struct gpio_v2_line_event *type;
+            const struct gpio_v2_line_event *const_type;
+            char (*rectype)[0];
+            struct gpio_v2_line_event *ptr;
+            const struct gpio_v2_line_event *ptr_const;
+        };
+        struct gpio_v2_line_event buf[0];
     } events;
     atomic_t seqno;
     struct mutex config_mutex;
@@ -24353,15 +24629,16 @@ struct lineevent_state {
     wait_queue_head_t wait;
     struct notifier_block device_unregistered_nb;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct gpioevent_data *type;
-	    const struct gpioevent_data *const_type;
-	    char (*rectype)[0];
-	    struct gpioevent_data *ptr;
-	    const struct gpioevent_data *ptr_const;
-	};
-	struct gpioevent_data buf[16];
+        union
+        {
+            struct __kfifo kfifo;
+            struct gpioevent_data *type;
+            const struct gpioevent_data *const_type;
+            char (*rectype)[0];
+            struct gpioevent_data *ptr;
+            const struct gpioevent_data *ptr_const;
+        };
+        struct gpioevent_data buf[16];
     } events;
     u64 timestamp;
 };
@@ -24370,15 +24647,16 @@ struct gpio_chardev_data {
     struct gpio_device *gdev;
     wait_queue_head_t wait;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct gpio_v2_line_info_changed *type;
-	    const struct gpio_v2_line_info_changed *const_type;
-	    char (*rectype)[0];
-	    struct gpio_v2_line_info_changed *ptr;
-	    const struct gpio_v2_line_info_changed *ptr_const;
-	};
-	struct gpio_v2_line_info_changed buf[32];
+        union
+        {
+            struct __kfifo kfifo;
+            struct gpio_v2_line_info_changed *type;
+            const struct gpio_v2_line_info_changed *const_type;
+            char (*rectype)[0];
+            struct gpio_v2_line_info_changed *ptr;
+            const struct gpio_v2_line_info_changed *ptr_const;
+        };
+        struct gpio_v2_line_info_changed buf[32];
     } events;
     struct notifier_block lineinfo_changed_nb;
     struct notifier_block device_unregistered_nb;
@@ -24550,15 +24828,17 @@ struct property_entry {
     size_t length;
     bool is_inline;
     enum dev_prop_type type;
-    union {
-	const void *pointer;
-	union {
-	    u8 u8_data[8];
-	    u16 u16_data[4];
-	    u32 u32_data[2];
-	    u64 u64_data[1];
-	    const char *str[1];
-	} value;
+    union
+    {
+        const void *pointer;
+        union
+        {
+            u8 u8_data[8];
+            u16 u16_data[4];
+            u32 u32_data[2];
+            u64 u64_data[1];
+            const char *str[1];
+        } value;
     };
 };
 
@@ -24572,42 +24852,43 @@ typedef void *acpi_handle;
 
 typedef u32 acpi_object_type;
 
-union acpi_object {
+union acpi_object
+{
     acpi_object_type type;
     struct {
-	acpi_object_type type;
-	u64 value;
+        acpi_object_type type;
+        u64 value;
     } integer;
     struct {
-	acpi_object_type type;
-	u32 length;
-	char *pointer;
+        acpi_object_type type;
+        u32 length;
+        char *pointer;
     } string;
     struct {
-	acpi_object_type type;
-	u32 length;
-	u8 *pointer;
+        acpi_object_type type;
+        u32 length;
+        u8 *pointer;
     } buffer;
     struct {
-	acpi_object_type type;
-	u32 count;
-	union acpi_object *elements;
+        acpi_object_type type;
+        u32 count;
+        union acpi_object *elements;
     } package;
     struct {
-	acpi_object_type type;
-	acpi_object_type actual_type;
-	acpi_handle handle;
+        acpi_object_type type;
+        acpi_object_type actual_type;
+        acpi_handle handle;
     } reference;
     struct {
-	acpi_object_type type;
-	u32 proc_id;
-	acpi_io_address pblk_address;
-	u32 pblk_length;
+        acpi_object_type type;
+        u32 proc_id;
+        acpi_io_address pblk_address;
+        u32 pblk_length;
     } processor;
     struct {
-	acpi_object_type type;
-	u32 system_level;
-	u32 resource_order;
+        acpi_object_type type;
+        u32 system_level;
+        u32 resource_order;
     } power_resource;
 };
 
@@ -24746,9 +25027,9 @@ struct acpi_device_power_flags {
 
 struct acpi_device_power_state {
     struct {
-	u8 valid : 1;
-	u8 explicit_set : 1;
-	u8 reserved : 6;
+        u8 valid : 1;
+        u8 explicit_set : 1;
+        u8 reserved : 6;
     } flags;
     int power;
     int latency;
@@ -24864,8 +25145,8 @@ struct acpi_hotplug_context {
 
 struct acpi_device_perf_state {
     struct {
-	u8 valid : 1;
-	u8 reserved : 7;
+        u8 valid : 1;
+        u8 reserved : 7;
     } flags;
     u8 power;
     u8 performance;
@@ -24927,7 +25208,8 @@ typedef acpi_status (*acpi_adr_space_handler)(u32, acpi_physical_address, u32, u
 
 typedef acpi_status (*acpi_adr_space_setup)(acpi_handle, u32, void *, void **);
 
-union acpi_name_union {
+union acpi_name_union
+{
     u32 integer;
     char ascii[4];
 };
@@ -25025,9 +25307,10 @@ struct acpi_object_method {
     union acpi_operand_object *mutex;
     union acpi_operand_object *node;
     u8 *aml_start;
-    union {
-	acpi_internal_method implementation;
-	union acpi_operand_object *handler;
+    union
+    {
+        acpi_internal_method implementation;
+        union acpi_operand_object *handler;
     } dispatch;
     u32 aml_length;
     acpi_owner_id owner_id;
@@ -25302,7 +25585,8 @@ struct acpi_object_cache_list {
     union acpi_operand_object *next;
 };
 
-union acpi_operand_object {
+union acpi_operand_object
+{
     struct acpi_object_common common;
     struct acpi_object_integer integer;
     struct acpi_object_string string;
@@ -25422,7 +25706,8 @@ struct acpi_gpe_notify_info {
     struct acpi_gpe_notify_info *next;
 };
 
-union acpi_gpe_dispatch_info {
+union acpi_gpe_dispatch_info
+{
     struct acpi_namespace_node *method_node;
     struct acpi_gpe_handler_info *handler;
     struct acpi_gpe_notify_info *notify_list;
@@ -25522,7 +25807,8 @@ struct acpi_control_state {
     u64 loop_timeout;
 };
 
-union acpi_parse_value {
+union acpi_parse_value
+{
     u64 integer;
     u32 size;
     char *string;
@@ -25597,7 +25883,8 @@ struct acpi_parse_obj_asl {
     char parse_op_name[20];
 };
 
-union acpi_parse_object {
+union acpi_parse_object
+{
     struct acpi_parse_obj_common common;
     struct acpi_parse_obj_named named;
     struct acpi_parse_obj_asl asl;
@@ -25663,7 +25950,8 @@ struct acpi_notify_info {
     struct acpi_global_notify_handler *global;
 };
 
-union acpi_generic_state {
+union acpi_generic_state
+{
     struct acpi_common_state common;
     struct acpi_control_state control;
     struct acpi_update_state update;
@@ -25924,32 +26212,32 @@ struct cper_sec_pcie {
     u64 validation_bits;
     u32 port_type;
     struct {
-	u8 minor;
-	u8 major;
-	u8 reserved[2];
+        u8 minor;
+        u8 major;
+        u8 reserved[2];
     } version;
     u16 command;
     u16 status;
     u32 reserved;
     struct {
-	u16 vendor_id;
-	u16 device_id;
-	u8 class_code[3];
-	u8 function;
-	u8 device;
-	u16 segment;
-	u8 bus;
-	u8 secondary_bus;
-	u16 slot;
-	u8 reserved;
+        u16 vendor_id;
+        u16 device_id;
+        u8 class_code[3];
+        u8 function;
+        u8 device;
+        u16 segment;
+        u8 bus;
+        u8 secondary_bus;
+        u16 slot;
+        u8 reserved;
     } __attribute__((packed)) device_id;
     struct {
-	u32 lower;
-	u32 upper;
+        u32 lower;
+        u32 upper;
     } serial_number;
     struct {
-	u16 secondary_status;
-	u16 control;
+        u16 secondary_status;
+        u16 control;
     } bridge;
     u8 capability[60];
     u8 aer_info[96];
@@ -25962,16 +26250,18 @@ enum hest_status {
 };
 
 struct ghes {
-    union {
-	struct acpi_hest_generic *generic;
-	struct acpi_hest_generic_v2 *generic_v2;
+    union
+    {
+        struct acpi_hest_generic *generic;
+        struct acpi_hest_generic_v2 *generic_v2;
     };
     struct acpi_hest_generic_status *estatus;
     long unsigned int flags;
-    union {
-	struct list_head list;
-	struct timer_list timer;
-	unsigned int irq;
+    union
+    {
+        struct list_head list;
+        struct timer_list timer;
+        unsigned int irq;
     };
     struct device *dev;
     struct list_head elist;
@@ -26258,18 +26548,18 @@ struct tty_struct {
     unsigned int receive_room;
     struct winsize winsize;
     struct {
-	spinlock_t lock;
-	bool stopped;
-	bool tco_stopped;
-	long unsigned int unused[0];
+        spinlock_t lock;
+        bool stopped;
+        bool tco_stopped;
+        long unsigned int unused[0];
     } flow;
     struct {
-	struct pid *pgrp;
-	struct pid *session;
-	spinlock_t lock;
-	unsigned char pktstatus;
-	bool packet;
-	long unsigned int unused[0];
+        struct pid *pgrp;
+        struct pid *session;
+        spinlock_t lock;
+        unsigned char pktstatus;
+        bool packet;
+        long unsigned int unused[0];
     } ctrl;
     bool hw_stopped;
     bool closing;
@@ -26368,9 +26658,10 @@ struct serial_struct {
 };
 
 struct tty_buffer {
-    union {
-	struct tty_buffer *next;
-	struct llist_node free;
+    union
+    {
+        struct tty_buffer *next;
+        struct llist_node free;
     };
     unsigned int used;
     unsigned int size;
@@ -26416,15 +26707,16 @@ struct tty_port {
     struct mutex buf_mutex;
     u8 *xmit_buf;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    u8 *type;
-	    const u8 *const_type;
-	    char (*rectype)[0];
-	    u8 *ptr;
-	    const u8 *ptr_const;
-	};
-	u8 buf[0];
+        union
+        {
+            struct __kfifo kfifo;
+            u8 *type;
+            const u8 *const_type;
+            char (*rectype)[0];
+            u8 *ptr;
+            const u8 *ptr_const;
+        };
+        u8 buf[0];
     } xmit_fifo;
     unsigned int close_delay;
     unsigned int closing_wait;
@@ -26700,9 +26992,10 @@ enum tpm_chip_flags {
 struct tpm_header {
     __be16 tag;
     __be32 length;
-    union {
-	__be32 ordinal;
-	__be32 return_code;
+    union
+    {
+        __be32 ordinal;
+        __be32 return_code;
     };
 } __attribute__((packed));
 
@@ -27001,9 +27294,9 @@ struct drm_device {
     struct kref ref;
     struct device *dev;
     struct {
-	struct list_head resources;
-	void *final_kfree;
-	spinlock_t lock;
+        struct list_head resources;
+        void *final_kfree;
+        spinlock_t lock;
     } managed;
     const struct drm_driver *driver;
     void *dev_private;
@@ -27240,9 +27533,10 @@ struct drm_format_info {
     u32 format;
     u8 depth;
     u8 num_planes;
-    union {
-	u8 cpp[4];
-	u8 char_per_block[4];
+    union
+    {
+        u8 cpp[4];
+        u8 char_per_block[4];
     };
     u8 block_w[4];
     u8 block_h[4];
@@ -27401,7 +27695,8 @@ struct i2c_msg {
     __u8 *buf;
 };
 
-union i2c_smbus_data {
+union i2c_smbus_data
+{
     __u8 byte;
     __u16 word;
     __u8 block[34];
@@ -27554,8 +27849,9 @@ struct hdr_static_metadata {
 
 struct hdr_sink_metadata {
     __u32 metadata_type;
-    union {
-	struct hdr_static_metadata hdmi_type1;
+    union
+    {
+        struct hdr_static_metadata hdmi_type1;
     };
 };
 
@@ -28176,10 +28472,11 @@ struct dma_fence_ops;
 struct dma_fence {
     spinlock_t *lock;
     const struct dma_fence_ops *ops;
-    union {
-	struct list_head cb_list;
-	ktime_t timestamp;
-	struct callback_head rcu;
+    union
+    {
+        struct list_head cb_list;
+        ktime_t timestamp;
+        struct callback_head rcu;
     };
     u64 context;
     u64 seqno;
@@ -28433,7 +28730,7 @@ struct drm_gem_object {
     struct dma_resv *resv;
     struct dma_resv _resv;
     struct {
-	struct list_head list;
+        struct list_head list;
     } gpuva;
     const struct drm_gem_object_funcs *funcs;
     struct list_head lru_node;
@@ -28441,9 +28738,10 @@ struct drm_gem_object {
 };
 
 struct iosys_map {
-    union {
-	void *vaddr_iomem;
-	void *vaddr;
+    union
+    {
+        void *vaddr_iomem;
+        void *vaddr;
     };
     bool is_iomem;
 };
@@ -28500,9 +28798,9 @@ struct dma_buf_attachment {
 
 struct drm_format_conv_state {
     struct {
-	void *mem;
-	size_t size;
-	bool preallocated;
+        void *mem;
+        size_t size;
+        bool preallocated;
     } tmp;
 };
 
@@ -29245,7 +29543,8 @@ struct ethtool_usrip6_spec {
     __u8 l4_proto;
 };
 
-union ethtool_flow_union {
+union ethtool_flow_union
+{
     struct ethtool_tcpip4_spec tcp_ip4_spec;
     struct ethtool_tcpip4_spec udp_ip4_spec;
     struct ethtool_tcpip4_spec sctp_ip4_spec;
@@ -29285,9 +29584,10 @@ struct ethtool_rxnfc {
     __u32 flow_type;
     __u64 data;
     struct ethtool_rx_flow_spec fs;
-    union {
-	__u32 rule_cnt;
-	__u32 rss_context;
+    union
+    {
+        __u32 rule_cnt;
+        __u32 rss_context;
     };
     __u32 rule_locs[0];
 };
@@ -29460,14 +29760,15 @@ struct kernel_ethtool_ringparam {
 
 struct ethtool_link_ext_state_info {
     enum ethtool_link_ext_state link_ext_state;
-    union {
-	enum ethtool_link_ext_substate_autoneg autoneg;
-	enum ethtool_link_ext_substate_link_training link_training;
-	enum ethtool_link_ext_substate_link_logical_mismatch link_logical_mismatch;
-	enum ethtool_link_ext_substate_bad_signal_integrity bad_signal_integrity;
-	enum ethtool_link_ext_substate_cable_issue cable_issue;
-	enum ethtool_link_ext_substate_module module;
-	u32 __link_ext_substate;
+    union
+    {
+        enum ethtool_link_ext_substate_autoneg autoneg;
+        enum ethtool_link_ext_substate_link_training link_training;
+        enum ethtool_link_ext_substate_link_logical_mismatch link_logical_mismatch;
+        enum ethtool_link_ext_substate_bad_signal_integrity bad_signal_integrity;
+        enum ethtool_link_ext_substate_cable_issue cable_issue;
+        enum ethtool_link_ext_substate_module module;
+        u32 __link_ext_substate;
     };
 };
 
@@ -29478,9 +29779,9 @@ struct ethtool_link_ext_stats {
 struct ethtool_link_ksettings {
     struct ethtool_link_settings base;
     struct {
-	long unsigned int supported[2];
-	long unsigned int advertising[2];
-	long unsigned int lp_advertising[2];
+        long unsigned int supported[2];
+        long unsigned int advertising[2];
+        long unsigned int lp_advertising[2];
     } link_modes;
     u32 lanes;
 };
@@ -29505,97 +29806,101 @@ struct kernel_ethtool_coalesce {
 
 struct ethtool_eth_mac_stats {
     enum ethtool_mac_stats_src src;
-    union {
-	struct {
-	    u64 FramesTransmittedOK;
-	    u64 SingleCollisionFrames;
-	    u64 MultipleCollisionFrames;
-	    u64 FramesReceivedOK;
-	    u64 FrameCheckSequenceErrors;
-	    u64 AlignmentErrors;
-	    u64 OctetsTransmittedOK;
-	    u64 FramesWithDeferredXmissions;
-	    u64 LateCollisions;
-	    u64 FramesAbortedDueToXSColls;
-	    u64 FramesLostDueToIntMACXmitError;
-	    u64 CarrierSenseErrors;
-	    u64 OctetsReceivedOK;
-	    u64 FramesLostDueToIntMACRcvError;
-	    u64 MulticastFramesXmittedOK;
-	    u64 BroadcastFramesXmittedOK;
-	    u64 FramesWithExcessiveDeferral;
-	    u64 MulticastFramesReceivedOK;
-	    u64 BroadcastFramesReceivedOK;
-	    u64 InRangeLengthErrors;
-	    u64 OutOfRangeLengthField;
-	    u64 FrameTooLongErrors;
-	};
-	struct {
-	    u64 FramesTransmittedOK;
-	    u64 SingleCollisionFrames;
-	    u64 MultipleCollisionFrames;
-	    u64 FramesReceivedOK;
-	    u64 FrameCheckSequenceErrors;
-	    u64 AlignmentErrors;
-	    u64 OctetsTransmittedOK;
-	    u64 FramesWithDeferredXmissions;
-	    u64 LateCollisions;
-	    u64 FramesAbortedDueToXSColls;
-	    u64 FramesLostDueToIntMACXmitError;
-	    u64 CarrierSenseErrors;
-	    u64 OctetsReceivedOK;
-	    u64 FramesLostDueToIntMACRcvError;
-	    u64 MulticastFramesXmittedOK;
-	    u64 BroadcastFramesXmittedOK;
-	    u64 FramesWithExcessiveDeferral;
-	    u64 MulticastFramesReceivedOK;
-	    u64 BroadcastFramesReceivedOK;
-	    u64 InRangeLengthErrors;
-	    u64 OutOfRangeLengthField;
-	    u64 FrameTooLongErrors;
-	} stats;
+    union
+    {
+        struct {
+            u64 FramesTransmittedOK;
+            u64 SingleCollisionFrames;
+            u64 MultipleCollisionFrames;
+            u64 FramesReceivedOK;
+            u64 FrameCheckSequenceErrors;
+            u64 AlignmentErrors;
+            u64 OctetsTransmittedOK;
+            u64 FramesWithDeferredXmissions;
+            u64 LateCollisions;
+            u64 FramesAbortedDueToXSColls;
+            u64 FramesLostDueToIntMACXmitError;
+            u64 CarrierSenseErrors;
+            u64 OctetsReceivedOK;
+            u64 FramesLostDueToIntMACRcvError;
+            u64 MulticastFramesXmittedOK;
+            u64 BroadcastFramesXmittedOK;
+            u64 FramesWithExcessiveDeferral;
+            u64 MulticastFramesReceivedOK;
+            u64 BroadcastFramesReceivedOK;
+            u64 InRangeLengthErrors;
+            u64 OutOfRangeLengthField;
+            u64 FrameTooLongErrors;
+        };
+        struct {
+            u64 FramesTransmittedOK;
+            u64 SingleCollisionFrames;
+            u64 MultipleCollisionFrames;
+            u64 FramesReceivedOK;
+            u64 FrameCheckSequenceErrors;
+            u64 AlignmentErrors;
+            u64 OctetsTransmittedOK;
+            u64 FramesWithDeferredXmissions;
+            u64 LateCollisions;
+            u64 FramesAbortedDueToXSColls;
+            u64 FramesLostDueToIntMACXmitError;
+            u64 CarrierSenseErrors;
+            u64 OctetsReceivedOK;
+            u64 FramesLostDueToIntMACRcvError;
+            u64 MulticastFramesXmittedOK;
+            u64 BroadcastFramesXmittedOK;
+            u64 FramesWithExcessiveDeferral;
+            u64 MulticastFramesReceivedOK;
+            u64 BroadcastFramesReceivedOK;
+            u64 InRangeLengthErrors;
+            u64 OutOfRangeLengthField;
+            u64 FrameTooLongErrors;
+        } stats;
     };
 };
 
 struct ethtool_eth_phy_stats {
     enum ethtool_mac_stats_src src;
-    union {
-	struct {
-	    u64 SymbolErrorDuringCarrier;
-	};
-	struct {
-	    u64 SymbolErrorDuringCarrier;
-	} stats;
+    union
+    {
+        struct {
+            u64 SymbolErrorDuringCarrier;
+        };
+        struct {
+            u64 SymbolErrorDuringCarrier;
+        } stats;
     };
 };
 
 struct ethtool_eth_ctrl_stats {
     enum ethtool_mac_stats_src src;
-    union {
-	struct {
-	    u64 MACControlFramesTransmitted;
-	    u64 MACControlFramesReceived;
-	    u64 UnsupportedOpcodesReceived;
-	};
-	struct {
-	    u64 MACControlFramesTransmitted;
-	    u64 MACControlFramesReceived;
-	    u64 UnsupportedOpcodesReceived;
-	} stats;
+    union
+    {
+        struct {
+            u64 MACControlFramesTransmitted;
+            u64 MACControlFramesReceived;
+            u64 UnsupportedOpcodesReceived;
+        };
+        struct {
+            u64 MACControlFramesTransmitted;
+            u64 MACControlFramesReceived;
+            u64 UnsupportedOpcodesReceived;
+        } stats;
     };
 };
 
 struct ethtool_pause_stats {
     enum ethtool_mac_stats_src src;
-    union {
-	struct {
-	    u64 tx_pause_frames;
-	    u64 rx_pause_frames;
-	};
-	struct {
-	    u64 tx_pause_frames;
-	    u64 rx_pause_frames;
-	} stats;
+    union
+    {
+        struct {
+            u64 tx_pause_frames;
+            u64 rx_pause_frames;
+        };
+        struct {
+            u64 tx_pause_frames;
+            u64 rx_pause_frames;
+        } stats;
     };
 };
 
@@ -29617,23 +29922,24 @@ struct ethtool_rmon_hist_range {
 
 struct ethtool_rmon_stats {
     enum ethtool_mac_stats_src src;
-    union {
-	struct {
-	    u64 undersize_pkts;
-	    u64 oversize_pkts;
-	    u64 fragments;
-	    u64 jabbers;
-	    u64 hist[10];
-	    u64 hist_tx[10];
-	};
-	struct {
-	    u64 undersize_pkts;
-	    u64 oversize_pkts;
-	    u64 fragments;
-	    u64 jabbers;
-	    u64 hist[10];
-	    u64 hist_tx[10];
-	} stats;
+    union
+    {
+        struct {
+            u64 undersize_pkts;
+            u64 oversize_pkts;
+            u64 fragments;
+            u64 jabbers;
+            u64 hist[10];
+            u64 hist_tx[10];
+        };
+        struct {
+            u64 undersize_pkts;
+            u64 oversize_pkts;
+            u64 fragments;
+            u64 jabbers;
+            u64 hist[10];
+            u64 hist_tx[10];
+        } stats;
     };
 };
 
@@ -29751,10 +30057,10 @@ struct mii_bus {
     struct mutex mdio_lock;
     struct device *parent;
     enum {
-	MDIOBUS_ALLOCATED = 1,
-	MDIOBUS_REGISTERED = 2,
-	MDIOBUS_UNREGISTERED = 3,
-	MDIOBUS_RELEASED = 4,
+        MDIOBUS_ALLOCATED = 1,
+        MDIOBUS_REGISTERED = 2,
+        MDIOBUS_UNREGISTERED = 3,
+        MDIOBUS_RELEASED = 4,
     } state;
     struct device dev;
     struct mdio_device *mdio_map[32];
@@ -30014,23 +30320,24 @@ struct sfp_eeprom_base {
     char vendor_oui[3];
     char vendor_pn[16];
     char vendor_rev[4];
-    union {
-	__be16 optical_wavelength;
-	__be16 cable_compliance;
-	struct {
-	    u8 sff8431_app_e : 1;
-	    u8 fc_pi_4_app_h : 1;
-	    u8 reserved60_2 : 6;
-	    u8 reserved61 : 8;
-	} passive;
-	struct {
-	    u8 sff8431_app_e : 1;
-	    u8 fc_pi_4_app_h : 1;
-	    u8 sff8431_lim : 1;
-	    u8 fc_pi_4_lim : 1;
-	    u8 reserved60_4 : 4;
-	    u8 reserved61 : 8;
-	} active;
+    union
+    {
+        __be16 optical_wavelength;
+        __be16 cable_compliance;
+        struct {
+            u8 sff8431_app_e : 1;
+            u8 fc_pi_4_app_h : 1;
+            u8 reserved60_2 : 6;
+            u8 reserved61 : 8;
+        } passive;
+        struct {
+            u8 sff8431_app_e : 1;
+            u8 fc_pi_4_app_h : 1;
+            u8 sff8431_lim : 1;
+            u8 fc_pi_4_lim : 1;
+            u8 reserved60_4 : 4;
+            u8 reserved61 : 8;
+        } active;
     };
     u8 reserved62;
     u8 cc_base;
@@ -30239,12 +30546,13 @@ struct ff_effect {
     __u16 direction;
     struct ff_trigger trigger;
     struct ff_replay replay;
-    union {
-	struct ff_constant_effect constant;
-	struct ff_ramp_effect ramp;
-	struct ff_periodic_effect periodic;
-	struct ff_condition_effect condition[2];
-	struct ff_rumble_effect rumble;
+    union
+    {
+        struct ff_constant_effect constant;
+        struct ff_ramp_effect ramp;
+        struct ff_periodic_effect periodic;
+        struct ff_condition_effect condition[2];
+        struct ff_rumble_effect rumble;
     } u;
 };
 
@@ -30644,7 +30952,8 @@ enum power_supply_notifier_events {
     PSY_EVENT_PROP_CHANGED = 0,
 };
 
-union power_supply_propval {
+union power_supply_propval
+{
     int intval;
     const char *strval;
 };
@@ -30985,28 +31294,29 @@ struct cper_sec_prot_err {
     u64 valid_bits;
     u8 agent_type;
     u8 reserved[7];
-    union {
-	u64 rcrb_base_addr;
-	struct {
-	    u8 function;
-	    u8 device;
-	    u8 bus;
-	    u16 segment;
-	    u8 reserved_1[3];
-	} __attribute__((packed));
+    union
+    {
+        u64 rcrb_base_addr;
+        struct {
+            u8 function;
+            u8 device;
+            u8 bus;
+            u16 segment;
+            u8 reserved_1[3];
+        } __attribute__((packed));
     } agent_addr;
     struct {
-	u16 vendor_id;
-	u16 device_id;
-	u16 subsystem_vendor_id;
-	u16 subsystem_id;
-	u8 class_code[2];
-	u16 slot;
-	u8 reserved_1[4];
+        u16 vendor_id;
+        u16 device_id;
+        u16 subsystem_vendor_id;
+        u16 subsystem_id;
+        u8 class_code[2];
+        u16 slot;
+        u8 reserved_1[4];
     } device_id;
     struct {
-	u32 lower_dw;
-	u32 upper_dw;
+        u32 lower_dw;
+        u32 upper_dw;
     } dev_serial_num;
     u8 capability[60];
     u16 dvsec_len;
@@ -31168,23 +31478,24 @@ typedef efi_status_t efi_update_capsule_t(efi_capsule_header_t **, long unsigned
 
 typedef efi_status_t efi_query_capsule_caps_t(efi_capsule_header_t **, long unsigned int, u64 *, int *);
 
-typedef union {
+typedef union
+{
     struct {
-	efi_table_hdr_t hdr;
-	efi_status_t (*get_time)(efi_time_t *, efi_time_cap_t *);
-	efi_status_t (*set_time)(efi_time_t *);
-	efi_status_t (*get_wakeup_time)(efi_bool_t *, efi_bool_t *, efi_time_t *);
-	efi_status_t (*set_wakeup_time)(efi_bool_t, efi_time_t *);
-	efi_status_t (*set_virtual_address_map)(long unsigned int, long unsigned int, u32, efi_memory_desc_t *);
-	void *convert_pointer;
-	efi_status_t (*get_variable)(efi_char16_t *, efi_guid_t *, u32 *, long unsigned int *, void *);
-	efi_status_t (*get_next_variable)(long unsigned int *, efi_char16_t *, efi_guid_t *);
-	efi_status_t (*set_variable)(efi_char16_t *, efi_guid_t *, u32, long unsigned int, void *);
-	efi_status_t (*get_next_high_mono_count)(u32 *);
-	void (*reset_system)(int, efi_status_t, long unsigned int, efi_char16_t *);
-	efi_status_t (*update_capsule)(efi_capsule_header_t **, long unsigned int, long unsigned int);
-	efi_status_t (*query_capsule_caps)(efi_capsule_header_t **, long unsigned int, u64 *, int *);
-	efi_status_t (*query_variable_info)(u32, u64 *, u64 *, u64 *);
+        efi_table_hdr_t hdr;
+        efi_status_t (*get_time)(efi_time_t *, efi_time_cap_t *);
+        efi_status_t (*set_time)(efi_time_t *);
+        efi_status_t (*get_wakeup_time)(efi_bool_t *, efi_bool_t *, efi_time_t *);
+        efi_status_t (*set_wakeup_time)(efi_bool_t, efi_time_t *);
+        efi_status_t (*set_virtual_address_map)(long unsigned int, long unsigned int, u32, efi_memory_desc_t *);
+        void *convert_pointer;
+        efi_status_t (*get_variable)(efi_char16_t *, efi_guid_t *, u32 *, long unsigned int *, void *);
+        efi_status_t (*get_next_variable)(long unsigned int *, efi_char16_t *, efi_guid_t *);
+        efi_status_t (*set_variable)(efi_char16_t *, efi_guid_t *, u32, long unsigned int, void *);
+        efi_status_t (*get_next_high_mono_count)(u32 *);
+        void (*reset_system)(int, efi_status_t, long unsigned int, efi_char16_t *);
+        efi_status_t (*update_capsule)(efi_capsule_header_t **, long unsigned int, long unsigned int);
+        efi_status_t (*query_capsule_caps)(efi_capsule_header_t **, long unsigned int, u64 *, int *);
+        efi_status_t (*query_variable_info)(u32, u64 *, u64 *, u64 *);
     };
     efi_runtime_services_32_t mixed_mode;
 } efi_runtime_services_t;
@@ -31259,66 +31570,67 @@ struct efi_runtime_work {
     const void *caller;
 };
 
-union efi_rts_args {
+union efi_rts_args
+{
     struct {
-	efi_time_t *time;
-	efi_time_cap_t *capabilities;
+        efi_time_t *time;
+        efi_time_cap_t *capabilities;
     } GET_TIME;
     struct {
-	efi_time_t *time;
+        efi_time_t *time;
     } SET_TIME;
     struct {
-	efi_bool_t *enabled;
-	efi_bool_t *pending;
-	efi_time_t *time;
+        efi_bool_t *enabled;
+        efi_bool_t *pending;
+        efi_time_t *time;
     } GET_WAKEUP_TIME;
     struct {
-	efi_bool_t enable;
-	efi_time_t *time;
+        efi_bool_t enable;
+        efi_time_t *time;
     } SET_WAKEUP_TIME;
     struct {
-	efi_char16_t *name;
-	efi_guid_t *vendor;
-	u32 *attr;
-	long unsigned int *data_size;
-	void *data;
+        efi_char16_t *name;
+        efi_guid_t *vendor;
+        u32 *attr;
+        long unsigned int *data_size;
+        void *data;
     } GET_VARIABLE;
     struct {
-	long unsigned int *name_size;
-	efi_char16_t *name;
-	efi_guid_t *vendor;
+        long unsigned int *name_size;
+        efi_char16_t *name;
+        efi_guid_t *vendor;
     } GET_NEXT_VARIABLE;
     struct {
-	efi_char16_t *name;
-	efi_guid_t *vendor;
-	u32 attr;
-	long unsigned int data_size;
-	void *data;
+        efi_char16_t *name;
+        efi_guid_t *vendor;
+        u32 attr;
+        long unsigned int data_size;
+        void *data;
     } SET_VARIABLE;
     struct {
-	u32 attr;
-	u64 *storage_space;
-	u64 *remaining_space;
-	u64 *max_variable_size;
+        u32 attr;
+        u64 *storage_space;
+        u64 *remaining_space;
+        u64 *max_variable_size;
     } QUERY_VARIABLE_INFO;
     struct {
-	u32 *high_count;
+        u32 *high_count;
     } GET_NEXT_HIGH_MONO_COUNT;
     struct {
-	efi_capsule_header_t **capsules;
-	long unsigned int count;
-	long unsigned int sg_list;
+        efi_capsule_header_t **capsules;
+        long unsigned int count;
+        long unsigned int sg_list;
     } UPDATE_CAPSULE;
     struct {
-	efi_capsule_header_t **capsules;
-	long unsigned int count;
-	u64 *max_size;
-	int *reset_type;
+        efi_capsule_header_t **capsules;
+        long unsigned int count;
+        u64 *max_size;
+        int *reset_type;
     } QUERY_CAPSULE_CAPS;
     struct {
-	efi_status_t (*acpi_prm_handler)(u64, void *);
-	u64 param_buffer_addr;
-	void *context;
+        efi_status_t (*acpi_prm_handler)(u64, void *);
+        u64 param_buffer_addr;
+        void *context;
     } ACPI_PRM_HANDLER;
 };
 
@@ -31388,12 +31700,13 @@ enum _slab_flag_bits {
 };
 
 struct __kernel_sockaddr_storage {
-    union {
-	struct {
-	    __kernel_sa_family_t ss_family;
-	    char __data[126];
-	};
-	void *__align;
+    union
+    {
+        struct {
+            __kernel_sa_family_t ss_family;
+            char __data[126];
+        };
+        void *__align;
     };
 };
 
@@ -31609,9 +31922,10 @@ struct skb_shared_info {
     short unsigned int gso_size;
     short unsigned int gso_segs;
     struct sk_buff *frag_list;
-    union {
-	struct skb_shared_hwtstamps hwtstamps;
-	struct xsk_tx_metadata_compl xsk_meta;
+    union
+    {
+        struct skb_shared_hwtstamps hwtstamps;
+        struct xsk_tx_metadata_compl xsk_meta;
     };
     unsigned int gso_type;
     u32 tskey;
@@ -31717,9 +32031,10 @@ struct inet_hashinfo {
 struct ip_ra_chain {
     struct ip_ra_chain *next;
     struct sock *sk;
-    union {
-	void (*destructor)(struct sock *);
-	struct sock *saved_sk;
+    union
+    {
+        void (*destructor)(struct sock *);
+        struct sock *saved_sk;
     };
     struct callback_head rcu;
 };
@@ -31835,9 +32150,10 @@ struct fib_nh_common {
     u8 nhc_gw_family;
     unsigned char nhc_flags;
     struct lwtunnel_state *nhc_lwtstate;
-    union {
-	__be32 ipv4;
-	struct in6_addr ipv6;
+    union
+    {
+        __be32 ipv4;
+        struct in6_addr ipv6;
     } nhc_gw;
     int nhc_weight;
     atomic_t nhc_upper_bound;
@@ -31865,9 +32181,10 @@ struct fib6_info {
     struct fib6_table *fib6_table;
     struct fib6_info *fib6_next;
     struct fib6_node *fib6_node;
-    union {
-	struct list_head fib6_siblings;
-	struct list_head nh_list;
+    union
+    {
+        struct list_head fib6_siblings;
+        struct list_head nh_list;
     };
     unsigned int fib6_nsiblings;
     refcount_t fib6_ref;
@@ -31939,7 +32256,8 @@ struct fib6_table {
     struct hlist_head tb6_gc_hlist;
 };
 
-typedef union {
+typedef union
+{
     __be32 a4;
     __be32 a6[4];
     struct in6_addr in6;
@@ -32162,9 +32480,10 @@ struct xfrm_type_offload;
 
 struct xfrm_state {
     possible_net_t xs_net;
-    union {
-	struct hlist_node gclist;
-	struct hlist_node bydst;
+    union
+    {
+        struct hlist_node gclist;
+        struct hlist_node bydst;
     };
     struct hlist_node bysrc;
     struct hlist_node byspi;
@@ -32179,19 +32498,19 @@ struct xfrm_state {
     u32 genid;
     struct xfrm_state_walk km;
     struct {
-	u32 reqid;
-	u8 mode;
-	u8 replay_window;
-	u8 aalgo;
-	u8 ealgo;
-	u8 calgo;
-	u8 flags;
-	u16 family;
-	xfrm_address_t saddr;
-	int header_len;
-	int trailer_len;
-	u32 extra_flags;
-	struct xfrm_mark smark;
+        u32 reqid;
+        u8 mode;
+        u8 replay_window;
+        u8 aalgo;
+        u8 ealgo;
+        u8 calgo;
+        u8 flags;
+        u16 family;
+        xfrm_address_t saddr;
+        int header_len;
+        int trailer_len;
+        u32 extra_flags;
+        struct xfrm_mark smark;
     } props;
     struct xfrm_lifetime_cfg lft;
     struct xfrm_algo_auth *aalg;
@@ -32366,9 +32685,9 @@ struct softnet_data {
     struct sk_buff *completion_queue;
     struct sk_buff_head xfrm_backlog;
     struct {
-	u16 recursion;
-	u8 more;
-	u8 skip_txqueue;
+        u16 recursion;
+        u8 more;
+        u8 skip_txqueue;
     } xmit;
     long : 0;
     unsigned int input_queue_head;
@@ -32745,25 +33064,26 @@ struct ipv6_pinfo {
     u8 mcast_hops;
     int ucast_oif;
     int mcast_oif;
-    union {
-	struct {
-	    __u16 srcrt : 1;
-	    __u16 osrcrt : 1;
-	    __u16 rxinfo : 1;
-	    __u16 rxoinfo : 1;
-	    __u16 rxhlim : 1;
-	    __u16 rxohlim : 1;
-	    __u16 hopopts : 1;
-	    __u16 ohopopts : 1;
-	    __u16 dstopts : 1;
-	    __u16 odstopts : 1;
-	    __u16 rxflow : 1;
-	    __u16 rxtclass : 1;
-	    __u16 rxpmtu : 1;
-	    __u16 rxorigdstaddr : 1;
-	    __u16 recvfragsize : 1;
-	} bits;
-	__u16 all;
+    union
+    {
+        struct {
+            __u16 srcrt : 1;
+            __u16 osrcrt : 1;
+            __u16 rxinfo : 1;
+            __u16 rxoinfo : 1;
+            __u16 rxhlim : 1;
+            __u16 rxohlim : 1;
+            __u16 hopopts : 1;
+            __u16 ohopopts : 1;
+            __u16 dstopts : 1;
+            __u16 odstopts : 1;
+            __u16 rxflow : 1;
+            __u16 rxtclass : 1;
+            __u16 rxpmtu : 1;
+            __u16 rxorigdstaddr : 1;
+            __u16 recvfragsize : 1;
+        } bits;
+        __u16 all;
     } rxopt;
     __u8 srcprefs;
     __u8 pmtudisc;
@@ -32885,24 +33205,24 @@ struct inet_connection_sock {
     __u8 icsk_probes_out;
     __u16 icsk_ext_hdr_len;
     struct {
-	__u8 pending;
-	__u8 quick;
-	__u8 pingpong;
-	__u8 retry;
-	__u32 ato : 8;
-	__u32 lrcv_flowlabel : 20;
-	__u32 unused : 4;
-	long unsigned int timeout;
-	__u32 lrcvtime;
-	__u16 last_seg_size;
-	__u16 rcv_mss;
+        __u8 pending;
+        __u8 quick;
+        __u8 pingpong;
+        __u8 retry;
+        __u32 ato : 8;
+        __u32 lrcv_flowlabel : 20;
+        __u32 unused : 4;
+        long unsigned int timeout;
+        __u32 lrcvtime;
+        __u16 last_seg_size;
+        __u16 rcv_mss;
     } icsk_ack;
     struct {
-	int search_high;
-	int search_low;
-	u32 probe_size : 31;
-	u32 enabled : 1;
-	u32 probe_timestamp;
+        int search_high;
+        int search_low;
+        u32 probe_size : 31;
+        u32 enabled : 1;
+        u32 probe_timestamp;
     } icsk_mtup;
     u32 icsk_probes_tstamp;
     u32 icsk_user_timeout;
@@ -33090,14 +33410,14 @@ struct tcp_sock {
     u64 delivered_mstamp;
     u64 bytes_acked;
     struct {
-	u32 rtt_us;
-	u32 seq;
-	u64 time;
+        u32 rtt_us;
+        u32 seq;
+        u64 time;
     } rcv_rtt_est;
     struct {
-	u32 space;
-	u32 seq;
-	u64 time;
+        u32 space;
+        u32 seq;
+        u64 time;
     } rcvq_space;
     __u8 __cacheline_group_end__tcp_sock_write_rx[0];
     u32 dsack_dups;
@@ -33159,8 +33479,8 @@ struct tcp_sock {
     u16 timeout_rehash;
     u32 rcv_ooopack;
     struct {
-	u32 probe_seq_start;
-	u32 probe_seq_end;
+        u32 probe_seq_start;
+        u32 probe_seq_end;
     } mtu_probe;
     u32 plb_rehash;
     u32 mtu_info;
@@ -33230,7 +33550,8 @@ struct tcp_fastopen_request {
     struct ubuf_info *uarg;
 };
 
-union tcp_ao_addr {
+union tcp_ao_addr
+{
     struct in_addr a4;
     struct in6_addr a6;
 };
@@ -33371,9 +33692,10 @@ struct ip6_flowlabel {
     long unsigned int linger;
     struct callback_head rcu;
     u8 share;
-    union {
-	struct pid *pid;
-	kuid_t uid;
+    union
+    {
+        struct pid *pid;
+        kuid_t uid;
     } owner;
     long unsigned int lastuse;
     long unsigned int expires;
@@ -33403,9 +33725,10 @@ struct rtable {
     __u8 rt_uses_gateway;
     int rt_iif;
     u8 rt_gw_family;
-    union {
-	__be32 rt_gw4;
-	struct in6_addr rt_gw6;
+    union
+    {
+        __be32 rt_gw4;
+        struct in6_addr rt_gw6;
     };
     u32 rt_mtu_locked : 1;
     u32 rt_pmtu : 31;
@@ -33433,13 +33756,14 @@ struct prefix_info {
     __u8 type;
     __u8 length;
     __u8 prefix_len;
-    union {
-	__u8 flags;
-	struct {
-	    __u8 reserved : 6;
-	    __u8 autoconf : 1;
-	    __u8 onlink : 1;
-	};
+    union
+    {
+        __u8 flags;
+        struct {
+            __u8 reserved : 6;
+            __u8 autoconf : 1;
+            __u8 onlink : 1;
+        };
     };
     __be32 valid;
     __be32 prefered;
@@ -33467,16 +33791,18 @@ struct sock_extended_err {
     __u8 ee_code;
     __u8 ee_pad;
     __u32 ee_info;
-    union {
-	__u32 ee_data;
-	struct sock_ee_data_rfc4884 ee_rfc4884;
+    union
+    {
+        __u32 ee_data;
+        struct sock_ee_data_rfc4884 ee_rfc4884;
     };
 };
 
 struct sock_exterr_skb {
-    union {
-	struct inet_skb_parm h4;
-	struct inet6_skb_parm h6;
+    union
+    {
+        struct inet_skb_parm h4;
+        struct inet6_skb_parm h6;
     } header;
     struct sock_extended_err ee;
     u16 addr_offset;
@@ -33536,10 +33862,11 @@ struct xfrm_type_offload {
 };
 
 struct xfrm_dst {
-    union {
-	struct dst_entry dst;
-	struct rtable rt;
-	struct rt6_info rt6;
+    union
+    {
+        struct dst_entry dst;
+        struct rtable rt;
+        struct rt6_info rt6;
     } u;
     struct dst_entry *route;
     struct dst_entry *child;
@@ -34694,17 +35021,18 @@ struct genl_family {
 };
 
 struct genl_split_ops {
-    union {
-	struct {
-	    int (*pre_doit)(const struct genl_split_ops *, struct sk_buff *, struct genl_info *);
-	    int (*doit)(struct sk_buff *, struct genl_info *);
-	    void (*post_doit)(const struct genl_split_ops *, struct sk_buff *, struct genl_info *);
-	};
-	struct {
-	    int (*start)(struct netlink_callback *);
-	    int (*dumpit)(struct sk_buff *, struct netlink_callback *);
-	    int (*done)(struct netlink_callback *);
-	};
+    union
+    {
+        struct {
+            int (*pre_doit)(const struct genl_split_ops *, struct sk_buff *, struct genl_info *);
+            int (*doit)(struct sk_buff *, struct genl_info *);
+            void (*post_doit)(const struct genl_split_ops *, struct sk_buff *, struct genl_info *);
+        };
+        struct {
+            int (*start)(struct netlink_callback *);
+            int (*dumpit)(struct sk_buff *, struct netlink_callback *);
+            int (*done)(struct netlink_callback *);
+        };
     };
     const struct nla_policy *policy;
     unsigned int maxattr;
@@ -34962,12 +35290,13 @@ struct inet_request_sock {
     u16 no_srccheck : 1;
     u16 smc_ok : 1;
     u32 ir_mark;
-    union {
-	struct ip_options_rcu *ireq_opt;
-	struct {
-	    struct ipv6_txoptions *ipv6_opt;
-	    struct sk_buff *pktopts;
-	};
+    union
+    {
+        struct ip_options_rcu *ireq_opt;
+        struct {
+            struct ipv6_txoptions *ipv6_opt;
+            struct sk_buff *pktopts;
+        };
     };
 };
 
@@ -34998,27 +35327,29 @@ struct ipv6hdr {
     __be16 payload_len;
     __u8 nexthdr;
     __u8 hop_limit;
-    union {
-	struct {
-	    struct in6_addr saddr;
-	    struct in6_addr daddr;
-	};
-	struct {
-	    struct in6_addr saddr;
-	    struct in6_addr daddr;
-	} addrs;
+    union
+    {
+        struct {
+            struct in6_addr saddr;
+            struct in6_addr daddr;
+        };
+        struct {
+            struct in6_addr saddr;
+            struct in6_addr daddr;
+        } addrs;
     };
 };
 
 struct tcp_skb_cb {
     __u32 seq;
     __u32 end_seq;
-    union {
-	__u32 tcp_tw_isn;
-	struct {
-	    u16 tcp_gso_segs;
-	    u16 tcp_gso_size;
-	};
+    union
+    {
+        __u32 tcp_tw_isn;
+        struct {
+            u16 tcp_gso_segs;
+            u16 tcp_gso_size;
+        };
     };
     __u8 tcp_flags;
     __u8 sacked;
@@ -35028,19 +35359,21 @@ struct tcp_skb_cb {
     __u8 has_rxtstamp : 1;
     __u8 unused : 5;
     __u32 ack_seq;
-    union {
-	struct {
-	    __u32 is_app_limited : 1;
-	    __u32 delivered_ce : 20;
-	    __u32 unused : 11;
-	    __u32 delivered;
-	    u64 first_tx_mstamp;
-	    u64 delivered_mstamp;
-	} tx;
-	union {
-	    struct inet_skb_parm h4;
-	    struct inet6_skb_parm h6;
-	} header;
+    union
+    {
+        struct {
+            __u32 is_app_limited : 1;
+            __u32 delivered_ce : 20;
+            __u32 unused : 11;
+            __u32 delivered;
+            u64 first_tx_mstamp;
+            u64 delivered_mstamp;
+        } tx;
+        union
+        {
+            struct inet_skb_parm h4;
+            struct inet6_skb_parm h6;
+        } header;
     };
 };
 
@@ -35173,15 +35506,16 @@ struct vlan_hdr {
 };
 
 struct vlan_ethhdr {
-    union {
-	struct {
-	    unsigned char h_dest[6];
-	    unsigned char h_source[6];
-	};
-	struct {
-	    unsigned char h_dest[6];
-	    unsigned char h_source[6];
-	} addrs;
+    union
+    {
+        struct {
+            unsigned char h_dest[6];
+            unsigned char h_source[6];
+        };
+        struct {
+            unsigned char h_dest[6];
+            unsigned char h_source[6];
+        } addrs;
     };
     __be16 h_vlan_proto;
     __be16 h_vlan_TCI;
@@ -35221,7 +35555,8 @@ struct vlan_dev_priv {
     struct netpoll *netpoll;
 };
 
-union inet_addr {
+union inet_addr
+{
     __u32 all[4];
     __be32 ip;
     __be32 ip6[4];
@@ -35243,48 +35578,50 @@ struct netpoll {
 };
 
 struct napi_gro_cb {
-    union {
-	struct {
-	    void *frag0;
-	    unsigned int frag0_len;
-	};
-	struct {
-	    struct sk_buff *last;
-	    long unsigned int age;
-	};
+    union
+    {
+        struct {
+            void *frag0;
+            unsigned int frag0_len;
+        };
+        struct {
+            struct sk_buff *last;
+            long unsigned int age;
+        };
     };
     int data_offset;
     u16 flush;
     u16 flush_id;
     u16 count;
     u16 proto;
-    union {
-	struct {
-	    u16 gro_remcsum_start;
-	    u8 same_flow : 1;
-	    u8 encap_mark : 1;
-	    u8 csum_valid : 1;
-	    u8 csum_cnt : 3;
-	    u8 free : 2;
-	    u8 is_ipv6 : 1;
-	    u8 is_fou : 1;
-	    u8 is_atomic : 1;
-	    u8 recursion_counter : 4;
-	    u8 is_flist : 1;
-	};
-	struct {
-	    u16 gro_remcsum_start;
-	    u8 same_flow : 1;
-	    u8 encap_mark : 1;
-	    u8 csum_valid : 1;
-	    u8 csum_cnt : 3;
-	    u8 free : 2;
-	    u8 is_ipv6 : 1;
-	    u8 is_fou : 1;
-	    u8 is_atomic : 1;
-	    u8 recursion_counter : 4;
-	    u8 is_flist : 1;
-	} zeroed;
+    union
+    {
+        struct {
+            u16 gro_remcsum_start;
+            u8 same_flow : 1;
+            u8 encap_mark : 1;
+            u8 csum_valid : 1;
+            u8 csum_cnt : 3;
+            u8 free : 2;
+            u8 is_ipv6 : 1;
+            u8 is_fou : 1;
+            u8 is_atomic : 1;
+            u8 recursion_counter : 4;
+            u8 is_flist : 1;
+        };
+        struct {
+            u16 gro_remcsum_start;
+            u8 same_flow : 1;
+            u8 encap_mark : 1;
+            u8 csum_valid : 1;
+            u8 csum_cnt : 3;
+            u8 free : 2;
+            u8 is_ipv6 : 1;
+            u8 is_fou : 1;
+            u8 is_atomic : 1;
+            u8 recursion_counter : 4;
+            u8 is_flist : 1;
+        } zeroed;
     };
     __wsum csum;
 };
@@ -35694,18 +36031,19 @@ struct uv_systab {
     u64 (*function)(enum uv_bios_cmd, ...);
     u32 size;
     struct {
-	u32 type : 8;
-	u32 offset : 24;
+        u32 type : 8;
+        u32 offset : 24;
     } entry[1];
 };
 
-union partition_info_u {
+union partition_info_u
+{
     u64 val;
     struct {
-	u64 hub_version : 8;
-	u64 partition_id : 16;
-	u64 coherence_id : 16;
-	u64 region_size : 24;
+        u64 hub_version : 8;
+        u64 partition_id : 16;
+        u64 coherence_id : 16;
+        u64 region_size : 24;
     };
 };
 
@@ -35830,24 +36168,26 @@ struct robust_list_head {
     struct robust_list *list_op_pending;
 };
 
-union futex_key {
+union futex_key
+{
     struct {
-	u64 i_seq;
-	long unsigned int pgoff;
-	unsigned int offset;
+        u64 i_seq;
+        long unsigned int pgoff;
+        unsigned int offset;
     } shared;
     struct {
-	union {
-	    struct mm_struct *mm;
-	    u64 __tmp;
-	};
-	long unsigned int address;
-	unsigned int offset;
+        union
+        {
+            struct mm_struct *mm;
+            u64 __tmp;
+        };
+        long unsigned int address;
+        unsigned int offset;
     } private;
     struct {
-	u64 ptr;
-	long unsigned int word;
-	unsigned int offset;
+        u64 ptr;
+        long unsigned int word;
+        unsigned int offset;
     } both;
 };
 
@@ -36195,12 +36535,14 @@ struct trace_subsystem_dir {
     int nr_events;
 };
 
-union lower_chunk {
+union lower_chunk
+{
     union lower_chunk *next;
     long unsigned int data[256];
 };
 
-union upper_chunk {
+union upper_chunk
+{
     union upper_chunk *next;
     union lower_chunk *data[256];
 };
@@ -36700,23 +37042,26 @@ typedef void (*btf_trace_compact_retry)(void *, int, enum compact_priority, enum
 
 struct ptdesc {
     long unsigned int __page_flags;
-    union {
-	struct callback_head pt_rcu_head;
-	struct list_head pt_list;
-	struct {
-	    long unsigned int _pt_pad_1;
-	    pgtable_t pmd_huge_pte;
-	};
+    union
+    {
+        struct callback_head pt_rcu_head;
+        struct list_head pt_list;
+        struct {
+            long unsigned int _pt_pad_1;
+            pgtable_t pmd_huge_pte;
+        };
     };
     long unsigned int __page_mapping;
-    union {
-	long unsigned int pt_index;
-	struct mm_struct *pt_mm;
-	atomic_t pt_frag_refcount;
+    union
+    {
+        long unsigned int pt_index;
+        struct mm_struct *pt_mm;
+        atomic_t pt_frag_refcount;
     };
-    union {
-	long unsigned int _pt_pad_2;
-	spinlock_t ptl;
+    union
+    {
+        long unsigned int _pt_pad_2;
+        spinlock_t ptl;
     };
     unsigned int __page_type;
     atomic_t __page_refcount;
@@ -36990,9 +37335,10 @@ struct dio {
     struct task_struct *waiter;
     struct kiocb *iocb;
     ssize_t result;
-    union {
-	struct page *pages[64];
-	struct work_struct complete_work;
+    union
+    {
+        struct page *pages[64];
+        struct work_struct complete_work;
     };
     long : 64;
 };
@@ -37087,12 +37433,13 @@ struct autofs_wait_queue {
 
 struct btrfs_balance_args {
     __u64 profiles;
-    union {
-	__u64 usage;
-	struct {
-	    __u32 usage_min;
-	    __u32 usage_max;
-	};
+    union
+    {
+        __u64 usage;
+        struct {
+            __u32 usage_min;
+            __u32 usage_max;
+        };
     };
     __u64 devid;
     __u64 pstart;
@@ -37101,12 +37448,13 @@ struct btrfs_balance_args {
     __u64 vend;
     __u64 target;
     __u64 flags;
-    union {
-	__u64 limit;
-	struct {
-	    __u32 limit_min;
-	    __u32 limit_max;
-	};
+    union
+    {
+        __u64 limit;
+        struct {
+            __u32 limit_min;
+            __u32 limit_max;
+        };
     };
     __u32 stripes_min;
     __u32 stripes_max;
@@ -37312,13 +37660,14 @@ struct sigevent {
     sigval_t sigev_value;
     int sigev_signo;
     int sigev_notify;
-    union {
-	int _pad[12];
-	int _tid;
-	struct {
-	    void (*_function)(sigval_t);
-	    void *_attribute;
-	} _sigev_thread;
+    union
+    {
+        int _pad[12];
+        int _tid;
+        struct {
+            void (*_function)(sigval_t);
+            void *_attribute;
+        } _sigev_thread;
     } _sigev_un;
 };
 
@@ -37353,7 +37702,8 @@ typedef u16 compat_mode_t;
 
 typedef s32 compat_int_t;
 
-union compat_sigval {
+union compat_sigval
+{
     compat_int_t sival_int;
     compat_uptr_t sival_ptr;
 };
@@ -37364,13 +37714,14 @@ struct compat_sigevent {
     compat_sigval_t sigev_value;
     compat_int_t sigev_signo;
     compat_int_t sigev_notify;
-    union {
-	compat_int_t _pad[13];
-	compat_int_t _tid;
-	struct {
-	    compat_uptr_t _function;
-	    compat_uptr_t _attribute;
-	} _sigev_thread;
+    union
+    {
+        compat_int_t _pad[13];
+        compat_int_t _tid;
+        struct {
+            compat_uptr_t _function;
+            compat_uptr_t _attribute;
+        } _sigev_thread;
     } _sigev_un;
 };
 
@@ -37451,12 +37802,13 @@ struct crypto_istat_hash {
 
 struct shash_instance {
     void (*free)(struct shash_instance *);
-    union {
-	struct {
-	    char head[104];
-	    struct crypto_instance base;
-	} s;
-	struct shash_alg alg;
+    union
+    {
+        struct {
+            char head[104];
+            struct crypto_instance base;
+        } s;
+        struct shash_alg alg;
     };
 };
 
@@ -37634,18 +37986,19 @@ struct io_uring_buf {
 };
 
 struct io_uring_buf_ring {
-    union {
-	struct {
-	    __u64 resv1;
-	    __u32 resv2;
-	    __u16 resv3;
-	    __u16 tail;
-	};
-	struct {
-	    struct {
-	    } __empty_bufs;
-	    struct io_uring_buf bufs[0];
-	};
+    union
+    {
+        struct {
+            __u64 resv1;
+            __u32 resv2;
+            __u16 resv3;
+            __u16 tail;
+        };
+        struct {
+            struct {
+            } __empty_bufs;
+            struct io_uring_buf bufs[0];
+        };
     };
 };
 
@@ -37659,17 +38012,19 @@ struct io_cache_entry {
 
 struct io_rsrc_put {
     u64 tag;
-    union {
-	void *rsrc;
-	struct file *file;
-	struct io_mapped_ubuf *buf;
+    union
+    {
+        void *rsrc;
+        struct file *file;
+        struct io_mapped_ubuf *buf;
     };
 };
 
 struct io_rsrc_node {
-    union {
-	struct io_cache_entry cache;
-	struct io_ring_ctx *ctx;
+    union
+    {
+        struct io_cache_entry cache;
+        struct io_ring_ctx *ctx;
     };
     int refs;
     bool empty;
@@ -37703,13 +38058,14 @@ struct io_buffer {
 };
 
 struct io_buffer_list {
-    union {
-	struct list_head buf_list;
-	struct {
-	    struct page **buf_pages;
-	    struct io_uring_buf_ring *buf_ring;
-	};
-	struct callback_head rcu;
+    union
+    {
+        struct list_head buf_list;
+        struct {
+            struct page **buf_pages;
+            struct io_uring_buf_ring *buf_ring;
+        };
+        struct callback_head rcu;
     };
     __u16 bgid;
     __u16 buf_nr_pages;
@@ -37730,9 +38086,10 @@ struct io_poll {
 };
 
 struct async_poll {
-    union {
-	struct io_poll poll;
-	struct io_cache_entry cache;
+    union
+    {
+        struct io_poll poll;
+        struct io_cache_entry cache;
     };
     struct io_poll *double_poll;
 };
@@ -37841,7 +38198,8 @@ union acpi_subtable_headers;
 
 typedef int (*acpi_tbl_entry_handler)(union acpi_subtable_headers *, const long unsigned int);
 
-union acpi_subtable_headers {
+union acpi_subtable_headers
+{
     struct acpi_subtable_header common;
     struct acpi_hmat_structure hmat;
     struct acpi_prmt_module_header prmt;
@@ -37859,7 +38217,8 @@ struct acpi_subtable_proc {
     int count;
 };
 
-union fw_table_header {
+union fw_table_header
+{
     struct acpi_table_header acpi;
     struct acpi_table_cdat cdat;
 };
@@ -38167,9 +38526,10 @@ struct pci_dev {
     u16 dpc_cap;
     unsigned int dpc_rp_extensions : 1;
     u8 dpc_rp_log_size;
-    union {
-	struct pci_sriov *sriov;
-	struct pci_dev *physfn;
+    union
+    {
+        struct pci_sriov *sriov;
+        struct pci_dev *physfn;
     };
     u16 ats_cap;
     u8 ats_stu;
@@ -38557,9 +38917,10 @@ struct fb_info {
     struct device *device;
     int class_flag;
     struct fb_tile_ops *tileops;
-    union {
-	char *screen_base;
-	char *screen_buffer;
+    union
+    {
+        char *screen_base;
+        char *screen_buffer;
     };
     long unsigned int screen_size;
     void *pseudo_palette;
@@ -38809,9 +39170,10 @@ struct acpi_ioremap {
     void *virt;
     acpi_physical_address phys;
     acpi_size size;
-    union {
-	long unsigned int refcount;
-	struct rcu_work rwork;
+    union
+    {
+        long unsigned int refcount;
+        struct rcu_work rwork;
     } track;
 };
 
@@ -38904,12 +39266,13 @@ struct generic_pm_domain {
     u64 on_time;
     u64 accounting_time;
     const struct genpd_lock_ops *lock_ops;
-    union {
-	struct mutex mlock;
-	struct {
-	    spinlock_t slock;
-	    long unsigned int lock_flags;
-	};
+    union
+    {
+        struct mutex mlock;
+        struct {
+            spinlock_t slock;
+            long unsigned int lock_flags;
+        };
     };
 };
 
@@ -39286,10 +39649,11 @@ struct drm_pending_vblank_event {
     struct drm_pending_event base;
     unsigned int pipe;
     u64 sequence;
-    union {
-	struct drm_event base;
-	struct drm_event_vblank vbl;
-	struct drm_event_crtc_sequence seq;
+    union
+    {
+        struct drm_event base;
+        struct drm_event_vblank vbl;
+        struct drm_event_crtc_sequence seq;
     } event;
 };
 
@@ -39948,13 +40312,14 @@ struct usb_ssp_cap_descriptor {
     __le32 bmAttributes;
     __le16 wFunctionalitySupport;
     __le16 wReserved;
-    union {
-	__le32 legacy_padding;
-	struct {
-	    struct {
-	    } __empty_bmSublinkSpeedAttr;
-	    __le32 bmSublinkSpeedAttr[0];
-	};
+    union
+    {
+        __le32 legacy_padding;
+        struct {
+            struct {
+            } __empty_bmSublinkSpeedAttr;
+            __le32 bmSublinkSpeedAttr[0];
+        };
     };
 };
 
@@ -40425,7 +40790,8 @@ struct xhci_generic_trb {
     __le32 field[4];
 };
 
-union xhci_trb {
+union xhci_trb
+{
     struct xhci_link_trb link;
     struct xhci_transfer_event trans_event;
     struct xhci_event_cmd event_cmd;
@@ -40903,18 +41269,18 @@ struct mddev {
     int sync_checkers;
     struct bitmap *bitmap;
     struct {
-	struct file *file;
-	loff_t offset;
-	long unsigned int space;
-	loff_t default_offset;
-	long unsigned int default_space;
-	struct mutex mutex;
-	long unsigned int chunksize;
-	long unsigned int daemon_sleep;
-	long unsigned int max_write_behind;
-	int external;
-	int nodes;
-	char cluster_name[64];
+        struct file *file;
+        loff_t offset;
+        long unsigned int space;
+        loff_t default_offset;
+        long unsigned int default_space;
+        struct mutex mutex;
+        long unsigned int chunksize;
+        long unsigned int daemon_sleep;
+        long unsigned int max_write_behind;
+        int external;
+        int nodes;
+        char cluster_name[64];
     } bitmap_info;
     atomic_t max_corr_read_errors;
     struct list_head all_mddevs;
@@ -40967,9 +41333,10 @@ struct md_rdev {
     int raid_disk;
     int new_raid_disk;
     int saved_raid_disk;
-    union {
-	sector_t recovery_offset;
-	sector_t journal_tail;
+    union
+    {
+        sector_t recovery_offset;
+        sector_t journal_tail;
     };
     atomic_t nr_pending;
     atomic_t read_errors;
@@ -40981,9 +41348,9 @@ struct md_rdev {
     struct kernfs_node *sysfs_badblocks;
     struct badblocks badblocks;
     struct {
-	short int offset;
-	unsigned int size;
-	sector_t sector;
+        short int offset;
+        unsigned int size;
+        sector_t sector;
     } ppl;
 };
 
@@ -41352,14 +41719,15 @@ struct hid_item {
     __u8 size;
     __u8 type;
     __u8 tag;
-    union {
-	__u8 u8;
-	__s8 s8;
-	__u16 u16;
-	__s16 s16;
-	__u32 u32;
-	__s32 s32;
-	__u8 *longdata;
+    union
+    {
+        __u8 u8;
+        __s8 s8;
+        __u16 u16;
+        __s16 s16;
+        __u32 u32;
+        __s32 s32;
+        __u8 *longdata;
     } data;
 };
 
@@ -41628,7 +41996,8 @@ struct iw_statistics {
     struct iw_missed miss;
 };
 
-union iwreq_data {
+union iwreq_data
+{
     char name[16];
     struct iw_point essid;
     struct iw_param nwid;
@@ -41938,8 +42307,9 @@ struct netdev_notifier_info {
 
 struct netdev_notifier_info_ext {
     struct netdev_notifier_info info;
-    union {
-	u32 mtu;
+    union
+    {
+        u32 mtu;
     } ext;
 };
 
@@ -42185,9 +42555,10 @@ struct fib_config {
     u8 fc_gw_family;
     u32 fc_table;
     __be32 fc_dst;
-    union {
-	__be32 fc_gw4;
-	struct in6_addr fc_gw6;
+    union
+    {
+        __be32 fc_gw4;
+        struct in6_addr fc_gw6;
     };
     int fc_oif;
     u32 fc_flags;
@@ -42258,9 +42629,10 @@ struct nexthop {
     bool is_group;
     refcount_t refcnt;
     struct callback_head rcu;
-    union {
-	struct nh_info *nh_info;
-	struct nh_group *nh_grp;
+    union
+    {
+        struct nh_info *nh_info;
+        struct nh_group *nh_grp;
     };
 };
 
@@ -42273,9 +42645,10 @@ struct nh_config {
     u32 nh_flags;
     int nh_ifindex;
     struct net_device *dev;
-    union {
-	__be32 ipv4;
-	struct in6_addr ipv6;
+    union
+    {
+        __be32 ipv4;
+        struct in6_addr ipv6;
     } gw;
     struct nlattr *nh_grp;
     u16 nh_grp_type;
@@ -42298,10 +42671,11 @@ struct nh_info {
     u8 family;
     bool reject_nh;
     bool fdb_nh;
-    union {
-	struct fib_nh_common fib_nhc;
-	struct fib_nh fib_nh;
-	struct fib6_nh fib6_nh;
+    union
+    {
+        struct fib_nh_common fib_nhc;
+        struct fib_nh fib_nh;
+        struct fib6_nh fib6_nh;
     };
 };
 
@@ -42321,15 +42695,16 @@ struct nh_grp_entry {
     struct nexthop *nh;
     struct nh_grp_entry_stats *stats;
     u8 weight;
-    union {
-	struct {
-	    atomic_t upper_bound;
-	} hthr;
-	struct {
-	    struct list_head uw_nh_entry;
-	    u16 count_buckets;
-	    u16 wants_buckets;
-	} res;
+    union
+    {
+        struct {
+            atomic_t upper_bound;
+        } hthr;
+        struct {
+            struct list_head uw_nh_entry;
+            u16 count_buckets;
+            u16 wants_buckets;
+        } res;
     };
     struct list_head nh_list;
     struct nexthop *nh_parent;
@@ -42385,9 +42760,10 @@ enum nh_notifier_info_type {
 struct nh_notifier_single_info {
     struct net_device *dev;
     u8 gw_family;
-    union {
-	__be32 ipv4;
-	struct in6_addr ipv6;
+    union
+    {
+        __be32 ipv4;
+        struct in6_addr ipv6;
     };
     u32 id;
     u8 is_reject : 1;
@@ -42437,12 +42813,13 @@ struct nh_notifier_info {
     struct netlink_ext_ack *extack;
     u32 id;
     enum nh_notifier_info_type type;
-    union {
-	struct nh_notifier_single_info *nh;
-	struct nh_notifier_grp_info *nh_grp;
-	struct nh_notifier_res_table_info *nh_res_table;
-	struct nh_notifier_res_bucket_info *nh_res_bucket;
-	struct nh_notifier_grp_hw_stats_info *nh_grp_hw_stats;
+    union
+    {
+        struct nh_notifier_single_info *nh;
+        struct nh_notifier_grp_info *nh_grp;
+        struct nh_notifier_res_table_info *nh_res_table;
+        struct nh_notifier_res_bucket_info *nh_res_bucket;
+        struct nh_notifier_grp_hw_stats_info *nh_grp_hw_stats;
     };
 };
 
@@ -42504,21 +42881,22 @@ struct group_source_req {
 };
 
 struct group_filter {
-    union {
-	struct {
-	    __u32 gf_interface_aux;
-	    struct __kernel_sockaddr_storage gf_group_aux;
-	    __u32 gf_fmode_aux;
-	    __u32 gf_numsrc_aux;
-	    struct __kernel_sockaddr_storage gf_slist[1];
-	};
-	struct {
-	    __u32 gf_interface;
-	    struct __kernel_sockaddr_storage gf_group;
-	    __u32 gf_fmode;
-	    __u32 gf_numsrc;
-	    struct __kernel_sockaddr_storage gf_slist_flex[0];
-	};
+    union
+    {
+        struct {
+            __u32 gf_interface_aux;
+            struct __kernel_sockaddr_storage gf_group_aux;
+            __u32 gf_fmode_aux;
+            __u32 gf_numsrc_aux;
+            struct __kernel_sockaddr_storage gf_slist[1];
+        };
+        struct {
+            __u32 gf_interface;
+            struct __kernel_sockaddr_storage gf_group;
+            __u32 gf_fmode;
+            __u32 gf_numsrc;
+            struct __kernel_sockaddr_storage gf_slist_flex[0];
+        };
     };
 };
 
@@ -42622,21 +43000,22 @@ struct compat_group_source_req {
 } __attribute__((packed));
 
 struct compat_group_filter {
-    union {
-	struct {
-	    __u32 gf_interface_aux;
-	    struct __kernel_sockaddr_storage gf_group_aux;
-	    __u32 gf_fmode_aux;
-	    __u32 gf_numsrc_aux;
-	    struct __kernel_sockaddr_storage gf_slist[1];
-	} __attribute__((packed));
-	struct {
-	    __u32 gf_interface;
-	    struct __kernel_sockaddr_storage gf_group;
-	    __u32 gf_fmode;
-	    __u32 gf_numsrc;
-	    struct __kernel_sockaddr_storage gf_slist_flex[0];
-	} __attribute__((packed));
+    union
+    {
+        struct {
+            __u32 gf_interface_aux;
+            struct __kernel_sockaddr_storage gf_group_aux;
+            __u32 gf_fmode_aux;
+            __u32 gf_numsrc_aux;
+            struct __kernel_sockaddr_storage gf_slist[1];
+        } __attribute__((packed));
+        struct {
+            __u32 gf_interface;
+            struct __kernel_sockaddr_storage gf_group;
+            __u32 gf_fmode;
+            __u32 gf_numsrc;
+            struct __kernel_sockaddr_storage gf_slist_flex[0];
+        } __attribute__((packed));
     };
 };
 
@@ -42744,11 +43123,12 @@ struct devlink_port_attrs {
     u32 lanes;
     enum devlink_port_flavour flavour;
     struct netdev_phys_item_id switch_id;
-    union {
-	struct devlink_port_phys_attrs phys;
-	struct devlink_port_pci_pf_attrs pci_pf;
-	struct devlink_port_pci_vf_attrs pci_vf;
-	struct devlink_port_pci_sf_attrs pci_sf;
+    union
+    {
+        struct devlink_port_phys_attrs phys;
+        struct devlink_port_pci_pf_attrs pci_pf;
+        struct devlink_port_pci_vf_attrs pci_vf;
+        struct devlink_port_pci_sf_attrs pci_sf;
     };
 };
 
@@ -42771,15 +43151,16 @@ struct devlink_port {
     spinlock_t type_lock;
     enum devlink_port_type type;
     enum devlink_port_type desired_type;
-    union {
-	struct {
-	    struct net_device *netdev;
-	    int ifindex;
-	    char ifname[16];
-	} type_eth;
-	struct {
-	    struct ib_device *ibdev;
-	} type_ib;
+    union
+    {
+        struct {
+            struct net_device *netdev;
+            int ifindex;
+            char ifname[16];
+        } type_eth;
+        struct {
+            struct ib_device *ibdev;
+        } type_ib;
     };
     struct devlink_port_attrs attrs;
     u8 attrs_set : 1;
@@ -42892,12 +43273,13 @@ struct devlink_rate {
     u64 tx_share;
     u64 tx_max;
     struct devlink_rate *parent;
-    union {
-	struct devlink_port *devlink_port;
-	struct {
-	    char *name;
-	    refcount_t refcnt;
-	};
+    union
+    {
+        struct devlink_port *devlink_port;
+        struct {
+            char *name;
+            refcount_t refcnt;
+        };
     };
     u32 tx_priority;
     u32 tx_weight;
@@ -43262,10 +43644,10 @@ enum ib_atomic_cap {
 struct ib_odp_caps {
     uint64_t general_caps;
     struct {
-	uint32_t rc_odp_caps;
-	uint32_t uc_odp_caps;
-	uint32_t ud_odp_caps;
-	uint32_t xrc_odp_caps;
+        uint32_t rc_odp_caps;
+        uint32_t uc_odp_caps;
+        uint32_t ud_odp_caps;
+        uint32_t xrc_odp_caps;
     } per_transport_caps;
 };
 
@@ -43374,9 +43756,10 @@ struct ib_device {
     rwlock_t cache_lock;
     struct ib_port_data *port_data;
     int num_comp_vectors;
-    union {
-	struct device dev;
-	struct ib_core_device coredev;
+    union
+    {
+        struct device dev;
+        struct ib_core_device coredev;
     };
     const struct attribute_group *groups[4];
     u64 uverbs_cmd_mask;
@@ -43977,8 +44360,9 @@ struct ib_t10_dif_domain {
 
 struct ib_sig_domain {
     enum ib_signature_type sig_type;
-    union {
-	struct ib_t10_dif_domain dif;
+    union
+    {
+        struct ib_t10_dif_domain dif;
     } sig;
 };
 
@@ -44059,11 +44443,12 @@ enum ib_uverbs_gid_type {
     IB_UVERBS_GID_TYPE_ROCE_V2 = 2,
 };
 
-union ib_gid {
+union ib_gid
+{
     u8 raw[16];
     struct {
-	__be64 subnet_prefix;
-	__be64 interface_id;
+        __be64 subnet_prefix;
+        __be64 interface_id;
     } global;
 };
 
@@ -44210,9 +44595,10 @@ struct ib_cq {
     enum ib_poll_context poll_ctx;
     struct ib_wc *wc;
     struct list_head pool_entry;
-    union {
-	struct irq_poll iop;
-	struct work_struct work;
+    union
+    {
+        struct irq_poll iop;
+        struct work_struct work;
     };
     struct workqueue_struct *comp_wq;
     struct dim *dim;
@@ -44301,13 +44687,14 @@ struct ib_srq {
     enum ib_srq_type srq_type;
     atomic_t usecnt;
     struct {
-	struct ib_cq *cq;
-	union {
-	    struct {
-		struct ib_xrcd *xrcd;
-		u32 srq_num;
-	    } xrc;
-	};
+        struct ib_cq *cq;
+        union
+        {
+            struct {
+                struct ib_xrcd *xrcd;
+                u32 srq_num;
+            } xrc;
+        };
     } ext;
     struct rdma_restrack_entry res;
 };
@@ -44339,12 +44726,13 @@ struct ib_wq {
 
 struct ib_event {
     struct ib_device *device;
-    union {
-	struct ib_cq *cq;
-	struct ib_qp *qp;
-	struct ib_srq *srq;
-	struct ib_wq *wq;
-	u32 port_num;
+    union
+    {
+        struct ib_cq *cq;
+        struct ib_qp *qp;
+        struct ib_srq *srq;
+        struct ib_wq *wq;
+        u32 port_num;
     } element;
     enum ib_event_type event;
 };
@@ -44407,10 +44795,11 @@ struct rdma_ah_attr {
     u32 port_num;
     u8 ah_flags;
     enum rdma_ah_attr_type type;
-    union {
-	struct ib_ah_attr ib;
-	struct roce_ah_attr roce;
-	struct opa_ah_attr opa;
+    union
+    {
+        struct ib_ah_attr ib;
+        struct roce_ah_attr roce;
+        struct opa_ah_attr opa;
     };
 };
 
@@ -44462,18 +44851,20 @@ struct ib_cqe {
 };
 
 struct ib_wc {
-    union {
-	u64 wr_id;
-	struct ib_cqe *wr_cqe;
+    union
+    {
+        u64 wr_id;
+        struct ib_cqe *wr_cqe;
     };
     enum ib_wc_status status;
     enum ib_wc_opcode opcode;
     u32 vendor_err;
     u32 byte_len;
     struct ib_qp *qp;
-    union {
-	__be32 imm_data;
-	u32 invalidate_rkey;
+    union
+    {
+        __be32 imm_data;
+        u32 invalidate_rkey;
     } ex;
     u32 src_qp;
     u32 slid;
@@ -44507,15 +44898,16 @@ struct ib_srq_init_attr {
     struct ib_srq_attr attr;
     enum ib_srq_type srq_type;
     struct {
-	struct ib_cq *cq;
-	union {
-	    struct {
-		struct ib_xrcd *xrcd;
-	    } xrc;
-	    struct {
-		u32 max_num_tags;
-	    } tag_matching;
-	};
+        struct ib_cq *cq;
+        union
+        {
+            struct {
+                struct ib_xrcd *xrcd;
+            } xrc;
+            struct {
+                u32 max_num_tags;
+            } tag_matching;
+        };
     } ext;
 };
 
@@ -44650,17 +45042,19 @@ struct ib_sge {
 
 struct ib_send_wr {
     struct ib_send_wr *next;
-    union {
-	u64 wr_id;
-	struct ib_cqe *wr_cqe;
+    union
+    {
+        u64 wr_id;
+        struct ib_cqe *wr_cqe;
     };
     struct ib_sge *sg_list;
     int num_sge;
     enum ib_wr_opcode opcode;
     int send_flags;
-    union {
-	__be32 imm_data;
-	u32 invalidate_rkey;
+    union
+    {
+        __be32 imm_data;
+        u32 invalidate_rkey;
     } ex;
 };
 
@@ -44682,9 +45076,10 @@ struct ib_mr {
     unsigned int page_size;
     enum ib_mr_type type;
     bool need_inval;
-    union {
-	struct ib_uobject *uobject;
-	struct list_head qp_entry;
+    union
+    {
+        struct ib_uobject *uobject;
+        struct list_head qp_entry;
     };
     struct ib_dm *dm;
     struct ib_sig_attrs *sig_attrs;
@@ -44693,9 +45088,10 @@ struct ib_mr {
 
 struct ib_recv_wr {
     struct ib_recv_wr *next;
-    union {
-	u64 wr_id;
-	struct ib_cqe *wr_cqe;
+    union
+    {
+        u64 wr_id;
+        struct ib_cqe *wr_cqe;
     };
     struct ib_sge *sg_list;
     int num_sge;
@@ -45005,10 +45401,11 @@ struct ib_counters {
     atomic_t usecnt;
 };
 
-union ib_flow_spec {
+union ib_flow_spec
+{
     struct {
-	u32 type;
-	u16 size;
+        u32 type;
+        u16 size;
     };
     struct ib_flow_spec_eth eth;
     struct ib_flow_spec_ib ib;
@@ -45107,11 +45504,11 @@ struct devlink_rel {
     refcount_t refcount;
     u32 devlink_index;
     struct {
-	u32 devlink_index;
-	u32 obj_index;
-	devlink_rel_notify_cb_t *notify_cb;
-	devlink_rel_cleanup_cb_t *cleanup_cb;
-	struct delayed_work notify_work;
+        u32 devlink_index;
+        u32 obj_index;
+        devlink_rel_notify_cb_t *notify_cb;
+        devlink_rel_cleanup_cb_t *cleanup_cb;
+        struct delayed_work notify_work;
     } nested_in;
 };
 
@@ -45157,12 +45554,13 @@ struct entry_stack_page {
 };
 
 struct msr {
-    union {
-	struct {
-	    u32 l;
-	    u32 h;
-	};
-	u64 q;
+    union
+    {
+        struct {
+            u32 l;
+            u32 h;
+        };
+        u64 q;
     };
 };
 
@@ -45504,8 +45902,8 @@ struct uv_rtc_timer_head {
     int next_cpu;
     int ncpus;
     struct {
-	int lcpu;
-	u64 expires;
+        int lcpu;
+        u64 expires;
     } cpu[0];
 };
 
@@ -45835,9 +46233,10 @@ struct kimage_arch {
 typedef long unsigned int kimage_entry_t;
 
 struct kexec_segment {
-    union {
-	void *buf;
-	void *kbuf;
+    union
+    {
+        void *buf;
+        void *kbuf;
     };
     size_t bufsz;
     long unsigned int mem;
@@ -46140,9 +46539,10 @@ struct watch_type_filter {
 };
 
 struct watch_filter {
-    union {
-	struct callback_head rcu;
-	long unsigned int type_filter[1];
+    union
+    {
+        struct callback_head rcu;
+        long unsigned int type_filter[1];
     };
     u32 nr_filters;
     struct watch_type_filter filters[0];
@@ -46162,9 +46562,10 @@ struct watch_queue {
 };
 
 struct watch {
-    union {
-	struct callback_head rcu;
-	u32 info_id;
+    union
+    {
+        struct callback_head rcu;
+        u32 info_id;
     };
     struct watch_queue *queue;
     struct hlist_node queue_node;
@@ -46991,9 +47392,10 @@ struct btrfs_ref {
     u64 len;
     u64 owning_root;
     u64 parent;
-    union {
-	struct btrfs_data_ref data_ref;
-	struct btrfs_tree_ref tree_ref;
+    union
+    {
+        struct btrfs_data_ref data_ref;
+        struct btrfs_tree_ref tree_ref;
     };
 };
 
@@ -47218,9 +47620,10 @@ struct landlock_object {
     refcount_t usage;
     spinlock_t lock;
     void *underobj;
-    union {
-	struct callback_head rcu_free;
-	const struct landlock_object_underops *underops;
+    union
+    {
+        struct callback_head rcu_free;
+        const struct landlock_object_underops *underops;
     };
 };
 
@@ -47231,7 +47634,8 @@ struct landlock_layer {
     access_mask_t access;
 };
 
-union landlock_key {
+union landlock_key
+{
     struct landlock_object *object;
     uintptr_t data;
 };
@@ -47257,7 +47661,8 @@ struct sctp_association;
 
 struct audit_krule;
 
-union security_list_options {
+union security_list_options
+{
     int (*binder_set_context_mgr)(const struct cred *);
     int (*binder_transaction)(const struct cred *, const struct cred *);
     int (*binder_transfer_binder)(const struct cred *, const struct cred *);
@@ -47887,9 +48292,10 @@ struct af_alg_async_req {
     unsigned int tsgl_entries;
     unsigned int outlen;
     unsigned int areqlen;
-    union {
-	struct aead_request aead_req;
-	struct skcipher_request skcipher_req;
+    union
+    {
+        struct aead_request aead_req;
+        struct skcipher_request skcipher_req;
     } cra_u;
 };
 
@@ -48350,11 +48756,12 @@ typedef __int128 unsigned __u128;
 
 typedef __u128 u128;
 
-union __u128_halves {
+union __u128_halves
+{
     u128 full;
     struct {
-	u64 low;
-	u64 high;
+        u64 low;
+        u64 high;
     };
 };
 
@@ -48511,16 +48918,17 @@ struct iommu_domain {
     struct iommu_dma_cookie *iova_cookie;
     int (*iopf_handler)(struct iopf_group *);
     void *fault_data;
-    union {
-	struct {
-	    iommu_fault_handler_t handler;
-	    void *handler_token;
-	};
-	struct {
-	    struct mm_struct *mm;
-	    int users;
-	    struct list_head next;
-	};
+    union
+    {
+        struct {
+            iommu_fault_handler_t handler;
+            void *handler_token;
+        };
+        struct {
+            struct mm_struct *mm;
+            int users;
+            struct list_head next;
+        };
     };
 };
 
@@ -48707,45 +49115,46 @@ struct io_pgtable_cfg {
     struct device *iommu_dev;
     void *(*alloc)(void *, size_t, gfp_t);
     void (*free)(void *, void *, size_t);
-    union {
-	struct {
-	    u64 ttbr;
-	    struct {
-		u32 ips : 3;
-		u32 tg : 2;
-		u32 sh : 2;
-		u32 orgn : 2;
-		u32 irgn : 2;
-		u32 tsz : 6;
-	    } tcr;
-	    u64 mair;
-	} arm_lpae_s1_cfg;
-	struct {
-	    u64 vttbr;
-	    struct {
-		u32 ps : 3;
-		u32 tg : 2;
-		u32 sh : 2;
-		u32 orgn : 2;
-		u32 irgn : 2;
-		u32 sl : 2;
-		u32 tsz : 6;
-	    } vtcr;
-	} arm_lpae_s2_cfg;
-	struct {
-	    u32 ttbr;
-	    u32 tcr;
-	    u32 nmrr;
-	    u32 prrr;
-	} arm_v7s_cfg;
-	struct {
-	    u64 transtab;
-	    u64 memattr;
-	} arm_mali_lpae_cfg;
-	struct {
-	    u64 ttbr[4];
-	    u32 n_ttbrs;
-	} apple_dart_cfg;
+    union
+    {
+        struct {
+            u64 ttbr;
+            struct {
+                u32 ips : 3;
+                u32 tg : 2;
+                u32 sh : 2;
+                u32 orgn : 2;
+                u32 irgn : 2;
+                u32 tsz : 6;
+            } tcr;
+            u64 mair;
+        } arm_lpae_s1_cfg;
+        struct {
+            u64 vttbr;
+            struct {
+                u32 ps : 3;
+                u32 tg : 2;
+                u32 sh : 2;
+                u32 orgn : 2;
+                u32 irgn : 2;
+                u32 sl : 2;
+                u32 tsz : 6;
+            } vtcr;
+        } arm_lpae_s2_cfg;
+        struct {
+            u32 ttbr;
+            u32 tcr;
+            u32 nmrr;
+            u32 prrr;
+        } arm_v7s_cfg;
+        struct {
+            u64 transtab;
+            u64 memattr;
+        } arm_mali_lpae_cfg;
+        struct {
+            u64 ttbr[4];
+            u32 n_ttbrs;
+        } apple_dart_cfg;
     };
 };
 
@@ -48941,63 +49350,67 @@ enum amd_iommu_intr_mode_type {
     AMD_IOMMU_GUEST_IR_VAPIC = 2,
 };
 
-union irte {
+union irte
+{
     u32 val;
     struct {
-	u32 valid : 1;
-	u32 no_fault : 1;
-	u32 int_type : 3;
-	u32 rq_eoi : 1;
-	u32 dm : 1;
-	u32 rsvd_1 : 1;
-	u32 destination : 8;
-	u32 vector : 8;
-	u32 rsvd_2 : 8;
+        u32 valid : 1;
+        u32 no_fault : 1;
+        u32 int_type : 3;
+        u32 rq_eoi : 1;
+        u32 dm : 1;
+        u32 rsvd_1 : 1;
+        u32 destination : 8;
+        u32 vector : 8;
+        u32 rsvd_2 : 8;
     } fields;
 };
 
-union irte_ga_lo {
+union irte_ga_lo
+{
     u64 val;
     struct {
-	u64 valid : 1;
-	u64 no_fault : 1;
-	u64 int_type : 3;
-	u64 rq_eoi : 1;
-	u64 dm : 1;
-	u64 guest_mode : 1;
-	u64 destination : 24;
-	u64 ga_tag : 32;
+        u64 valid : 1;
+        u64 no_fault : 1;
+        u64 int_type : 3;
+        u64 rq_eoi : 1;
+        u64 dm : 1;
+        u64 guest_mode : 1;
+        u64 destination : 24;
+        u64 ga_tag : 32;
     } fields_remap;
     struct {
-	u64 valid : 1;
-	u64 no_fault : 1;
-	u64 ga_log_intr : 1;
-	u64 rsvd1 : 3;
-	u64 is_run : 1;
-	u64 guest_mode : 1;
-	u64 destination : 24;
-	u64 ga_tag : 32;
+        u64 valid : 1;
+        u64 no_fault : 1;
+        u64 ga_log_intr : 1;
+        u64 rsvd1 : 3;
+        u64 is_run : 1;
+        u64 guest_mode : 1;
+        u64 destination : 24;
+        u64 ga_tag : 32;
     } fields_vapic;
 };
 
-union irte_ga_hi {
+union irte_ga_hi
+{
     u64 val;
     struct {
-	u64 vector : 8;
-	u64 rsvd_1 : 4;
-	u64 ga_root_ptr : 40;
-	u64 rsvd_2 : 4;
-	u64 destination : 8;
+        u64 vector : 8;
+        u64 rsvd_1 : 4;
+        u64 ga_root_ptr : 40;
+        u64 rsvd_2 : 4;
+        u64 destination : 8;
     } fields;
 };
 
 struct irte_ga {
-    union {
-	struct {
-	    union irte_ga_lo lo;
-	    union irte_ga_hi hi;
-	};
-	u128 irte;
+    union
+    {
+        struct {
+            union irte_ga_lo lo;
+            union irte_ga_hi hi;
+        };
+        u128 irte;
     };
 };
 
@@ -49641,13 +50054,14 @@ enum scsi_ml_status {
 };
 
 struct flow_dissector_key_vlan {
-    union {
-	struct {
-	    u16 vlan_id : 12;
-	    u16 vlan_dei : 1;
-	    u16 vlan_priority : 3;
-	};
-	__be16 vlan_tci;
+    union
+    {
+        struct {
+            u16 vlan_id : 12;
+            u16 vlan_dei : 1;
+            u16 vlan_priority : 3;
+        };
+        __be16 vlan_tci;
     };
     __be16 vlan_tpid;
     __be16 vlan_eth_type;
@@ -49673,12 +50087,13 @@ struct flow_dissector_key_arp {
 };
 
 struct flow_dissector_key_ports {
-    union {
-	__be32 ports;
-	struct {
-	    __be16 src;
-	    __be16 dst;
-	};
+    union
+    {
+        __be32 ports;
+        struct {
+            __be16 src;
+            __be16 dst;
+        };
     };
 };
 
@@ -49822,97 +50237,98 @@ struct flow_action_entry {
     enum flow_action_hw_stats hw_stats;
     action_destr destructor;
     void *destructor_priv;
-    union {
-	u32 chain_index;
-	struct net_device *dev;
-	struct {
-	    u16 vid;
-	    __be16 proto;
-	    u8 prio;
-	} vlan;
-	struct {
-	    unsigned char dst[6];
-	    unsigned char src[6];
-	} vlan_push_eth;
-	struct {
-	    enum flow_action_mangle_base htype;
-	    u32 offset;
-	    u32 mask;
-	    u32 val;
-	} mangle;
-	struct ip_tunnel_info *tunnel;
-	u32 csum_flags;
-	u32 mark;
-	u16 ptype;
-	u16 rx_queue;
-	u32 priority;
-	struct {
-	    u32 ctx;
-	    u32 index;
-	    u8 vf;
-	} queue;
-	struct {
-	    struct psample_group *psample_group;
-	    u32 rate;
-	    u32 trunc_size;
-	    bool truncate;
-	} sample;
-	struct {
-	    u32 burst;
-	    u64 rate_bytes_ps;
-	    u64 peakrate_bytes_ps;
-	    u32 avrate;
-	    u16 overhead;
-	    u64 burst_pkt;
-	    u64 rate_pkt_ps;
-	    u32 mtu;
-	    struct {
-		enum flow_action_id act_id;
-		u32 extval;
-	    } exceed;
-	    struct {
-		enum flow_action_id act_id;
-		u32 extval;
-	    } notexceed;
-	} police;
-	struct {
-	    int action;
-	    u16 zone;
-	    struct nf_flowtable *flow_table;
-	} ct;
-	struct {
-	    long unsigned int cookie;
-	    u32 mark;
-	    u32 labels[4];
-	    bool orig_dir;
-	} ct_metadata;
-	struct {
-	    u32 label;
-	    __be16 proto;
-	    u8 tc;
-	    u8 bos;
-	    u8 ttl;
-	} mpls_push;
-	struct {
-	    __be16 proto;
-	} mpls_pop;
-	struct {
-	    u32 label;
-	    u8 tc;
-	    u8 bos;
-	    u8 ttl;
-	} mpls_mangle;
-	struct {
-	    s32 prio;
-	    u64 basetime;
-	    u64 cycletime;
-	    u64 cycletimeext;
-	    u32 num_entries;
-	    struct action_gate_entry *entries;
-	} gate;
-	struct {
-	    u16 sid;
-	} pppoe;
+    union
+    {
+        u32 chain_index;
+        struct net_device *dev;
+        struct {
+            u16 vid;
+            __be16 proto;
+            u8 prio;
+        } vlan;
+        struct {
+            unsigned char dst[6];
+            unsigned char src[6];
+        } vlan_push_eth;
+        struct {
+            enum flow_action_mangle_base htype;
+            u32 offset;
+            u32 mask;
+            u32 val;
+        } mangle;
+        struct ip_tunnel_info *tunnel;
+        u32 csum_flags;
+        u32 mark;
+        u16 ptype;
+        u16 rx_queue;
+        u32 priority;
+        struct {
+            u32 ctx;
+            u32 index;
+            u8 vf;
+        } queue;
+        struct {
+            struct psample_group *psample_group;
+            u32 rate;
+            u32 trunc_size;
+            bool truncate;
+        } sample;
+        struct {
+            u32 burst;
+            u64 rate_bytes_ps;
+            u64 peakrate_bytes_ps;
+            u32 avrate;
+            u16 overhead;
+            u64 burst_pkt;
+            u64 rate_pkt_ps;
+            u32 mtu;
+            struct {
+                enum flow_action_id act_id;
+                u32 extval;
+            } exceed;
+            struct {
+                enum flow_action_id act_id;
+                u32 extval;
+            } notexceed;
+        } police;
+        struct {
+            int action;
+            u16 zone;
+            struct nf_flowtable *flow_table;
+        } ct;
+        struct {
+            long unsigned int cookie;
+            u32 mark;
+            u32 labels[4];
+            bool orig_dir;
+        } ct_metadata;
+        struct {
+            u32 label;
+            __be16 proto;
+            u8 tc;
+            u8 bos;
+            u8 ttl;
+        } mpls_push;
+        struct {
+            __be16 proto;
+        } mpls_pop;
+        struct {
+            u32 label;
+            u8 tc;
+            u8 bos;
+            u8 ttl;
+        } mpls_mangle;
+        struct {
+            s32 prio;
+            u64 basetime;
+            u64 cycletime;
+            u64 cycletimeext;
+            u32 num_entries;
+            struct action_gate_entry *entries;
+        } gate;
+        struct {
+            u16 sid;
+        } pppoe;
     };
     struct flow_action_cookie *user_cookie;
 };
@@ -50322,26 +50738,28 @@ struct lirc_fh {
     struct rc_dev *rc;
     int carrier_low;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    unsigned int *type;
-	    const unsigned int *const_type;
-	    char (*rectype)[0];
-	    unsigned int *ptr;
-	    const unsigned int *ptr_const;
-	};
-	unsigned int buf[0];
+        union
+        {
+            struct __kfifo kfifo;
+            unsigned int *type;
+            const unsigned int *const_type;
+            char (*rectype)[0];
+            unsigned int *ptr;
+            const unsigned int *ptr_const;
+        };
+        unsigned int buf[0];
     } rawir;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct lirc_scancode *type;
-	    const struct lirc_scancode *const_type;
-	    char (*rectype)[0];
-	    struct lirc_scancode *ptr;
-	    const struct lirc_scancode *ptr_const;
-	};
-	struct lirc_scancode buf[0];
+        union
+        {
+            struct __kfifo kfifo;
+            struct lirc_scancode *type;
+            const struct lirc_scancode *const_type;
+            char (*rectype)[0];
+            struct lirc_scancode *ptr;
+            const struct lirc_scancode *ptr_const;
+        };
+        struct lirc_scancode buf[0];
     } scancodes;
     wait_queue_head_t wait_poll;
     u8 send_mode;
@@ -50413,9 +50831,10 @@ struct rc_dev {
 };
 
 struct ir_raw_event {
-    union {
-	u32 duration;
-	u32 carrier;
+    union
+    {
+        u32 duration;
+        u32 carrier;
     };
     u8 duty_cycle;
     unsigned int pulse : 1;
@@ -50510,15 +50929,16 @@ struct ir_raw_event_ctrl {
     struct list_head list;
     struct task_struct *thread;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct ir_raw_event *type;
-	    const struct ir_raw_event *const_type;
-	    char (*rectype)[0];
-	    struct ir_raw_event *ptr;
-	    const struct ir_raw_event *ptr_const;
-	};
-	struct ir_raw_event buf[512];
+        union
+        {
+            struct __kfifo kfifo;
+            struct ir_raw_event *type;
+            const struct ir_raw_event *const_type;
+            char (*rectype)[0];
+            struct ir_raw_event *ptr;
+            const struct ir_raw_event *ptr_const;
+        };
+        struct ir_raw_event buf[512];
     } kfifo;
     ktime_t last_event;
     struct rc_dev *dev;
@@ -50570,11 +50990,12 @@ enum dm_io_mem_type {
 struct dm_io_memory {
     enum dm_io_mem_type type;
     unsigned int offset;
-    union {
-	struct page_list *pl;
-	struct bio *bio;
-	void *vma;
-	void *addr;
+    union
+    {
+        struct page_list *pl;
+        struct bio *bio;
+        void *vma;
+        void *addr;
     } ptr;
 };
 
@@ -50611,9 +51032,10 @@ struct io {
 struct dpages {
     void (*get_page)(struct dpages *, struct page **, long unsigned int *, unsigned int *);
     void (*next_page)(struct dpages *);
-    union {
-	unsigned int context_u;
-	struct bvec_iter context_bi;
+    union
+    {
+        unsigned int context_u;
+        struct bvec_iter context_bi;
     };
     void *context_ptr;
     void *vma_invalidate_address;
@@ -50689,16 +51111,17 @@ struct tcp_request_sock_ops {
 };
 
 struct net_generic {
-    union {
-	struct {
-	    unsigned int len;
-	    struct callback_head rcu;
-	} s;
-	struct {
-	    struct {
-	    } __empty_ptr;
-	    void *ptr[0];
-	};
+    union
+    {
+        struct {
+            unsigned int len;
+            struct callback_head rcu;
+        } s;
+        struct {
+            struct {
+            } __empty_ptr;
+            void *ptr[0];
+        };
     };
 };
 
@@ -50902,17 +51325,18 @@ struct mmpin {
 
 struct ubuf_info_msgzc {
     struct ubuf_info ubuf;
-    union {
-	struct {
-	    long unsigned int desc;
-	    void *ctx;
-	};
-	struct {
-	    u32 id;
-	    u16 len;
-	    u16 zerocopy : 1;
-	    u32 bytelen;
-	};
+    union
+    {
+        struct {
+            long unsigned int desc;
+            void *ctx;
+        };
+        struct {
+            u32 id;
+            u16 len;
+            u16 zerocopy : 1;
+            u32 bytelen;
+        };
     };
     struct mmpin mmp;
 };
@@ -50939,15 +51363,16 @@ struct iphdr {
     __u8 ttl;
     __u8 protocol;
     __sum16 check;
-    union {
-	struct {
-	    __be32 saddr;
-	    __be32 daddr;
-	};
-	struct {
-	    __be32 saddr;
-	    __be32 daddr;
-	} addrs;
+    union
+    {
+        struct {
+            __be32 saddr;
+            __be32 daddr;
+        };
+        struct {
+            __be32 saddr;
+            __be32 daddr;
+        } addrs;
     };
 };
 
@@ -51031,17 +51456,18 @@ struct icmphdr {
     __u8 type;
     __u8 code;
     __sum16 checksum;
-    union {
-	struct {
-	    __be16 id;
-	    __be16 sequence;
-	} echo;
-	__be32 gateway;
-	struct {
-	    __be16 __unused;
-	    __be16 mtu;
-	} frag;
-	__u8 reserved[4];
+    union
+    {
+        struct {
+            __be16 id;
+            __be16 sequence;
+        } echo;
+        __be32 gateway;
+        struct {
+            __be16 __unused;
+            __be16 mtu;
+        } frag;
+        __u8 reserved[4];
     } un;
 };
 
@@ -51450,13 +51876,14 @@ enum devlink_multicast_groups {
 struct devlink_nl_dump_state {
     long unsigned int instance;
     int idx;
-    union {
-	struct {
-	    u64 start_offset;
-	};
-	struct {
-	    u64 dump_ts;
-	};
+    union
+    {
+        struct {
+            u64 start_offset;
+        };
+        struct {
+            u64 dump_ts;
+        };
     };
 };
 
@@ -51475,9 +51902,10 @@ struct devlink_region {
     struct devlink *devlink;
     struct devlink_port *port;
     struct list_head list;
-    union {
-	const struct devlink_region_ops *ops;
-	const struct devlink_port_region_ops *port_ops;
+    union
+    {
+        const struct devlink_region_ops *ops;
+        const struct devlink_port_region_ops *port_ops;
     };
     struct mutex snapshot_lock;
     struct list_head snapshot_list;
@@ -51948,10 +52376,11 @@ struct fscrypt_inode_info {
 struct fscrypt_key_specifier {
     __u32 type;
     __u32 __reserved;
-    union {
-	__u8 __reserved[32];
-	__u8 descriptor[8];
-	__u8 identifier[16];
+    union
+    {
+        __u8 __reserved[32];
+        __u8 descriptor[8];
+        __u8 identifier[16];
     } u;
 };
 
@@ -52001,10 +52430,11 @@ typedef enum {
     FS_ENCRYPT = 1,
 } fscrypt_direction_t;
 
-union fscrypt_iv {
+union fscrypt_iv
+{
     struct {
-	__le64 index;
-	u8 nonce[16];
+        __le64 index;
+        u8 nonce[16];
     };
     u8 raw[32];
     __le64 dun[4];
@@ -52077,14 +52507,16 @@ struct proc_dir_entry {
     spinlock_t pde_unload_lock;
     struct completion *pde_unload_completion;
     const struct inode_operations *proc_iops;
-    union {
-	const struct proc_ops *proc_ops;
-	const struct file_operations *proc_dir_ops;
+    union
+    {
+        const struct proc_ops *proc_ops;
+        const struct file_operations *proc_dir_ops;
     };
     const struct dentry_operations *proc_dops;
-    union {
-	const struct seq_operations *seq_ops;
-	int (*single_show)(struct seq_file *, void *);
+    union
+    {
+        const struct seq_operations *seq_ops;
+        int (*single_show)(struct seq_file *, void *);
     };
     proc_write_t write;
     void *data;
@@ -52104,7 +52536,8 @@ struct proc_dir_entry {
     char inline_name[0];
 };
 
-union proc_op {
+union proc_op
+{
     int (*proc_get_link)(struct dentry *, struct path *);
     int (*proc_show)(struct seq_file *, struct pid_namespace *, struct pid *, struct task_struct *);
     int lsmid;
@@ -52209,14 +52642,16 @@ struct ext4_free_data {
 };
 
 struct ext4_prealloc_space {
-    union {
-	struct rb_node inode_node;
-	struct list_head lg_list;
+    union
+    {
+        struct rb_node inode_node;
+        struct list_head lg_list;
     } pa_node;
     struct list_head pa_group_list;
-    union {
-	struct list_head pa_tmp_list;
-	struct callback_head pa_rcu;
+    union
+    {
+        struct list_head pa_tmp_list;
+        struct callback_head pa_rcu;
     } u;
     spinlock_t pa_lock;
     atomic_t pa_count;
@@ -52226,9 +52661,10 @@ struct ext4_prealloc_space {
     ext4_grpblk_t pa_len;
     ext4_grpblk_t pa_free;
     short unsigned int pa_type;
-    union {
-	rwlock_t *inode_lock;
-	spinlock_t *lg_lock;
+    union
+    {
+        rwlock_t *inode_lock;
+        spinlock_t *lg_lock;
     } pa_node_lock;
     struct inode *pa_inode;
 };
@@ -52315,9 +52751,10 @@ struct kernel_pkey_params {
     const char *hash_algo;
     char *info;
     __u32 in_len;
-    union {
-	__u32 out_len;
-	__u32 in2_len;
+    union
+    {
+        __u32 out_len;
+        __u32 in2_len;
     };
     enum kernel_pkey_operation op : 8;
 };
@@ -52416,27 +52853,29 @@ struct skcipher_alg {
     int (*init)(struct crypto_skcipher *);
     void (*exit)(struct crypto_skcipher *);
     unsigned int walksize;
-    union {
-	struct {
-	    unsigned int min_keysize;
-	    unsigned int max_keysize;
-	    unsigned int ivsize;
-	    unsigned int chunksize;
-	    unsigned int statesize;
-	    struct crypto_alg base;
-	};
-	struct skcipher_alg_common co;
+    union
+    {
+        struct {
+            unsigned int min_keysize;
+            unsigned int max_keysize;
+            unsigned int ivsize;
+            unsigned int chunksize;
+            unsigned int statesize;
+            struct crypto_alg base;
+        };
+        struct skcipher_alg_common co;
     };
 };
 
 struct skcipher_instance {
     void (*free)(struct skcipher_instance *);
-    union {
-	struct {
-	    char head[88];
-	    struct crypto_instance base;
-	} s;
-	struct skcipher_alg alg;
+    union
+    {
+        struct {
+            char head[88];
+            struct crypto_instance base;
+        } s;
+        struct skcipher_alg alg;
     };
 };
 
@@ -53057,7 +53496,7 @@ struct pci_p2pdma_whitelist_entry {
     short unsigned int vendor;
     short unsigned int device;
     enum {
-	REQ_SAME_HOST_BRIDGE = 1,
+        REQ_SAME_HOST_BRIDGE = 1,
     } flags;
 };
 
@@ -53071,13 +53510,14 @@ struct acpi_pci_routing_table {
     u32 pin;
     u64 address;
     u32 source_index;
-    union {
-	char pad[4];
-	struct {
-	    struct {
-	    } __Empty_source;
-	    char source[0];
-	};
+    union
+    {
+        char pad[4];
+        struct {
+            struct {
+            } __Empty_source;
+            char source[0];
+        };
     };
 };
 
@@ -53147,7 +53587,8 @@ struct acpi_package_info4 {
     u16 reserved;
 } __attribute__((packed));
 
-union acpi_predefined_info {
+union acpi_predefined_info
+{
     struct acpi_name_info info;
     struct acpi_package_info ret_info;
     struct acpi_package_info2 ret_info2;
@@ -53346,13 +53787,14 @@ struct aml_resource_extended_irq {
     u16 resource_length;
     u8 flags;
     u8 interrupt_count;
-    union {
-	u32 interrupt;
-	struct {
-	    struct {
-	    } __Empty_interrupts;
-	    u32 interrupts[0];
-	};
+    union
+    {
+        u32 interrupt;
+        struct {
+            struct {
+            } __Empty_interrupts;
+            u32 interrupts[0];
+        };
     };
 } __attribute__((packed));
 
@@ -53530,7 +53972,8 @@ struct aml_resource_pin_group_config {
     u16 vendor_length;
 } __attribute__((packed));
 
-union aml_resource {
+union aml_resource
+{
     u8 descriptor_type;
     struct aml_resource_small_header small_header;
     struct aml_resource_large_header large_header;
@@ -53778,14 +54221,15 @@ struct serial_rs485 {
     __u32 flags;
     __u32 delay_rts_before_send;
     __u32 delay_rts_after_send;
-    union {
-	__u32 padding[5];
-	struct {
-	    __u8 addr_recv;
-	    __u8 addr_dest;
-	    __u8 padding0[2];
-	    __u32 padding1[4];
-	};
+    union
+    {
+        __u32 padding[5];
+        struct {
+            __u8 addr_recv;
+            __u8 addr_dest;
+            __u8 padding0[2];
+            __u32 padding1[4];
+        };
     };
 };
 
@@ -54666,16 +55110,17 @@ struct regcache_ops;
 struct hwspinlock;
 
 struct regmap {
-    union {
-	struct mutex mutex;
-	struct {
-	    spinlock_t spinlock;
-	    long unsigned int spinlock_flags;
-	};
-	struct {
-	    raw_spinlock_t raw_spinlock;
-	    long unsigned int raw_spinlock_flags;
-	};
+    union
+    {
+        struct mutex mutex;
+        struct {
+            spinlock_t spinlock;
+            long unsigned int spinlock_flags;
+        };
+        struct {
+            raw_spinlock_t raw_spinlock;
+            long unsigned int raw_spinlock_flags;
+        };
     };
     regmap_lock lock;
     regmap_unlock unlock;
@@ -55254,7 +55699,8 @@ struct cdrom_msf0 {
     __u8 frame;
 };
 
-union cdrom_addr {
+union cdrom_addr
+{
     struct cdrom_msf0 msf;
     int lba;
 };
@@ -55596,18 +56042,20 @@ struct ata_taskfile {
     u8 hob_lbal;
     u8 hob_lbam;
     u8 hob_lbah;
-    union {
-	u8 error;
-	u8 feature;
+    union
+    {
+        u8 error;
+        u8 feature;
     };
     u8 nsect;
     u8 lbal;
     u8 lbam;
     u8 lbah;
     u8 device;
-    union {
-	u8 status;
-	u8 command;
+    union
+    {
+        u8 status;
+        u8 command;
     };
     u32 auxiliary;
 };
@@ -55714,9 +56162,10 @@ struct ata_device {
     u16 sectors;
     long : 64;
     long : 64;
-    union {
-	u16 id[256];
-	u32 gscr[128];
+    union
+    {
+        u16 id[256];
+        u32 gscr[128];
     };
     u8 devslp_timing[8];
     u8 ncq_send_recv_cmds[20];
@@ -56052,7 +56501,8 @@ enum phy_media {
     PHY_MEDIA_DAC = 2,
 };
 
-union phy_configure_opts {
+union phy_configure_opts
+{
     struct phy_configure_opts_mipi_dphy mipi_dphy;
     struct phy_configure_opts_dp dp;
     struct phy_configure_opts_lvds lvds;
@@ -56464,7 +56914,8 @@ typedef enum {
     STATUSTYPE_IMA = 2,
 } status_type_t;
 
-union map_info {
+union map_info
+{
     void *ptr;
 };
 
@@ -56818,9 +57269,10 @@ struct hid_bpf_ctx {
     const struct hid_device *hid;
     __u32 allocated_size;
     enum hid_report_type report_type;
-    union {
-	__s32 retval;
-	__s32 size;
+    union
+    {
+        __s32 retval;
+        __s32 size;
     };
 };
 
@@ -56874,13 +57326,13 @@ struct bpf_load_and_run_opts {
 struct entrypoints_bpf {
     struct bpf_loader_ctx ctx;
     struct {
-	struct bpf_map_desc hid_jmp_table;
+        struct bpf_map_desc hid_jmp_table;
     } maps;
     struct {
-	struct bpf_prog_desc hid_tail_call;
+        struct bpf_prog_desc hid_tail_call;
     } progs;
     struct {
-	int hid_tail_call_fd;
+        int hid_tail_call_fd;
     } links;
 };
 
@@ -56957,19 +57409,20 @@ struct ipv4_devconf {
     long unsigned int state[1];
 };
 
-union bpf_iter_link_info {
+union bpf_iter_link_info
+{
     struct {
-	__u32 map_fd;
+        __u32 map_fd;
     } map;
     struct {
-	enum bpf_cgroup_iter_order order;
-	__u32 cgroup_fd;
-	__u64 cgroup_id;
+        enum bpf_cgroup_iter_order order;
+        __u32 cgroup_fd;
+        __u64 cgroup_id;
     } cgroup;
     struct {
-	__u32 tid;
-	__u32 pid;
-	__u32 pid_fd;
+        __u32 tid;
+        __u32 pid;
+        __u32 pid_fd;
     } task;
 };
 
@@ -57036,8 +57489,9 @@ struct bpf_iter_reg {
 };
 
 struct bpf_iter_meta {
-    union {
-	struct seq_file *seq;
+    union
+    {
+        struct seq_file *seq;
     };
     u64 session_id;
     u64 seq_num;
@@ -57173,10 +57627,11 @@ typedef u32 inet_ehashfn_t(const struct net *, const __be32, const __u16, const 
 
 struct bpf_sock_ops_kern {
     struct sock *sk;
-    union {
-	u32 args[4];
-	u32 reply;
-	u32 replylong[4];
+    union
+    {
+        u32 args[4];
+        u32 reply;
+        u32 replylong[4];
     };
     struct sk_buff *syn_skb;
     struct sk_buff *skb;
@@ -57195,9 +57650,10 @@ struct tcp_ao_hdr {
 };
 
 struct mptcp_ext {
-    union {
-	u64 data_ack;
-	u32 data_ack32;
+    union
+    {
+        u64 data_ack;
+        u32 data_ack32;
     };
     u64 data_seq;
     u32 subflow_seq;
@@ -57252,19 +57708,20 @@ struct tcp_iter_state {
 };
 
 struct tcp_key {
-    union {
-	struct {
-	    struct tcp_ao_key *ao_key;
-	    char *traffic_key;
-	    u32 sne;
-	    u8 rcv_next;
-	};
-	struct tcp_md5sig_key *md5_key;
+    union
+    {
+        struct {
+            struct tcp_ao_key *ao_key;
+            char *traffic_key;
+            u32 sne;
+            u8 rcv_next;
+        };
+        struct tcp_md5sig_key *md5_key;
     };
     enum {
-	TCP_KEY_NONE = 0,
-	TCP_KEY_MD5 = 1,
-	TCP_KEY_AO = 2,
+        TCP_KEY_NONE = 0,
+        TCP_KEY_MD5 = 1,
+        TCP_KEY_AO = 2,
     } type;
 };
 
@@ -57276,8 +57733,8 @@ enum {
 
 struct xfrm_offload {
     struct {
-	__u32 low;
-	__u32 hi;
+        __u32 low;
+        __u32 hi;
     } seq;
     __u32 flags;
     __u32 status;
@@ -57324,11 +57781,13 @@ struct bpf_tcp_iter_state {
 };
 
 struct bpf_iter__tcp {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct sock_common *sk_common;
+    union
+    {
+        struct sock_common *sk_common;
     };
     uid_t uid;
 };
@@ -57394,8 +57853,8 @@ struct irq_info___2 {
     u8 bus;
     u8 devfn;
     struct {
-	u8 link;
-	u16 bitmap;
+        u8 link;
+        u16 bitmap;
     } __attribute__((packed)) irq[4];
     u8 slot;
     u8 rfu;
@@ -57634,9 +58093,10 @@ struct seccomp_data {
 };
 
 struct irqentry_state {
-    union {
-	bool exit_rcu;
-	bool lockdep;
+    union
+    {
+        bool exit_rcu;
+        bool lockdep;
     };
 };
 
@@ -57673,9 +58133,10 @@ enum audit_state {
 struct audit_cap_data {
     kernel_cap_t permitted;
     kernel_cap_t inheritable;
-    union {
-	unsigned int fE;
-	kernel_cap_t effective;
+    union
+    {
+        unsigned int fE;
+        kernel_cap_t effective;
     };
     kernel_cap_t ambient;
     kuid_t rootid;
@@ -57726,9 +58187,9 @@ struct audit_tree_refs;
 struct audit_context {
     int dummy;
     enum {
-	AUDIT_CTX_UNUSED = 0,
-	AUDIT_CTX_SYSCALL = 1,
-	AUDIT_CTX_URING = 2,
+        AUDIT_CTX_UNUSED = 0,
+        AUDIT_CTX_SYSCALL = 1,
+        AUDIT_CTX_URING = 2,
     } context;
     enum audit_state state;
     enum audit_state current_state;
@@ -57771,60 +58232,61 @@ struct audit_context {
     struct list_head killed_trees;
     int tree_count;
     int type;
-    union {
-	struct {
-	    int nargs;
-	    long int args[6];
-	} socketcall;
-	struct {
-	    kuid_t uid;
-	    kgid_t gid;
-	    umode_t mode;
-	    u32 osid;
-	    int has_perm;
-	    uid_t perm_uid;
-	    gid_t perm_gid;
-	    umode_t perm_mode;
-	    long unsigned int qbytes;
-	} ipc;
-	struct {
-	    mqd_t mqdes;
-	    struct mq_attr mqstat;
-	} mq_getsetattr;
-	struct {
-	    mqd_t mqdes;
-	    int sigev_signo;
-	} mq_notify;
-	struct {
-	    mqd_t mqdes;
-	    size_t msg_len;
-	    unsigned int msg_prio;
-	    struct timespec64 abs_timeout;
-	} mq_sendrecv;
-	struct {
-	    int oflag;
-	    umode_t mode;
-	    struct mq_attr attr;
-	} mq_open;
-	struct {
-	    pid_t pid;
-	    struct audit_cap_data cap;
-	} capset;
-	struct {
-	    int fd;
-	    int flags;
-	} mmap;
-	struct open_how openat2;
-	struct {
-	    int argc;
-	} execve;
-	struct {
-	    char *name;
-	} module;
-	struct {
-	    struct audit_ntp_data ntp_data;
-	    struct timespec64 tk_injoffset;
-	} time;
+    union
+    {
+        struct {
+            int nargs;
+            long int args[6];
+        } socketcall;
+        struct {
+            kuid_t uid;
+            kgid_t gid;
+            umode_t mode;
+            u32 osid;
+            int has_perm;
+            uid_t perm_uid;
+            gid_t perm_gid;
+            umode_t perm_mode;
+            long unsigned int qbytes;
+        } ipc;
+        struct {
+            mqd_t mqdes;
+            struct mq_attr mqstat;
+        } mq_getsetattr;
+        struct {
+            mqd_t mqdes;
+            int sigev_signo;
+        } mq_notify;
+        struct {
+            mqd_t mqdes;
+            size_t msg_len;
+            unsigned int msg_prio;
+            struct timespec64 abs_timeout;
+        } mq_sendrecv;
+        struct {
+            int oflag;
+            umode_t mode;
+            struct mq_attr attr;
+        } mq_open;
+        struct {
+            pid_t pid;
+            struct audit_cap_data cap;
+        } capset;
+        struct {
+            int fd;
+            int flags;
+        } mmap;
+        struct open_how openat2;
+        struct {
+            int argc;
+        } execve;
+        struct {
+            char *name;
+        } module;
+        struct {
+            struct audit_ntp_data ntp_data;
+            struct timespec64 tk_injoffset;
+        } time;
     };
     int fds[2];
     struct audit_proctitle proctitle;
@@ -57845,9 +58307,10 @@ struct audit_status {
     __u32 backlog_limit;
     __u32 lost;
     __u32 backlog;
-    union {
-	__u32 version;
-	__u32 feature_bitmap;
+    union
+    {
+        __u32 version;
+        __u32 feature_bitmap;
     };
     __u32 backlog_wait_time;
     __u32 backlog_wait_time_actual;
@@ -58038,15 +58501,16 @@ struct memory_failure_entry {
 
 struct memory_failure_cpu {
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct memory_failure_entry *type;
-	    const struct memory_failure_entry *const_type;
-	    char (*rectype)[0];
-	    struct memory_failure_entry *ptr;
-	    const struct memory_failure_entry *ptr_const;
-	};
-	struct memory_failure_entry buf[16];
+        union
+        {
+            struct __kfifo kfifo;
+            struct memory_failure_entry *type;
+            const struct memory_failure_entry *const_type;
+            char (*rectype)[0];
+            struct memory_failure_entry *ptr;
+            const struct memory_failure_entry *ptr_const;
+        };
+        struct memory_failure_entry buf[16];
     } fifo;
     spinlock_t lock;
     struct work_struct work;
@@ -58113,14 +58577,15 @@ struct iomap_dio {
     int error;
     size_t done_before;
     bool wait_for_completion;
-    union {
-	struct {
-	    struct iov_iter *iter;
-	    struct task_struct *waiter;
-	} submit;
-	struct {
-	    struct work_struct work;
-	} aio;
+    union
+    {
+        struct {
+            struct iov_iter *iter;
+            struct task_struct *waiter;
+        } submit;
+        struct {
+            struct work_struct work;
+        } aio;
     };
 };
 
@@ -58263,30 +58728,31 @@ enum {
 };
 
 struct fid {
-    union {
-	struct {
-	    u32 ino;
-	    u32 gen;
-	    u32 parent_ino;
-	    u32 parent_gen;
-	} i32;
-	struct {
-	    u64 ino;
-	    u32 gen;
-	} __attribute__((packed)) i64;
-	struct {
-	    u32 block;
-	    u16 partref;
-	    u16 parent_partref;
-	    u32 generation;
-	    u32 parent_block;
-	    u32 parent_generation;
-	} udf;
-	struct {
-	    struct {
-	    } __empty_raw;
-	    __u32 raw[0];
-	};
+    union
+    {
+        struct {
+            u32 ino;
+            u32 gen;
+            u32 parent_ino;
+            u32 parent_gen;
+        } i32;
+        struct {
+            u64 ino;
+            u32 gen;
+        } __attribute__((packed)) i64;
+        struct {
+            u32 block;
+            u16 partref;
+            u16 parent_partref;
+            u32 generation;
+            u32 parent_block;
+            u32 parent_generation;
+        } udf;
+        struct {
+            struct {
+            } __empty_raw;
+            __u32 raw[0];
+        };
     };
 };
 
@@ -59536,12 +60002,13 @@ struct crypto_istat_akcipher {
 
 struct akcipher_instance {
     void (*free)(struct akcipher_instance *);
-    union {
-	struct {
-	    char head[72];
-	    struct crypto_instance base;
-	} s;
-	struct akcipher_alg alg;
+    union
+    {
+        struct {
+            char head[72];
+            struct crypto_instance base;
+        } s;
+        struct akcipher_alg alg;
     };
 };
 
@@ -60118,15 +60585,16 @@ struct aer_err_source {
 struct aer_rpc {
     struct pci_dev *rpd;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    struct aer_err_source *type;
-	    const struct aer_err_source *const_type;
-	    char (*rectype)[0];
-	    struct aer_err_source *ptr;
-	    const struct aer_err_source *ptr_const;
-	};
-	struct aer_err_source buf[128];
+        union
+        {
+            struct __kfifo kfifo;
+            struct aer_err_source *type;
+            const struct aer_err_source *const_type;
+            char (*rectype)[0];
+            struct aer_err_source *ptr;
+            const struct aer_err_source *ptr_const;
+        };
+        struct aer_err_source buf[128];
     } aer_fifo;
 };
 
@@ -60563,7 +61031,8 @@ struct fwnode_link {
     u8 flags;
 };
 
-union device_attr_group_devres {
+union device_attr_group_devres
+{
     const struct attribute_group *group;
     const struct attribute_group **groups;
 };
@@ -60594,13 +61063,14 @@ struct usb_ctrlrequest {
 };
 
 struct kfifo {
-    union {
-	struct __kfifo kfifo;
-	unsigned char *type;
-	const unsigned char *const_type;
-	char (*rectype)[0];
-	void *ptr;
-	const void *ptr_const;
+    union
+    {
+        struct __kfifo kfifo;
+        unsigned char *type;
+        const unsigned char *const_type;
+        char (*rectype)[0];
+        void *ptr;
+        const void *ptr_const;
     };
     unsigned char buf[0];
 };
@@ -60944,7 +61414,8 @@ typedef struct {
 
 typedef int (*efi_memattr_perm_setter)(struct mm_struct *, efi_memory_desc_t *, bool);
 
-union extcon_property_value {
+union extcon_property_value
+{
     int intval;
 };
 
@@ -61003,15 +61474,16 @@ struct bpf_flow_keys {
     __be16 n_proto;
     __be16 sport;
     __be16 dport;
-    union {
-	struct {
-	    __be32 ipv4_src;
-	    __be32 ipv4_dst;
-	};
-	struct {
-	    __u32 ipv6_src[4];
-	    __u32 ipv6_dst[4];
-	};
+    union
+    {
+        struct {
+            __be32 ipv4_src;
+            __be32 ipv4_dst;
+        };
+        struct {
+            __u32 ipv6_src[4];
+            __u32 ipv6_dst[4];
+        };
     };
     __u32 flags;
     __be32 flow_label;
@@ -61061,14 +61533,16 @@ struct __sk_buff {
     __u32 remote_port;
     __u32 local_port;
     __u32 data_meta;
-    union {
-	struct bpf_flow_keys *flow_keys;
+    union
+    {
+        struct bpf_flow_keys *flow_keys;
     };
     __u64 tstamp;
     __u32 wire_len;
     __u32 gso_segs;
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
     __u32 gso_size;
     __u8 tstamp_type;
@@ -61077,9 +61551,9 @@ struct __sk_buff {
 
 struct qdisc_skb_cb {
     struct {
-	unsigned int pkt_len;
-	u16 slave_dev_queue_mapping;
-	u16 tc_classid;
+        unsigned int pkt_len;
+        u16 slave_dev_queue_mapping;
+        u16 tc_classid;
     };
     unsigned char data[20];
 };
@@ -61098,11 +61572,13 @@ enum sk_action {
 };
 
 struct bpf_sk_lookup {
-    union {
-	union {
-	    struct bpf_sock *sk;
-	};
-	__u64 cookie;
+    union
+    {
+        union
+        {
+            struct bpf_sock *sk;
+        };
+        __u64 cookie;
     };
     __u32 family;
     __u32 protocol;
@@ -61209,10 +61685,10 @@ struct page_pool {
     u64 destroy_cnt;
     struct page_pool_params_slow slow;
     struct {
-	struct hlist_node list;
-	u64 detach_time;
-	u32 napi_id;
-	u32 id;
+        struct hlist_node list;
+        u64 detach_time;
+        u32 napi_id;
+        u32 id;
     } user;
     long : 64;
     long : 64;
@@ -61266,9 +61742,10 @@ struct bpf_skb_data_end {
 
 struct bpf_nh_params {
     u32 nh_family;
-    union {
-	u32 ipv4_nh;
-	struct in6_addr ipv6_nh;
+    union
+    {
+        u32 ipv4_nh;
+        struct in6_addr ipv6_nh;
     };
 };
 
@@ -61289,12 +61766,12 @@ struct bpf_sk_lookup_kern {
     __be16 sport;
     u16 dport;
     struct {
-	__be32 saddr;
-	__be32 daddr;
+        __be32 saddr;
+        __be32 daddr;
     } v4;
     struct {
-	const struct in6_addr *saddr;
-	const struct in6_addr *daddr;
+        const struct in6_addr *saddr;
+        const struct in6_addr *daddr;
     } v6;
     struct sock *selected_sk;
     u32 ingress_ifindex;
@@ -61302,27 +61779,29 @@ struct bpf_sk_lookup_kern {
 };
 
 struct page_pool_params {
-    union {
-	struct {
-	    unsigned int flags;
-	    unsigned int order;
-	    unsigned int pool_size;
-	    int nid;
-	    struct device *dev;
-	    struct napi_struct *napi;
-	    enum dma_data_direction dma_dir;
-	    unsigned int max_len;
-	    unsigned int offset;
-	};
-	struct page_pool_params_fast fast;
+    union
+    {
+        struct {
+            unsigned int flags;
+            unsigned int order;
+            unsigned int pool_size;
+            int nid;
+            struct device *dev;
+            struct napi_struct *napi;
+            enum dma_data_direction dma_dir;
+            unsigned int max_len;
+            unsigned int offset;
+        };
+        struct page_pool_params_fast fast;
     };
-    union {
-	struct {
-	    struct net_device *netdev;
-	    void (*init_callback)(struct page *, void *);
-	    void *init_arg;
-	};
-	struct page_pool_params_slow slow;
+    union
+    {
+        struct {
+            struct net_device *netdev;
+            void (*init_callback)(struct page *, void *);
+            void *init_arg;
+        };
+        struct page_pool_params_slow slow;
     };
 };
 
@@ -61364,8 +61843,8 @@ typedef void (*btf_trace_bpf_test_finish)(void *, int *);
 
 struct bpf_test_timer {
     enum {
-	NO_PREEMPT = 0,
-	NO_MIGRATE = 1,
+        NO_PREEMPT = 0,
+        NO_MIGRATE = 1,
     } mode;
     u32 i;
     u64 time_start;
@@ -61375,17 +61854,18 @@ struct bpf_test_timer {
 struct xdp_page_head {
     struct xdp_buff orig_ctx;
     struct xdp_buff ctx;
-    union {
-	struct {
-	    struct {
-	    } __empty_frame;
-	    struct xdp_frame frame[0];
-	};
-	struct {
-	    struct {
-	    } __empty_data;
-	    u8 data[0];
-	};
+    union
+    {
+        struct {
+            struct {
+            } __empty_frame;
+            struct xdp_frame frame[0];
+        };
+        struct {
+            struct {
+            } __empty_data;
+            u8 data[0];
+        };
     };
 };
 
@@ -61576,13 +62056,14 @@ struct icmp6hdr {
     __u8 icmp6_type;
     __u8 icmp6_code;
     __sum16 icmp6_cksum;
-    union {
-	__be32 un_data32[1];
-	__be16 un_data16[2];
-	__u8 un_data8[4];
-	struct icmpv6_echo u_echo;
-	struct icmpv6_nd_advt u_nd_advt;
-	struct icmpv6_nd_ra u_nd_ra;
+    union
+    {
+        __be32 un_data32[1];
+        __be16 un_data16[2];
+        __u8 un_data8[4];
+        struct icmpv6_echo u_echo;
+        struct icmpv6_nd_advt u_nd_advt;
+        struct icmpv6_nd_ra u_nd_ra;
     } icmp6_dataun;
 };
 
@@ -61604,9 +62085,10 @@ struct mptcp_addr_info {
     u8 id;
     sa_family_t family;
     __be16 port;
-    union {
-	struct in_addr addr;
-	struct in6_addr addr6;
+    union
+    {
+        struct in_addr addr;
+        struct in6_addr addr6;
     };
 };
 
@@ -61620,121 +62102,124 @@ struct mptcp_sched_data {
 
 struct mptcp_subflow_context {
     struct list_head node;
-    union {
-	struct {
-	    long unsigned int avg_pacing_rate;
-	    u64 local_key;
-	    u64 remote_key;
-	    u64 idsn;
-	    u64 map_seq;
-	    u32 snd_isn;
-	    u32 token;
-	    u32 rel_write_seq;
-	    u32 map_subflow_seq;
-	    u32 ssn_offset;
-	    u32 map_data_len;
-	    __wsum map_data_csum;
-	    u32 map_csum_len;
-	    u32 request_mptcp : 1;
-	    u32 request_join : 1;
-	    u32 request_bkup : 1;
-	    u32 mp_capable : 1;
-	    u32 mp_join : 1;
-	    u32 fully_established : 1;
-	    u32 pm_notified : 1;
-	    u32 conn_finished : 1;
-	    u32 map_valid : 1;
-	    u32 map_csum_reqd : 1;
-	    u32 map_data_fin : 1;
-	    u32 mpc_map : 1;
-	    u32 backup : 1;
-	    u32 send_mp_prio : 1;
-	    u32 send_mp_fail : 1;
-	    u32 send_fastclose : 1;
-	    u32 send_infinite_map : 1;
-	    u32 remote_key_valid : 1;
-	    u32 disposable : 1;
-	    u32 stale : 1;
-	    u32 valid_csum_seen : 1;
-	    u32 is_mptfo : 1;
-	    u32 __unused : 10;
-	    bool data_avail;
-	    bool scheduled;
-	    u32 remote_nonce;
-	    u64 thmac;
-	    u32 local_nonce;
-	    u32 remote_token;
-	    union {
-		u8 hmac[20];
-		u64 iasn;
-	    };
-	    s16 local_id;
-	    u8 remote_id;
-	    u8 reset_seen : 1;
-	    u8 reset_transient : 1;
-	    u8 reset_reason : 4;
-	    u8 stale_count;
-	    u32 subflow_id;
-	    long int delegated_status;
-	    long unsigned int fail_tout;
-	};
-	struct {
-	    long unsigned int avg_pacing_rate;
-	    u64 local_key;
-	    u64 remote_key;
-	    u64 idsn;
-	    u64 map_seq;
-	    u32 snd_isn;
-	    u32 token;
-	    u32 rel_write_seq;
-	    u32 map_subflow_seq;
-	    u32 ssn_offset;
-	    u32 map_data_len;
-	    __wsum map_data_csum;
-	    u32 map_csum_len;
-	    u32 request_mptcp : 1;
-	    u32 request_join : 1;
-	    u32 request_bkup : 1;
-	    u32 mp_capable : 1;
-	    u32 mp_join : 1;
-	    u32 fully_established : 1;
-	    u32 pm_notified : 1;
-	    u32 conn_finished : 1;
-	    u32 map_valid : 1;
-	    u32 map_csum_reqd : 1;
-	    u32 map_data_fin : 1;
-	    u32 mpc_map : 1;
-	    u32 backup : 1;
-	    u32 send_mp_prio : 1;
-	    u32 send_mp_fail : 1;
-	    u32 send_fastclose : 1;
-	    u32 send_infinite_map : 1;
-	    u32 remote_key_valid : 1;
-	    u32 disposable : 1;
-	    u32 stale : 1;
-	    u32 valid_csum_seen : 1;
-	    u32 is_mptfo : 1;
-	    u32 __unused : 10;
-	    bool data_avail;
-	    bool scheduled;
-	    u32 remote_nonce;
-	    u64 thmac;
-	    u32 local_nonce;
-	    u32 remote_token;
-	    union {
-		u8 hmac[20];
-		u64 iasn;
-	    };
-	    s16 local_id;
-	    u8 remote_id;
-	    u8 reset_seen : 1;
-	    u8 reset_transient : 1;
-	    u8 reset_reason : 4;
-	    u8 stale_count;
-	    u32 subflow_id;
-	    long int delegated_status;
-	    long unsigned int fail_tout;
-	} reset;
+    union
+    {
+        struct {
+            long unsigned int avg_pacing_rate;
+            u64 local_key;
+            u64 remote_key;
+            u64 idsn;
+            u64 map_seq;
+            u32 snd_isn;
+            u32 token;
+            u32 rel_write_seq;
+            u32 map_subflow_seq;
+            u32 ssn_offset;
+            u32 map_data_len;
+            __wsum map_data_csum;
+            u32 map_csum_len;
+            u32 request_mptcp : 1;
+            u32 request_join : 1;
+            u32 request_bkup : 1;
+            u32 mp_capable : 1;
+            u32 mp_join : 1;
+            u32 fully_established : 1;
+            u32 pm_notified : 1;
+            u32 conn_finished : 1;
+            u32 map_valid : 1;
+            u32 map_csum_reqd : 1;
+            u32 map_data_fin : 1;
+            u32 mpc_map : 1;
+            u32 backup : 1;
+            u32 send_mp_prio : 1;
+            u32 send_mp_fail : 1;
+            u32 send_fastclose : 1;
+            u32 send_infinite_map : 1;
+            u32 remote_key_valid : 1;
+            u32 disposable : 1;
+            u32 stale : 1;
+            u32 valid_csum_seen : 1;
+            u32 is_mptfo : 1;
+            u32 __unused : 10;
+            bool data_avail;
+            bool scheduled;
+            u32 remote_nonce;
+            u64 thmac;
+            u32 local_nonce;
+            u32 remote_token;
+            union
+            {
+                u8 hmac[20];
+                u64 iasn;
+            };
+            s16 local_id;
+            u8 remote_id;
+            u8 reset_seen : 1;
+            u8 reset_transient : 1;
+            u8 reset_reason : 4;
+            u8 stale_count;
+            u32 subflow_id;
+            long int delegated_status;
+            long unsigned int fail_tout;
+        };
+        struct {
+            long unsigned int avg_pacing_rate;
+            u64 local_key;
+            u64 remote_key;
+            u64 idsn;
+            u64 map_seq;
+            u32 snd_isn;
+            u32 token;
+            u32 rel_write_seq;
+            u32 map_subflow_seq;
+            u32 ssn_offset;
+            u32 map_data_len;
+            __wsum map_data_csum;
+            u32 map_csum_len;
+            u32 request_mptcp : 1;
+            u32 request_join : 1;
+            u32 request_bkup : 1;
+            u32 mp_capable : 1;
+            u32 mp_join : 1;
+            u32 fully_established : 1;
+            u32 pm_notified : 1;
+            u32 conn_finished : 1;
+            u32 map_valid : 1;
+            u32 map_csum_reqd : 1;
+            u32 map_data_fin : 1;
+            u32 mpc_map : 1;
+            u32 backup : 1;
+            u32 send_mp_prio : 1;
+            u32 send_mp_fail : 1;
+            u32 send_fastclose : 1;
+            u32 send_infinite_map : 1;
+            u32 remote_key_valid : 1;
+            u32 disposable : 1;
+            u32 stale : 1;
+            u32 valid_csum_seen : 1;
+            u32 is_mptfo : 1;
+            u32 __unused : 10;
+            bool data_avail;
+            bool scheduled;
+            u32 remote_nonce;
+            u64 thmac;
+            u32 local_nonce;
+            u32 remote_token;
+            union
+            {
+                u8 hmac[20];
+                u64 iasn;
+            };
+            s16 local_id;
+            u8 remote_id;
+            u8 reset_seen : 1;
+            u8 reset_transient : 1;
+            u8 reset_reason : 4;
+            u8 stale_count;
+            u32 subflow_id;
+            long int delegated_status;
+            long unsigned int fail_tout;
+        } reset;
     };
     struct list_head delegated_node;
     u32 setsockopt_seq;
@@ -61840,10 +62325,10 @@ struct mptcp_sock {
     struct mptcp_pm_data pm;
     struct mptcp_sched_ops *sched;
     struct {
-	u32 space;
-	u32 copied;
-	u64 time;
-	u64 rtt_us;
+        u32 space;
+        u32 copied;
+        u64 time;
+        u64 rtt_us;
     } rcvq_space;
     u8 scaling_ratio;
     u32 subflow_id;
@@ -62279,31 +62764,35 @@ enum resctrl_res_level {
     RDT_NUM_RESOURCES = 4,
 };
 
-union cpuid_0x10_1_eax {
+union cpuid_0x10_1_eax
+{
     struct {
-	unsigned int cbm_len : 5;
+        unsigned int cbm_len : 5;
     } split;
     unsigned int full;
 };
 
-union cpuid_0x10_3_eax {
+union cpuid_0x10_3_eax
+{
     struct {
-	unsigned int max_delay : 12;
+        unsigned int max_delay : 12;
     } split;
     unsigned int full;
 };
 
-union cpuid_0x10_x_ecx {
+union cpuid_0x10_x_ecx
+{
     struct {
-	unsigned int reserved : 3;
-	unsigned int noncont : 1;
+        unsigned int reserved : 3;
+        unsigned int noncont : 1;
     } split;
     unsigned int full;
 };
 
-union cpuid_0x10_x_edx {
+union cpuid_0x10_x_edx
+{
     struct {
-	unsigned int cos_max : 16;
+        unsigned int cos_max : 16;
     } split;
     unsigned int full;
 };
@@ -62752,9 +63241,10 @@ enum positive_aop_returns {
 struct posix_acl_entry {
     short int e_tag;
     short unsigned int e_perm;
-    union {
-	kuid_t e_uid;
-	kgid_t e_gid;
+    union
+    {
+        kuid_t e_uid;
+        kgid_t e_gid;
     };
 };
 
@@ -62831,43 +63321,45 @@ struct ext4_inode {
     __le16 i_links_count;
     __le32 i_blocks_lo;
     __le32 i_flags;
-    union {
-	struct {
-	    __le32 l_i_version;
-	} linux1;
-	struct {
-	    __u32 h_i_translator;
-	} hurd1;
-	struct {
-	    __u32 m_i_reserved1;
-	} masix1;
+    union
+    {
+        struct {
+            __le32 l_i_version;
+        } linux1;
+        struct {
+            __u32 h_i_translator;
+        } hurd1;
+        struct {
+            __u32 m_i_reserved1;
+        } masix1;
     } osd1;
     __le32 i_block[15];
     __le32 i_generation;
     __le32 i_file_acl_lo;
     __le32 i_size_high;
     __le32 i_obso_faddr;
-    union {
-	struct {
-	    __le16 l_i_blocks_high;
-	    __le16 l_i_file_acl_high;
-	    __le16 l_i_uid_high;
-	    __le16 l_i_gid_high;
-	    __le16 l_i_checksum_lo;
-	    __le16 l_i_reserved;
-	} linux2;
-	struct {
-	    __le16 h_i_reserved1;
-	    __u16 h_i_mode_high;
-	    __u16 h_i_uid_high;
-	    __u16 h_i_gid_high;
-	    __u32 h_i_author;
-	} hurd2;
-	struct {
-	    __le16 h_i_reserved1;
-	    __le16 m_i_file_acl_high;
-	    __u32 m_i_reserved2[2];
-	} masix2;
+    union
+    {
+        struct {
+            __le16 l_i_blocks_high;
+            __le16 l_i_file_acl_high;
+            __le16 l_i_uid_high;
+            __le16 l_i_gid_high;
+            __le16 l_i_checksum_lo;
+            __le16 l_i_reserved;
+        } linux2;
+        struct {
+            __le16 h_i_reserved1;
+            __u16 h_i_mode_high;
+            __u16 h_i_uid_high;
+            __u16 h_i_gid_high;
+            __u32 h_i_author;
+        } hurd2;
+        struct {
+            __le16 h_i_reserved1;
+            __le16 m_i_file_acl_high;
+            __u32 m_i_reserved2[2];
+        } masix2;
     } osd2;
     __le16 i_extra_isize;
     __le16 i_checksum_hi;
@@ -62932,9 +63424,9 @@ struct partial_cluster {
     ext4_fsblk_t pclu;
     ext4_lblk_t lblk;
     enum {
-	initial = 0,
-	tofree = 1,
-	nofree = 2,
+        initial = 0,
+        tofree = 1,
+        nofree = 2,
     } state;
 };
 
@@ -64397,9 +64889,10 @@ struct ext4_mount_options {
 
 struct io_cancel_data {
     struct io_ring_ctx *ctx;
-    union {
-	u64 data;
-	struct file *file;
+    union
+    {
+        u64 data;
+        struct file *file;
     };
     u8 opcode;
     u32 flags;
@@ -64651,7 +65144,8 @@ struct acpi_common_descriptor {
     u8 descriptor_type;
 };
 
-union acpi_descriptor {
+union acpi_descriptor
+{
     struct acpi_common_descriptor common;
     union acpi_operand_object object;
     struct acpi_namespace_node node;
@@ -64673,7 +65167,7 @@ struct pnp_card_device_id {
     __u8 id[8];
     kernel_ulong_t driver_data;
     struct {
-	__u8 id[8];
+        __u8 id[8];
     } devs[8];
 };
 
@@ -65085,19 +65579,21 @@ struct iova_fq;
 
 struct iommu_dma_cookie {
     enum iommu_dma_cookie_type type;
-    union {
-	struct {
-	    struct iova_domain iovad;
-	    union {
-		struct iova_fq *single_fq;
-		struct iova_fq *percpu_fq;
-	    };
-	    atomic64_t fq_flush_start_cnt;
-	    atomic64_t fq_flush_finish_cnt;
-	    struct timer_list fq_timer;
-	    atomic_t fq_timer_on;
-	};
-	dma_addr_t msi_iova;
+    union
+    {
+        struct {
+            struct iova_domain iovad;
+            union
+            {
+                struct iova_fq *single_fq;
+                struct iova_fq *percpu_fq;
+            };
+            atomic64_t fq_flush_start_cnt;
+            atomic64_t fq_flush_finish_cnt;
+            struct timer_list fq_timer;
+            atomic_t fq_timer_on;
+        };
+        dma_addr_t msi_iova;
     };
     struct list_head msi_page_list;
     struct iommu_domain *fq_domain;
@@ -65623,9 +66119,10 @@ struct dpll_pin_frequency {
 };
 
 struct dpll_pin_ref {
-    union {
-	struct dpll_device *dpll;
-	struct dpll_pin *pin;
+    union
+    {
+        struct dpll_device *dpll;
+        struct dpll_pin *pin;
     };
     struct list_head registration_list;
     refcount_t refcount;
@@ -65765,17 +66262,18 @@ struct xt_match {
 };
 
 struct xt_entry_match {
-    union {
-	struct {
-	    __u16 match_size;
-	    char name[29];
-	    __u8 revision;
-	} user;
-	struct {
-	    __u16 match_size;
-	    struct xt_match *match;
-	} kernel;
-	__u16 match_size;
+    union
+    {
+        struct {
+            __u16 match_size;
+            char name[29];
+            __u8 revision;
+        } user;
+        struct {
+            __u16 match_size;
+            struct xt_match *match;
+        } kernel;
+        __u16 match_size;
     } u;
     unsigned char data[0];
 };
@@ -65801,17 +66299,18 @@ struct xt_target {
 };
 
 struct xt_entry_target {
-    union {
-	struct {
-	    __u16 target_size;
-	    char name[29];
-	    __u8 revision;
-	} user;
-	struct {
-	    __u16 target_size;
-	    struct xt_target *target;
-	} kernel;
-	__u16 target_size;
+    union
+    {
+        struct {
+            __u16 target_size;
+            char name[29];
+            __u8 revision;
+        } user;
+        struct {
+            __u16 target_size;
+            struct xt_target *target;
+        } kernel;
+        __u16 target_size;
     } u;
     unsigned char data[0];
 };
@@ -65838,13 +66337,15 @@ struct xt_counters_info {
 };
 
 struct xt_action_param {
-    union {
-	const struct xt_match *match;
-	const struct xt_target *target;
+    union
+    {
+        const struct xt_match *match;
+        const struct xt_target *target;
     };
-    union {
-	const void *matchinfo;
-	const void *targinfo;
+    union
+    {
+        const void *matchinfo;
+        const void *targinfo;
     };
     const struct nf_hook_state *state;
     unsigned int thoff;
@@ -66067,22 +66568,23 @@ struct mr_mfc {
     struct rhlist_head mnode;
     short unsigned int mfc_parent;
     int mfc_flags;
-    union {
-	struct {
-	    long unsigned int expires;
-	    struct sk_buff_head unresolved;
-	} unres;
-	struct {
-	    long unsigned int last_assert;
-	    int minvif;
-	    int maxvif;
-	    long unsigned int bytes;
-	    long unsigned int pkt;
-	    long unsigned int wrong_if;
-	    long unsigned int lastuse;
-	    unsigned char ttls[32];
-	    refcount_t refcount;
-	} res;
+    union
+    {
+        struct {
+            long unsigned int expires;
+            struct sk_buff_head unresolved;
+        } unres;
+        struct {
+            long unsigned int last_assert;
+            int minvif;
+            int maxvif;
+            long unsigned int bytes;
+            long unsigned int pkt;
+            long unsigned int wrong_if;
+            long unsigned int lastuse;
+            unsigned char ttls[32];
+            refcount_t refcount;
+        } res;
     } mfc_un;
     struct list_head list;
     struct callback_head rcu;
@@ -66157,17 +66659,18 @@ struct flow_dissector_key_tipc {
 };
 
 struct flow_dissector_key_addrs {
-    union {
-	struct flow_dissector_key_ipv4_addrs v4addrs;
-	struct flow_dissector_key_ipv6_addrs v6addrs;
-	struct flow_dissector_key_tipc tipckey;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs v4addrs;
+        struct flow_dissector_key_ipv6_addrs v6addrs;
+        struct flow_dissector_key_tipc tipckey;
     };
 };
 
 struct flow_dissector_key_icmp {
     struct {
-	u8 type;
-	u8 code;
+        u8 type;
+        u8 code;
     };
     u16 id;
 };
@@ -66262,10 +66765,11 @@ struct ipv4_addr_key {
 };
 
 struct inetpeer_addr {
-    union {
-	struct ipv4_addr_key a4;
-	struct in6_addr a6;
-	u32 key[4];
+    union
+    {
+        struct ipv4_addr_key a4;
+        struct in6_addr a6;
+        u32 key[4];
     };
     __u16 family;
 };
@@ -66277,11 +66781,12 @@ struct inet_peer {
     u32 rate_tokens;
     u32 n_redirects;
     long unsigned int rate_last;
-    union {
-	struct {
-	    atomic_t rid;
-	};
-	struct callback_head rcu;
+    union
+    {
+        struct {
+            atomic_t rid;
+        };
+        struct callback_head rcu;
     };
     __u32 dtime;
     refcount_t refcnt;
@@ -66411,9 +66916,10 @@ struct sched_domain {
     unsigned int ttwu_move_affine;
     unsigned int ttwu_move_balance;
     char *name;
-    union {
-	void *private;
-	struct callback_head rcu;
+    union
+    {
+        void *private;
+        struct callback_head rcu;
     };
     struct sched_domain_shared *shared;
     unsigned int span_weight;
@@ -66699,19 +67205,20 @@ enum fetch_op {
 
 struct fetch_insn {
     enum fetch_op op;
-    union {
-	unsigned int param;
-	struct {
-	    unsigned int size;
-	    int offset;
-	};
-	struct {
-	    unsigned char basesize;
-	    unsigned char lshift;
-	    unsigned char rshift;
-	};
-	long unsigned int immediate;
-	void *data;
+    union
+    {
+        unsigned int param;
+        struct {
+            unsigned int size;
+            int offset;
+        };
+        struct {
+            unsigned char basesize;
+            unsigned char lshift;
+            unsigned char rshift;
+        };
+        long unsigned int immediate;
+        void *data;
     };
 };
 
@@ -66922,12 +67429,13 @@ enum pgt_entry {
     HPAGE_PUD = 3,
 };
 
-union handle_parts {
+union handle_parts
+{
     depot_stack_handle_t handle;
     struct {
-	u32 pool_index_plus_1 : 17;
-	u32 offset : 10;
-	u32 extra : 5;
+        u32 pool_index_plus_1 : 17;
+        u32 offset : 10;
+        u32 extra : 5;
     };
 };
 
@@ -66937,12 +67445,13 @@ struct stack_record {
     u32 size;
     union handle_parts handle;
     refcount_t count;
-    union {
-	long unsigned int entries[64];
-	struct {
-	    struct list_head free_list;
-	    long unsigned int rcu_state;
-	};
+    union
+    {
+        long unsigned int entries[64];
+        struct {
+            struct list_head free_list;
+            long unsigned int rcu_state;
+        };
     };
 };
 
@@ -67030,10 +67539,11 @@ struct fsnotify_group {
     struct fasync_struct *fsn_fa;
     struct fsnotify_event *overflow_event;
     struct mem_cgroup *memcg;
-    union {
-	void *private;
-	struct inotify_group_private_data inotify_data;
-	struct fanotify_group_private_data fanotify_data;
+    union
+    {
+        void *private;
+        struct inotify_group_private_data inotify_data;
+        struct fanotify_group_private_data fanotify_data;
     };
 };
 
@@ -67146,14 +67656,15 @@ struct debugfs_cancellation {
 
 struct debugfs_fsdata {
     const struct file_operations *real_fops;
-    union {
-	debugfs_automount_t automount;
-	struct {
-	    refcount_t active_users;
-	    struct completion active_users_drained;
-	    struct mutex cancellations_mtx;
-	    struct list_head cancellations;
-	};
+    union
+    {
+        debugfs_automount_t automount;
+        struct {
+            refcount_t active_users;
+            struct completion active_users_drained;
+            struct mutex cancellations_mtx;
+            struct list_head cancellations;
+        };
     };
 };
 
@@ -67275,8 +67786,8 @@ struct btrfs_backref_iter {
 
 struct btrfs_backref_node {
     struct {
-	struct rb_node rb_node;
-	u64 bytenr;
+        struct rb_node rb_node;
+        u64 bytenr;
     };
     u64 new_bytenr;
     u64 owner;
@@ -67303,16 +67814,16 @@ struct btrfs_backref_edge {
 
 struct mapping_node {
     struct {
-	struct rb_node rb_node;
-	u64 bytenr;
+        struct rb_node rb_node;
+        u64 bytenr;
     };
     void *data;
 };
 
 struct tree_block {
     struct {
-	struct rb_node rb_node;
-	u64 bytenr;
+        struct rb_node rb_node;
+        u64 bytenr;
     };
     u64 owner;
     struct btrfs_key key;
@@ -67375,7 +67886,8 @@ struct sidtab_node_inner;
 
 struct sidtab_node_leaf;
 
-union sidtab_entry_inner {
+union sidtab_entry_inner
+{
     struct sidtab_node_inner *ptr_inner;
     struct sidtab_node_leaf *ptr_leaf;
 };
@@ -67453,9 +67965,10 @@ struct avtab_extended_perms {
 };
 
 struct avtab_datum {
-    union {
-	u32 data;
-	struct avtab_extended_perms *xperms;
+    union
+    {
+        u32 data;
+        struct avtab_extended_perms *xperms;
     } u;
 };
 
@@ -67547,34 +68060,36 @@ struct cond_bool_datum {
 };
 
 struct ocontext {
-    union {
-	char *name;
-	struct {
-	    u8 protocol;
-	    u16 low_port;
-	    u16 high_port;
-	} port;
-	struct {
-	    u32 addr;
-	    u32 mask;
-	} node;
-	struct {
-	    u32 addr[4];
-	    u32 mask[4];
-	} node6;
-	struct {
-	    u64 subnet_prefix;
-	    u16 low_pkey;
-	    u16 high_pkey;
-	} ibpkey;
-	struct {
-	    char *dev_name;
-	    u8 port;
-	} ibendport;
+    union
+    {
+        char *name;
+        struct {
+            u8 protocol;
+            u16 low_port;
+            u16 high_port;
+        } port;
+        struct {
+            u32 addr;
+            u32 mask;
+        } node;
+        struct {
+            u32 addr[4];
+            u32 mask[4];
+        } node6;
+        struct {
+            u64 subnet_prefix;
+            u16 low_pkey;
+            u16 high_pkey;
+        } ibpkey;
+        struct {
+            char *dev_name;
+            u8 port;
+        } ibendport;
     } u;
-    union {
-	u32 sclass;
-	u32 behavior;
+    union
+    {
+        u32 sclass;
+        u32 behavior;
     } v;
     struct context context[2];
     u32 sid[2];
@@ -67644,12 +68159,13 @@ struct crypto_aead {
 
 struct aead_instance {
     void (*free)(struct aead_instance *);
-    union {
-	struct {
-	    char head[64];
-	    struct crypto_instance base;
-	} s;
-	struct aead_alg alg;
+    union
+    {
+        struct {
+            char head[64];
+            struct crypto_instance base;
+        } s;
+        struct aead_alg alg;
     };
 };
 
@@ -67794,13 +68310,14 @@ struct acpi_resource_irq {
     u8 shareable;
     u8 wake_capable;
     u8 interrupt_count;
-    union {
-	u8 interrupt;
-	struct {
-	    struct {
-	    } __Empty_interrupts;
-	    u8 interrupts[0];
-	};
+    union
+    {
+        u8 interrupt;
+        struct {
+            struct {
+            } __Empty_interrupts;
+            u8 interrupts[0];
+        };
     };
 };
 
@@ -67809,13 +68326,14 @@ struct acpi_resource_dma {
     u8 bus_master;
     u8 transfer;
     u8 channel_count;
-    union {
-	u8 channel;
-	struct {
-	    struct {
-	    } __Empty_channels;
-	    u8 channels[0];
-	};
+    union
+    {
+        u8 channel;
+        struct {
+            struct {
+            } __Empty_channels;
+            u8 channels[0];
+        };
     };
 };
 
@@ -67896,7 +68414,8 @@ struct acpi_io_attribute {
     u8 reserved1;
 };
 
-union acpi_resource_attribute {
+union acpi_resource_attribute
+{
     struct acpi_memory_attribute mem;
     struct acpi_io_attribute io;
     u8 type_specific;
@@ -67993,13 +68512,14 @@ struct acpi_resource_extended_irq {
     u8 wake_capable;
     u8 interrupt_count;
     struct acpi_resource_source resource_source;
-    union {
-	u32 interrupt;
-	struct {
-	    struct {
-	    } __Empty_interrupts;
-	    u32 interrupts[0];
-	};
+    union
+    {
+        u32 interrupt;
+        struct {
+            struct {
+            } __Empty_interrupts;
+            u32 interrupts[0];
+        };
     };
 } __attribute__((packed));
 
@@ -68183,7 +68703,8 @@ struct acpi_resource_pin_group_config {
     u8 *vendor_data;
 } __attribute__((packed));
 
-union acpi_resource_data {
+union acpi_resource_data
+{
     struct acpi_resource_irq irq;
     struct acpi_resource_dma dma;
     struct acpi_resource_start_dependent start_dpf;
@@ -68509,13 +69030,14 @@ struct acpi_dmar_andd {
     struct acpi_dmar_header header;
     u8 reserved[3];
     u8 device_number;
-    union {
-	char __pad;
-	struct {
-	    struct {
-	    } __Empty_device_name;
-	    char device_name[0];
-	};
+    union
+    {
+        char __pad;
+        struct {
+            struct {
+            } __Empty_device_name;
+            char device_name[0];
+        };
     };
 } __attribute__((packed));
 
@@ -68623,64 +69145,67 @@ struct dmar_pci_notify_info {
 };
 
 struct irte___2 {
-    union {
-	struct {
-	    union {
-		struct {
-		    __u64 present : 1;
-		    __u64 fpd : 1;
-		    __u64 __res0 : 6;
-		    __u64 avail : 4;
-		    __u64 __res1 : 3;
-		    __u64 pst : 1;
-		    __u64 vector : 8;
-		    __u64 __res2 : 40;
-		};
-		struct {
-		    __u64 r_present : 1;
-		    __u64 r_fpd : 1;
-		    __u64 dst_mode : 1;
-		    __u64 redir_hint : 1;
-		    __u64 trigger_mode : 1;
-		    __u64 dlvry_mode : 3;
-		    __u64 r_avail : 4;
-		    __u64 r_res0 : 4;
-		    __u64 r_vector : 8;
-		    __u64 r_res1 : 8;
-		    __u64 dest_id : 32;
-		};
-		struct {
-		    __u64 p_present : 1;
-		    __u64 p_fpd : 1;
-		    __u64 p_res0 : 6;
-		    __u64 p_avail : 4;
-		    __u64 p_res1 : 2;
-		    __u64 p_urgent : 1;
-		    __u64 p_pst : 1;
-		    __u64 p_vector : 8;
-		    __u64 p_res2 : 14;
-		    __u64 pda_l : 26;
-		};
-		__u64 low;
-	    };
-	    union {
-		struct {
-		    __u64 sid : 16;
-		    __u64 sq : 2;
-		    __u64 svt : 2;
-		    __u64 __res3 : 44;
-		};
-		struct {
-		    __u64 p_sid : 16;
-		    __u64 p_sq : 2;
-		    __u64 p_svt : 2;
-		    __u64 p_res3 : 12;
-		    __u64 pda_h : 32;
-		};
-		__u64 high;
-	    };
-	};
-	__u128 irte;
+    union
+    {
+        struct {
+            union
+            {
+                struct {
+                    __u64 present : 1;
+                    __u64 fpd : 1;
+                    __u64 __res0 : 6;
+                    __u64 avail : 4;
+                    __u64 __res1 : 3;
+                    __u64 pst : 1;
+                    __u64 vector : 8;
+                    __u64 __res2 : 40;
+                };
+                struct {
+                    __u64 r_present : 1;
+                    __u64 r_fpd : 1;
+                    __u64 dst_mode : 1;
+                    __u64 redir_hint : 1;
+                    __u64 trigger_mode : 1;
+                    __u64 dlvry_mode : 3;
+                    __u64 r_avail : 4;
+                    __u64 r_res0 : 4;
+                    __u64 r_vector : 8;
+                    __u64 r_res1 : 8;
+                    __u64 dest_id : 32;
+                };
+                struct {
+                    __u64 p_present : 1;
+                    __u64 p_fpd : 1;
+                    __u64 p_res0 : 6;
+                    __u64 p_avail : 4;
+                    __u64 p_res1 : 2;
+                    __u64 p_urgent : 1;
+                    __u64 p_pst : 1;
+                    __u64 p_vector : 8;
+                    __u64 p_res2 : 14;
+                    __u64 pda_l : 26;
+                };
+                __u64 low;
+            };
+            union
+            {
+                struct {
+                    __u64 sid : 16;
+                    __u64 sq : 2;
+                    __u64 svt : 2;
+                    __u64 __res3 : 44;
+                };
+                struct {
+                    __u64 p_sid : 16;
+                    __u64 p_sq : 2;
+                    __u64 p_svt : 2;
+                    __u64 p_res3 : 12;
+                    __u64 pda_h : 32;
+                };
+                __u64 high;
+            };
+        };
+        __u128 irte;
     };
 };
 
@@ -68907,8 +69432,8 @@ typedef unsigned char cisdata_t;
 struct cistpl_longlink_mfc_t {
     u_char nfn;
     struct {
-	u_char space;
-	u_int addr;
+        u_char space;
+        u_int addr;
     } fn[8];
 };
 
@@ -68950,12 +69475,12 @@ typedef struct cistpl_config_t cistpl_config_t;
 struct cistpl_device_geo_t {
     u_char ngeo;
     struct {
-	u_char buswidth;
-	u_int erase_block;
-	u_int read_block;
-	u_int write_block;
-	u_int partition;
-	u_int interleave;
+        u_char buswidth;
+        u_int erase_block;
+        u_int read_block;
+        u_int write_block;
+        u_int partition;
+        u_int interleave;
     } geo[4];
 };
 
@@ -69164,12 +69689,13 @@ struct mdp_superblock_1 {
     __le64 size;
     __le32 chunksize;
     __le32 raid_disks;
-    union {
-	__le32 bitmap_offset;
-	struct {
-	    __le16 offset;
-	    __le16 size;
-	} ppl;
+    union
+    {
+        __le32 bitmap_offset;
+        struct {
+            __le16 offset;
+            __le16 size;
+        } ppl;
     };
     __le32 new_level;
     __le64 reshape_position;
@@ -69180,9 +69706,10 @@ struct mdp_superblock_1 {
     __le64 data_offset;
     __le64 data_size;
     __le64 super_offset;
-    union {
-	__le64 recovery_offset;
-	__le64 journal_tail;
+    union
+    {
+        __le64 recovery_offset;
+        __le64 journal_tail;
     };
     __le32 dev_number;
     __le32 cnt_corrected_read;
@@ -69498,9 +70025,10 @@ struct rproc_vdev_data {
 };
 
 struct tc_skb_ext {
-    union {
-	u64 act_miss_cookie;
-	__u32 chain;
+    union
+    {
+        u64 act_miss_cookie;
+        __u32 chain;
     };
     __u16 mru;
     __u16 zone;
@@ -69552,15 +70080,16 @@ struct dst_cache {
 
 struct ip_tunnel_key {
     __be64 tun_id;
-    union {
-	struct {
-	    __be32 src;
-	    __be32 dst;
-	} ipv4;
-	struct {
-	    struct in6_addr src;
-	    struct in6_addr dst;
-	} ipv6;
+    union
+    {
+        struct {
+            __be32 src;
+            __be32 dst;
+        } ipv4;
+        struct {
+            struct in6_addr src;
+            struct in6_addr dst;
+        } ipv6;
     } u;
     __be16 tun_flags;
     u8 tos;
@@ -69591,20 +70120,22 @@ typedef u64 sci_t;
 
 typedef u32 ssci_t;
 
-union salt {
+union salt
+{
     struct {
-	u32 ssci;
-	u64 pn;
+        u32 ssci;
+        u64 pn;
     } __attribute__((packed));
     u8 bytes[12];
 };
 
 typedef union salt salt_t;
 
-union pn {
+union pn
+{
     struct {
-	u32 lower;
-	u32 upper;
+        u32 lower;
+        u32 upper;
     };
     u64 full64;
 };
@@ -69667,9 +70198,10 @@ struct macsec_rx_sa {
     struct macsec_key key;
     ssci_t ssci;
     spinlock_t lock;
-    union {
-	pn_t next_pn_halves;
-	u64 next_pn;
+    union
+    {
+        pn_t next_pn_halves;
+        u64 next_pn;
     };
     refcount_t refcnt;
     bool active;
@@ -69704,9 +70236,10 @@ struct macsec_tx_sa {
     struct macsec_key key;
     ssci_t ssci;
     spinlock_t lock;
-    union {
-	pn_t next_pn_halves;
-	u64 next_pn;
+    union
+    {
+        pn_t next_pn_halves;
+        u64 next_pn;
     };
     refcount_t refcnt;
     bool active;
@@ -69753,11 +70286,12 @@ struct xfrm_md_info {
 struct metadata_dst {
     struct dst_entry dst;
     enum metadata_type type;
-    union {
-	struct ip_tunnel_info tun_info;
-	struct hw_port_info port_info;
-	struct macsec_info macsec_info;
-	struct xfrm_md_info xfrm_info;
+    union
+    {
+        struct ip_tunnel_info tun_info;
+        struct hw_port_info port_info;
+        struct macsec_info macsec_info;
+        struct xfrm_md_info xfrm_info;
     } u;
 };
 
@@ -69778,28 +70312,31 @@ struct macsec_secy {
 };
 
 struct macsec_context {
-    union {
-	struct net_device *netdev;
-	struct phy_device *phydev;
+    union
+    {
+        struct net_device *netdev;
+        struct phy_device *phydev;
     };
     enum macsec_offload offload;
     struct macsec_secy *secy;
     struct macsec_rx_sc *rx_sc;
     struct {
-	bool update_pn;
-	unsigned char assoc_num;
-	u8 key[128];
-	union {
-	    struct macsec_rx_sa *rx_sa;
-	    struct macsec_tx_sa *tx_sa;
-	};
+        bool update_pn;
+        unsigned char assoc_num;
+        u8 key[128];
+        union
+        {
+            struct macsec_rx_sa *rx_sa;
+            struct macsec_tx_sa *tx_sa;
+        };
     } sa;
-    union {
-	struct macsec_tx_sc_stats *tx_sc_stats;
-	struct macsec_tx_sa_stats *tx_sa_stats;
-	struct macsec_rx_sc_stats *rx_sc_stats;
-	struct macsec_rx_sa_stats *rx_sa_stats;
-	struct macsec_dev_stats *dev_stats;
+    union
+    {
+        struct macsec_tx_sc_stats *tx_sc_stats;
+        struct macsec_tx_sa_stats *tx_sa_stats;
+        struct macsec_rx_sc_stats *rx_sc_stats;
+        struct macsec_rx_sa_stats *rx_sa_stats;
+        struct macsec_dev_stats *dev_stats;
     } stats;
 };
 
@@ -70057,20 +70594,21 @@ typedef struct {
     long : 64;
 } irq_cpustat_t;
 
-union hv_hypervisor_version_info {
+union hv_hypervisor_version_info
+{
     struct {
-	u32 build_number;
-	u32 minor_version : 16;
-	u32 major_version : 16;
-	u32 service_pack;
-	u32 service_number : 24;
-	u32 service_branch : 8;
+        u32 build_number;
+        u32 minor_version : 16;
+        u32 major_version : 16;
+        u32 service_pack;
+        u32 service_number : 24;
+        u32 service_branch : 8;
     };
     struct {
-	u32 eax;
-	u32 ebx;
-	u32 ecx;
-	u32 edx;
+        u32 eax;
+        u32 ebx;
+        u32 ecx;
+        u32 edx;
     };
 };
 
@@ -70209,9 +70747,10 @@ struct vdso_data {
     u64 mask;
     u32 mult;
     u32 shift;
-    union {
-	struct vdso_timestamp basetime[12];
-	struct timens_offset offset[12];
+    union
+    {
+        struct vdso_timestamp basetime[12];
+        struct timens_offset offset[12];
     };
     s32 tz_minuteswest;
     s32 tz_dsttime;
@@ -70286,14 +70825,15 @@ struct audit_krule {
 
 struct audit_field {
     u32 type;
-    union {
-	u32 val;
-	kuid_t uid;
-	kgid_t gid;
-	struct {
-	    char *lsm_str;
-	    void *lsm_rule;
-	};
+    union
+    {
+        u32 val;
+        kuid_t uid;
+        kgid_t gid;
+        struct {
+            char *lsm_str;
+            void *lsm_rule;
+        };
     };
     u32 op;
 };
@@ -70335,11 +70875,13 @@ struct bpf_iter_seq_map_info {
 };
 
 struct bpf_iter__bpf_map {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_map *map;
+    union
+    {
+        struct bpf_map *map;
     };
 };
 
@@ -70472,17 +71014,18 @@ struct file_lock {
     loff_t fl_end;
     const struct file_lock_operations *fl_ops;
     const struct lock_manager_operations *fl_lmops;
-    union {
-	struct nfs_lock_info nfs_fl;
-	struct nfs4_lock_info nfs4_fl;
-	struct {
-	    struct list_head link;
-	    int state;
-	    unsigned int debug_id;
-	} afs;
-	struct {
-	    struct inode *inode;
-	} ceph;
+    union
+    {
+        struct nfs_lock_info nfs_fl;
+        struct nfs4_lock_info nfs4_fl;
+        struct {
+            struct list_head link;
+            int state;
+            unsigned int debug_id;
+        } afs;
+        struct {
+            struct inode *inode;
+        } ceph;
     } fl_u;
 };
 
@@ -70683,9 +71226,10 @@ struct ipc_perm {
 struct ipc_params {
     key_t key;
     int flg;
-    union {
-	size_t size;
-	int nsems;
+    union
+    {
+        size_t size;
+        int nsems;
     } u;
 };
 
@@ -70724,15 +71268,16 @@ struct lsm_network_audit {
     u16 family;
     __be16 dport;
     __be16 sport;
-    union {
-	struct {
-	    __be32 daddr;
-	    __be32 saddr;
-	} v4;
-	struct {
-	    struct in6_addr daddr;
-	    struct in6_addr saddr;
-	} v6;
+    union
+    {
+        struct {
+            __be32 daddr;
+            __be32 saddr;
+        } v4;
+        struct {
+            struct in6_addr daddr;
+            struct in6_addr saddr;
+        } v6;
     } fam;
 };
 
@@ -70763,28 +71308,30 @@ struct selinux_audit_data {
 
 struct common_audit_data {
     char type;
-    union {
-	struct path path;
-	struct dentry *dentry;
-	struct inode *inode;
-	struct lsm_network_audit *net;
-	int cap;
-	int ipc_id;
-	struct task_struct *tsk;
-	struct {
-	    key_serial_t key;
-	    char *key_desc;
-	} key_struct;
-	char *kmod_name;
-	struct lsm_ioctlop_audit *op;
-	struct file *file;
-	struct lsm_ibpkey_audit *ibpkey;
-	struct lsm_ibendport_audit *ibendport;
-	int reason;
-	const char *anonclass;
+    union
+    {
+        struct path path;
+        struct dentry *dentry;
+        struct inode *inode;
+        struct lsm_network_audit *net;
+        int cap;
+        int ipc_id;
+        struct task_struct *tsk;
+        struct {
+            key_serial_t key;
+            char *key_desc;
+        } key_struct;
+        char *kmod_name;
+        struct lsm_ioctlop_audit *op;
+        struct file *file;
+        struct lsm_ibpkey_audit *ibpkey;
+        struct lsm_ibendport_audit *ibendport;
+        int reason;
+        const char *anonclass;
     } u;
-    union {
-	struct selinux_audit_data *selinux_audit_data;
+    union
+    {
+        struct selinux_audit_data *selinux_audit_data;
     };
 };
 
@@ -70954,14 +71501,15 @@ struct rusage {
 };
 
 struct siginfo {
-    union {
-	struct {
-	    int si_signo;
-	    int si_errno;
-	    int si_code;
-	    union __sifields _sifields;
-	};
-	int _si_pad[32];
+    union
+    {
+        struct {
+            int si_signo;
+            int si_errno;
+            int si_code;
+            union __sifields _sifields;
+        };
+        int _si_pad[32];
     };
 };
 
@@ -70975,59 +71523,61 @@ struct compat_siginfo {
     int si_signo;
     int si_errno;
     int si_code;
-    union {
-	int _pad[29];
-	struct {
-	    compat_pid_t _pid;
-	    __compat_uid32_t _uid;
-	} _kill;
-	struct {
-	    compat_timer_t _tid;
-	    int _overrun;
-	    compat_sigval_t _sigval;
-	} _timer;
-	struct {
-	    compat_pid_t _pid;
-	    __compat_uid32_t _uid;
-	    compat_sigval_t _sigval;
-	} _rt;
-	struct {
-	    compat_pid_t _pid;
-	    __compat_uid32_t _uid;
-	    int _status;
-	    compat_clock_t _utime;
-	    compat_clock_t _stime;
-	} _sigchld;
-	struct {
-	    compat_uptr_t _addr;
-	    union {
-		int _trapno;
-		short int _addr_lsb;
-		struct {
-		    char _dummy_bnd[4];
-		    compat_uptr_t _lower;
-		    compat_uptr_t _upper;
-		} _addr_bnd;
-		struct {
-		    char _dummy_pkey[4];
-		    u32 _pkey;
-		} _addr_pkey;
-		struct {
-		    compat_ulong_t _data;
-		    u32 _type;
-		    u32 _flags;
-		} _perf;
-	    };
-	} _sigfault;
-	struct {
-	    compat_long_t _band;
-	    int _fd;
-	} _sigpoll;
-	struct {
-	    compat_uptr_t _call_addr;
-	    int _syscall;
-	    unsigned int _arch;
-	} _sigsys;
+    union
+    {
+        int _pad[29];
+        struct {
+            compat_pid_t _pid;
+            __compat_uid32_t _uid;
+        } _kill;
+        struct {
+            compat_timer_t _tid;
+            int _overrun;
+            compat_sigval_t _sigval;
+        } _timer;
+        struct {
+            compat_pid_t _pid;
+            __compat_uid32_t _uid;
+            compat_sigval_t _sigval;
+        } _rt;
+        struct {
+            compat_pid_t _pid;
+            __compat_uid32_t _uid;
+            int _status;
+            compat_clock_t _utime;
+            compat_clock_t _stime;
+        } _sigchld;
+        struct {
+            compat_uptr_t _addr;
+            union
+            {
+                int _trapno;
+                short int _addr_lsb;
+                struct {
+                    char _dummy_bnd[4];
+                    compat_uptr_t _lower;
+                    compat_uptr_t _upper;
+                } _addr_bnd;
+                struct {
+                    char _dummy_pkey[4];
+                    u32 _pkey;
+                } _addr_pkey;
+                struct {
+                    compat_ulong_t _data;
+                    u32 _type;
+                    u32 _flags;
+                } _perf;
+            };
+        } _sigfault;
+        struct {
+            compat_long_t _band;
+            int _fd;
+        } _sigpoll;
+        struct {
+            compat_uptr_t _call_addr;
+            int _syscall;
+            unsigned int _arch;
+        } _sigsys;
     } _sifields;
 };
 
@@ -71594,10 +72144,11 @@ typedef struct {
     u32 table;
 } efi_config_table_32_t;
 
-typedef union {
+typedef union
+{
     struct {
-	efi_guid_t guid;
-	void *table;
+        efi_guid_t guid;
+        void *table;
     };
     efi_config_table_32_t mixed_mode;
 } efi_config_table_t;
@@ -71646,8 +72197,8 @@ struct linux_efi_memreserve {
     atomic_t count;
     phys_addr_t next;
     struct {
-	phys_addr_t base;
-	phys_addr_t size;
+        phys_addr_t base;
+        phys_addr_t size;
     } entry[0];
 };
 
@@ -71711,12 +72262,13 @@ struct ce_array {
     u64 pfns_poisoned;
     u64 ces_entered;
     u64 decays_done;
-    union {
-	struct {
-	    __u32 disabled : 1;
-	    __u32 __resv : 31;
-	};
-	__u32 flags;
+    union
+    {
+        struct {
+            __u32 disabled : 1;
+            __u32 __resv : 31;
+        };
+        __u32 flags;
     };
 };
 
@@ -71999,14 +72551,16 @@ struct cipher_context {
     char rec_seq[8];
 };
 
-union tls_crypto_context {
+union tls_crypto_context
+{
     struct tls_crypto_info info;
-    union {
-	struct tls12_crypto_info_aes_gcm_128 aes_gcm_128;
-	struct tls12_crypto_info_aes_gcm_256 aes_gcm_256;
-	struct tls12_crypto_info_chacha20_poly1305 chacha20_poly1305;
-	struct tls12_crypto_info_sm4_gcm sm4_gcm;
-	struct tls12_crypto_info_sm4_ccm sm4_ccm;
+    union
+    {
+        struct tls12_crypto_info_aes_gcm_128 aes_gcm_128;
+        struct tls12_crypto_info_aes_gcm_256 aes_gcm_256;
+        struct tls12_crypto_info_chacha20_poly1305 chacha20_poly1305;
+        struct tls12_crypto_info_sm4_gcm sm4_gcm;
+        struct tls12_crypto_info_sm4_ccm sm4_ccm;
     };
 };
 
@@ -72081,17 +72635,18 @@ struct ipv6_rpl_sr_hdr {
     __u32 reserved : 4;
     __u32 pad : 4;
     __u32 reserved1 : 16;
-    union {
-	struct {
-	    struct {
-	    } __empty_addr;
-	    struct in6_addr addr[0];
-	};
-	struct {
-	    struct {
-	    } __empty_data;
-	    __u8 data[0];
-	};
+    union
+    {
+        struct {
+            struct {
+            } __empty_addr;
+            struct in6_addr addr[0];
+        };
+        struct {
+            struct {
+            } __empty_data;
+            __u8 data[0];
+        };
     } segments;
 };
 
@@ -72108,34 +72663,35 @@ struct ioam6_trace_hdr {
     __u8 overflow : 1;
     __u8 nodelen : 5;
     __u8 remlen : 7;
-    union {
-	__be32 type_be32;
-	struct {
-	    __u32 bit7 : 1;
-	    __u32 bit6 : 1;
-	    __u32 bit5 : 1;
-	    __u32 bit4 : 1;
-	    __u32 bit3 : 1;
-	    __u32 bit2 : 1;
-	    __u32 bit1 : 1;
-	    __u32 bit0 : 1;
-	    __u32 bit15 : 1;
-	    __u32 bit14 : 1;
-	    __u32 bit13 : 1;
-	    __u32 bit12 : 1;
-	    __u32 bit11 : 1;
-	    __u32 bit10 : 1;
-	    __u32 bit9 : 1;
-	    __u32 bit8 : 1;
-	    __u32 bit23 : 1;
-	    __u32 bit22 : 1;
-	    __u32 bit21 : 1;
-	    __u32 bit20 : 1;
-	    __u32 bit19 : 1;
-	    __u32 bit18 : 1;
-	    __u32 bit17 : 1;
-	    __u32 bit16 : 1;
-	} type;
+    union
+    {
+        __be32 type_be32;
+        struct {
+            __u32 bit7 : 1;
+            __u32 bit6 : 1;
+            __u32 bit5 : 1;
+            __u32 bit4 : 1;
+            __u32 bit3 : 1;
+            __u32 bit2 : 1;
+            __u32 bit1 : 1;
+            __u32 bit0 : 1;
+            __u32 bit15 : 1;
+            __u32 bit14 : 1;
+            __u32 bit13 : 1;
+            __u32 bit12 : 1;
+            __u32 bit11 : 1;
+            __u32 bit10 : 1;
+            __u32 bit9 : 1;
+            __u32 bit8 : 1;
+            __u32 bit23 : 1;
+            __u32 bit22 : 1;
+            __u32 bit21 : 1;
+            __u32 bit20 : 1;
+            __u32 bit19 : 1;
+            __u32 bit18 : 1;
+            __u32 bit17 : 1;
+            __u32 bit16 : 1;
+        } type;
     };
     __u8 data[0];
 };
@@ -72207,9 +72763,10 @@ struct devlink_dpipe_action {
 };
 
 struct devlink_dpipe_value {
-    union {
-	struct devlink_dpipe_action *action;
-	struct devlink_dpipe_match *match;
+    union
+    {
+        struct devlink_dpipe_action *action;
+        struct devlink_dpipe_match *match;
     };
     unsigned int mapping_value;
     bool mapping_valid;
@@ -72259,23 +72816,24 @@ struct devlink_dpipe_table_ops {
     u64 (*size_get)(void *);
 };
 
-union x86_pmu_config {
+union x86_pmu_config
+{
     struct {
-	u64 event : 8;
-	u64 umask : 8;
-	u64 usr : 1;
-	u64 os : 1;
-	u64 edge : 1;
-	u64 pc : 1;
-	u64 interrupt : 1;
-	u64 __reserved1 : 1;
-	u64 en : 1;
-	u64 inv : 1;
-	u64 cmask : 8;
-	u64 event2 : 4;
-	u64 __reserved2 : 4;
-	u64 go : 1;
-	u64 ho : 1;
+        u64 event : 8;
+        u64 umask : 8;
+        u64 usr : 1;
+        u64 os : 1;
+        u64 edge : 1;
+        u64 pc : 1;
+        u64 interrupt : 1;
+        u64 __reserved1 : 1;
+        u64 en : 1;
+        u64 inv : 1;
+        u64 cmask : 8;
+        u64 event2 : 4;
+        u64 __reserved2 : 4;
+        u64 go : 1;
+        u64 ho : 1;
     } bits;
     u64 value;
 };
@@ -72332,18 +72890,19 @@ struct arch_specific_insn {
     kprobe_opcode_t *insn;
     unsigned int boostable : 1;
     unsigned char size;
-    union {
-	unsigned char opcode;
-	struct {
-	    unsigned char type;
-	} jcc;
-	struct {
-	    unsigned char type;
-	    unsigned char asize;
-	} loop;
-	struct {
-	    unsigned char reg;
-	} indirect;
+    union
+    {
+        unsigned char opcode;
+        struct {
+            unsigned char type;
+        } jcc;
+        struct {
+            unsigned char type;
+            unsigned char asize;
+        } loop;
+        struct {
+            unsigned char reg;
+        } indirect;
     };
     s32 rel32;
     void (*emulate_op)(struct kprobe *, struct pt_regs *);
@@ -72453,9 +73012,10 @@ struct tasklet_struct {
     long unsigned int state;
     atomic_t count;
     bool use_callback;
-    union {
-	void (*func)(long unsigned int);
-	void (*callback)(struct tasklet_struct *);
+    union
+    {
+        void (*func)(long unsigned int);
+        void (*callback)(struct tasklet_struct *);
     };
     long unsigned int data;
 };
@@ -72628,11 +73188,13 @@ struct bpf_iter_seq_link_info {
 };
 
 struct bpf_iter__bpf_link {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_link *link;
+    union
+    {
+        struct bpf_link *link;
     };
 };
 
@@ -72726,17 +73288,18 @@ struct perf_event_mmap_page {
     __s64 offset;
     __u64 time_enabled;
     __u64 time_running;
-    union {
-	__u64 capabilities;
-	struct {
-	    __u64 cap_bit0 : 1;
-	    __u64 cap_bit0_is_deprecated : 1;
-	    __u64 cap_user_rdpmc : 1;
-	    __u64 cap_user_time : 1;
-	    __u64 cap_user_time_zero : 1;
-	    __u64 cap_user_time_short : 1;
-	    __u64 cap_____res : 58;
-	};
+    union
+    {
+        __u64 capabilities;
+        struct {
+            __u64 cap_bit0 : 1;
+            __u64 cap_bit0_is_deprecated : 1;
+            __u64 cap_user_rdpmc : 1;
+            __u64 cap_user_time : 1;
+            __u64 cap_user_time_zero : 1;
+            __u64 cap_user_time_short : 1;
+            __u64 cap_____res : 58;
+        };
     };
     __u16 pmc_width;
     __u16 time_shift;
@@ -72961,12 +73524,12 @@ struct perf_task_event {
     struct task_struct *task;
     struct perf_event_context *task_ctx;
     struct {
-	struct perf_event_header header;
-	u32 pid;
-	u32 ppid;
-	u32 tid;
-	u32 ptid;
-	u64 time;
+        struct perf_event_header header;
+        u32 pid;
+        u32 ppid;
+        u32 tid;
+        u32 ptid;
+        u64 time;
     } event_id;
 };
 
@@ -72975,20 +73538,20 @@ struct perf_comm_event {
     char *comm;
     int comm_size;
     struct {
-	struct perf_event_header header;
-	u32 pid;
-	u32 tid;
+        struct perf_event_header header;
+        u32 pid;
+        u32 tid;
     } event_id;
 };
 
 struct perf_namespaces_event {
     struct task_struct *task;
     struct {
-	struct perf_event_header header;
-	u32 pid;
-	u32 tid;
-	u64 nr_namespaces;
-	struct perf_ns_link_info link_info[7];
+        struct perf_event_header header;
+        u32 pid;
+        u32 tid;
+        u64 nr_namespaces;
+        struct perf_ns_link_info link_info[7];
     } event_id;
 };
 
@@ -72996,9 +73559,9 @@ struct perf_cgroup_event {
     char *path;
     int path_size;
     struct {
-	struct perf_event_header header;
-	u64 id;
-	char path[0];
+        struct perf_event_header header;
+        u64 id;
+        char path[0];
     } event_id;
 };
 
@@ -73015,12 +73578,12 @@ struct perf_mmap_event {
     u8 build_id[20];
     u32 build_id_size;
     struct {
-	struct perf_event_header header;
-	u32 pid;
-	u32 tid;
-	u64 start;
-	u64 len;
-	u64 pgoff;
+        struct perf_event_header header;
+        u32 pid;
+        u32 tid;
+        u64 start;
+        u64 len;
+        u64 pgoff;
     } event_id;
 };
 
@@ -73028,9 +73591,9 @@ struct perf_switch_event {
     struct task_struct *task;
     struct task_struct *next_prev;
     struct {
-	struct perf_event_header header;
-	u32 next_prev_pid;
-	u32 next_prev_tid;
+        struct perf_event_header header;
+        u32 next_prev_pid;
+        u32 next_prev_tid;
     } event_id;
 };
 
@@ -73038,22 +73601,22 @@ struct perf_ksymbol_event {
     const char *name;
     int name_len;
     struct {
-	struct perf_event_header header;
-	u64 addr;
-	u32 len;
-	u16 ksym_type;
-	u16 flags;
+        struct perf_event_header header;
+        u64 addr;
+        u32 len;
+        u16 ksym_type;
+        u16 flags;
     } event_id;
 };
 
 struct perf_bpf_event {
     struct bpf_prog *prog;
     struct {
-	struct perf_event_header header;
-	u16 type;
-	u16 flags;
-	u32 id;
-	u8 tag[8];
+        struct perf_event_header header;
+        u16 type;
+        u16 flags;
+        u32 id;
+        u8 tag[8];
     } event_id;
 };
 
@@ -73064,8 +73627,8 @@ struct perf_text_poke_event {
     u16 old_len;
     u16 new_len;
     struct {
-	struct perf_event_header header;
-	u64 addr;
+        struct perf_event_header header;
+        u64 addr;
     } event_id;
 };
 
@@ -73153,18 +73716,20 @@ struct mount {
     struct mount *mnt_parent;
     struct dentry *mnt_mountpoint;
     struct vfsmount mnt;
-    union {
-	struct callback_head mnt_rcu;
-	struct llist_node mnt_llist;
+    union
+    {
+        struct callback_head mnt_rcu;
+        struct llist_node mnt_llist;
     };
     struct mnt_pcp *mnt_pcp;
     struct list_head mnt_mounts;
     struct list_head mnt_child;
     struct list_head mnt_instance;
     const char *mnt_devname;
-    union {
-	struct rb_node mnt_node;
-	struct list_head mnt_list;
+    union
+    {
+        struct rb_node mnt_node;
+        struct list_head mnt_list;
     };
     struct list_head mnt_expire;
     struct list_head mnt_share;
@@ -73173,9 +73738,10 @@ struct mount {
     struct mount *mnt_master;
     struct mnt_namespace *mnt_ns;
     struct mountpoint *mnt_mp;
-    union {
-	struct hlist_node mnt_mp_list;
-	struct hlist_node mnt_umount;
+    union
+    {
+        struct hlist_node mnt_mp_list;
+        struct hlist_node mnt_umount;
     };
     struct list_head mnt_umounting;
     struct fsnotify_mark_connector *mnt_fsnotify_marks;
@@ -73409,12 +73975,13 @@ struct lskcipher_alg {
 
 struct lskcipher_instance {
     void (*free)(struct lskcipher_instance *);
-    union {
-	struct {
-	    char head[64];
-	    struct crypto_instance base;
-	} s;
-	struct lskcipher_alg alg;
+    union
+    {
+        struct {
+            char head[64];
+            struct crypto_instance base;
+        } s;
+        struct lskcipher_alg alg;
     };
 };
 
@@ -73423,25 +73990,27 @@ struct crypto_lskcipher_spawn {
 };
 
 struct skcipher_walk {
-    union {
-	struct {
-	    struct page *page;
-	    long unsigned int offset;
-	} phys;
-	struct {
-	    u8 *page;
-	    void *addr;
-	} virt;
+    union
+    {
+        struct {
+            struct page *page;
+            long unsigned int offset;
+        } phys;
+        struct {
+            u8 *page;
+            void *addr;
+        } virt;
     } src;
-    union {
-	struct {
-	    struct page *page;
-	    long unsigned int offset;
-	} phys;
-	struct {
-	    u8 *page;
-	    void *addr;
-	} virt;
+    union
+    {
+        struct {
+            struct page *page;
+            long unsigned int offset;
+        } phys;
+        struct {
+            u8 *page;
+            void *addr;
+        } virt;
     } dst;
     struct scatter_walk in;
     unsigned int nbytes;
@@ -74066,9 +74635,10 @@ struct pinctrl_map {
     const char *name;
     enum pinctrl_map_type type;
     const char *ctrl_dev_name;
-    union {
-	struct pinctrl_map_mux mux;
-	struct pinctrl_map_configs configs;
+    union
+    {
+        struct pinctrl_map_mux mux;
+        struct pinctrl_map_configs configs;
     } data;
 };
 
@@ -74233,9 +74803,10 @@ struct pinctrl_setting {
     enum pinctrl_map_type type;
     struct pinctrl_dev *pctldev;
     const char *dev_name;
-    union {
-	struct pinctrl_setting_mux mux;
-	struct pinctrl_setting_configs configs;
+    union
+    {
+        struct pinctrl_setting_mux mux;
+        struct pinctrl_setting_configs configs;
     } data;
 };
 
@@ -74376,9 +74947,10 @@ struct virtio_pci_admin_vq {
 struct virtio_pci_device {
     struct virtio_device vdev;
     struct pci_dev *pci_dev;
-    union {
-	struct virtio_pci_legacy_device ldev;
-	struct virtio_pci_modern_device mdev;
+    union
+    {
+        struct virtio_pci_legacy_device ldev;
+        struct virtio_pci_modern_device mdev;
     };
     bool is_legacy;
     u8 *isr;
@@ -74471,7 +75043,8 @@ struct permanent_flags_t {
     u8 disableFullDALogicInfo;
 };
 
-typedef union {
+typedef union
+{
     struct permanent_flags_t perm_flags;
     struct stclear_flags_t stclear_flags;
     __u8 owned;
@@ -74978,10 +75551,11 @@ enum nf_ct_ext_id {
     NF_CT_EXT_NUM = 9,
 };
 
-union tcf_exts_miss_cookie {
+union tcf_exts_miss_cookie
+{
     struct {
-	u32 miss_cookie_base;
-	u32 act_index;
+        u32 miss_cookie_base;
+        u32 act_index;
     };
     u64 miss_cookie;
 };
@@ -75029,13 +75603,15 @@ struct ip_tunnel;
 struct ip6_tnl;
 
 struct xfrm_tunnel_skb_cb {
-    union {
-	struct inet_skb_parm h4;
-	struct inet6_skb_parm h6;
+    union
+    {
+        struct inet_skb_parm h4;
+        struct inet6_skb_parm h6;
     } header;
-    union {
-	struct ip_tunnel *ip4;
-	struct ip6_tnl *ip6;
+    union
+    {
+        struct ip_tunnel *ip4;
+        struct ip6_tnl *ip6;
     } tunnel;
 };
 
@@ -75085,11 +75661,11 @@ struct netlbl_lsm_secattr {
     char *domain;
     struct netlbl_lsm_cache *cache;
     struct {
-	struct {
-	    struct netlbl_lsm_catmap *cat;
-	    u32 lvl;
-	} mls;
-	u32 secid;
+        struct {
+            struct netlbl_lsm_catmap *cat;
+            u32 lvl;
+        } mls;
+        u32 secid;
     } attr;
 };
 
@@ -75148,10 +75724,11 @@ struct cipso_v4_doi;
 
 struct netlbl_dommap_def {
     u32 type;
-    union {
-	struct netlbl_domaddr_map *addrsel;
-	struct cipso_v4_doi *cipso;
-	struct calipso_doi *calipso;
+    union
+    {
+        struct netlbl_domaddr_map *addrsel;
+        struct cipso_v4_doi *cipso;
+        struct calipso_doi *calipso;
     };
 };
 
@@ -75236,9 +75813,10 @@ typedef unsigned char insn_byte_t;
 typedef int insn_value_t;
 
 struct insn_field {
-    union {
-	insn_value_t value;
-	insn_byte_t bytes[4];
+    union
+    {
+        insn_value_t value;
+        insn_byte_t bytes[4];
     };
     unsigned char got;
     unsigned char nbytes;
@@ -75252,14 +75830,16 @@ struct insn {
     struct insn_field modrm;
     struct insn_field sib;
     struct insn_field displacement;
-    union {
-	struct insn_field immediate;
-	struct insn_field moffset1;
-	struct insn_field immediate1;
+    union
+    {
+        struct insn_field immediate;
+        struct insn_field moffset1;
+        struct insn_field immediate1;
     };
-    union {
-	struct insn_field moffset2;
-	struct insn_field immediate2;
+    union
+    {
+        struct insn_field moffset2;
+        struct insn_field immediate2;
     };
     int emulate_prefix_size;
     insn_attr_t attr;
@@ -75279,12 +75859,13 @@ enum insn_mode {
     INSN_NUM_MODES = 3,
 };
 
-union cpuid_0x80000022_ebx {
+union cpuid_0x80000022_ebx
+{
     struct {
-	unsigned int num_core_pmc : 4;
-	unsigned int lbr_v2_stack_sz : 6;
-	unsigned int num_df_pmc : 6;
-	unsigned int num_umc_pmc : 6;
+        unsigned int num_core_pmc : 4;
+        unsigned int lbr_v2_stack_sz : 6;
+        unsigned int num_df_pmc : 6;
+        unsigned int num_umc_pmc : 6;
     } split;
     unsigned int full;
 };
@@ -75402,12 +75983,13 @@ struct snp_guest_request_ioctl {
     __u8 msg_version;
     __u64 req_data;
     __u64 resp_data;
-    union {
-	__u64 exitinfo2;
-	struct {
-	    __u32 fw_error;
-	    __u32 vmm_error;
-	};
+    union
+    {
+        __u64 exitinfo2;
+        struct {
+            __u32 fw_error;
+            __u32 vmm_error;
+        };
     };
 };
 
@@ -75760,10 +76342,11 @@ struct bpf_cpumask {
 
 typedef u128 freelist_full_t;
 
-typedef union {
+typedef union
+{
     struct {
-	void *freelist;
-	long unsigned int counter;
+        void *freelist;
+        long unsigned int counter;
     };
     freelist_full_t full;
 } freelist_aba_t;
@@ -75771,31 +76354,35 @@ typedef union {
 struct slab {
     long unsigned int __page_flags;
     struct kmem_cache *slab_cache;
-    union {
-	struct {
-	    union {
-		struct list_head slab_list;
-		struct {
-		    struct slab *next;
-		    int slabs;
-		};
-	    };
-	    union {
-		struct {
-		    void *freelist;
-		    union {
-			long unsigned int counters;
-			struct {
-			    unsigned int inuse : 16;
-			    unsigned int objects : 15;
-			    unsigned int frozen : 1;
-			};
-		    };
-		};
-		freelist_aba_t freelist_counter;
-	    };
-	};
-	struct callback_head callback_head;
+    union
+    {
+        struct {
+            union
+            {
+                struct list_head slab_list;
+                struct {
+                    struct slab *next;
+                    int slabs;
+                };
+            };
+            union
+            {
+                struct {
+                    void *freelist;
+                    union
+                    {
+                        long unsigned int counters;
+                        struct {
+                            unsigned int inuse : 16;
+                            unsigned int objects : 15;
+                            unsigned int frozen : 1;
+                        };
+                    };
+                };
+                freelist_aba_t freelist_counter;
+            };
+        };
+        struct callback_head callback_head;
     };
     unsigned int __unused;
     atomic_t __page_refcount;
@@ -76128,19 +76715,21 @@ struct k_itimer {
     int it_sigev_notify;
     ktime_t it_interval;
     struct signal_struct *it_signal;
-    union {
-	struct pid *it_pid;
-	struct task_struct *it_process;
+    union
+    {
+        struct pid *it_pid;
+        struct task_struct *it_process;
     };
     struct sigqueue *sigq;
-    union {
-	struct {
-	    struct hrtimer timer;
-	} real;
-	struct cpu_timer cpu;
-	struct {
-	    struct alarm alarmtimer;
-	} alarm;
+    union
+    {
+        struct {
+            struct hrtimer timer;
+        } real;
+        struct cpu_timer cpu;
+        struct {
+            struct alarm alarmtimer;
+        } alarm;
     } it;
     struct callback_head rcu;
 };
@@ -76326,7 +76915,8 @@ struct rhashtable_iter {
     bool end_of_table;
 };
 
-union nested_table {
+union nested_table
+{
     union nested_table *table;
     struct rhash_lock_head *bucket;
 };
@@ -76399,7 +76989,8 @@ struct inflate_state {
     code codes[2048];
 };
 
-union uu {
+union uu
+{
     short unsigned int us;
     unsigned char b[2];
 };
@@ -76413,13 +77004,15 @@ typedef short unsigned int ush;
 typedef long unsigned int ulg;
 
 struct ct_data_s {
-    union {
-	ush freq;
-	ush code;
+    union
+    {
+        ush freq;
+        ush code;
     } fc;
-    union {
-	ush dad;
-	ush len;
+    union
+    {
+        ush dad;
+        ush len;
     } dl;
 };
 
@@ -76680,13 +77273,13 @@ struct ntb_ctrl_regs {
     u32 req_id_error;
     u32 reserved1[7];
     struct {
-	u32 ctl;
-	u32 win_size;
-	u64 xlate_addr;
+        u32 ctl;
+        u32 win_size;
+        u64 xlate_addr;
     } bar_entry[6];
     struct {
-	u32 win_size;
-	u32 reserved[3];
+        u32 win_size;
+        u32 reserved[3];
     } bar_ext_entry[6];
     u32 reserved2[192];
     u32 req_id_table[512];
@@ -76977,16 +77570,17 @@ struct usb_hub_descriptor {
     __le16 wHubCharacteristics;
     __u8 bPwrOn2PwrGood;
     __u8 bHubContrCurrent;
-    union {
-	struct {
-	    __u8 DeviceRemovable[4];
-	    __u8 PortPwrCtrlMask[4];
-	} hs;
-	struct {
-	    __u8 bHubHdrDecLat;
-	    __le16 wHubDelay;
-	    __le16 DeviceRemovable;
-	} __attribute__((packed)) ss;
+    union
+    {
+        struct {
+            __u8 DeviceRemovable[4];
+            __u8 PortPwrCtrlMask[4];
+        } hs;
+        struct {
+            __u8 bHubHdrDecLat;
+            __le16 wHubDelay;
+            __le16 DeviceRemovable;
+        } __attribute__((packed)) ss;
     } u;
 } __attribute__((packed));
 
@@ -77005,9 +77599,10 @@ struct usb_hub {
     struct kref kref;
     struct urb *urb;
     u8 (*buffer)[8];
-    union {
-	struct usb_hub_status hub;
-	struct usb_port_status port;
+    union
+    {
+        struct usb_hub_status hub;
+        struct usb_port_status port;
     } *status;
     struct mutex status_mutex;
     int error;
@@ -77220,7 +77815,8 @@ struct nf_conntrack_zone {
     u8 dir;
 };
 
-union nf_inet_addr {
+union nf_inet_addr
+{
     __u32 all[4];
     __be32 ip;
     __be32 ip6[4];
@@ -77228,25 +77824,26 @@ union nf_inet_addr {
     struct in6_addr in6;
 };
 
-union nf_conntrack_man_proto {
+union nf_conntrack_man_proto
+{
     __be16 all;
     struct {
-	__be16 port;
+        __be16 port;
     } tcp;
     struct {
-	__be16 port;
+        __be16 port;
     } udp;
     struct {
-	__be16 id;
+        __be16 id;
     } icmp;
     struct {
-	__be16 port;
+        __be16 port;
     } dccp;
     struct {
-	__be16 port;
+        __be16 port;
     } sctp;
     struct {
-	__be16 key;
+        __be16 key;
     } gre;
 };
 
@@ -77259,33 +77856,34 @@ struct nf_conntrack_man {
 struct nf_conntrack_tuple {
     struct nf_conntrack_man src;
     struct {
-	union nf_inet_addr u3;
-	union {
-	    __be16 all;
-	    struct {
-		__be16 port;
-	    } tcp;
-	    struct {
-		__be16 port;
-	    } udp;
-	    struct {
-		u_int8_t type;
-		u_int8_t code;
-	    } icmp;
-	    struct {
-		__be16 port;
-	    } dccp;
-	    struct {
-		__be16 port;
-	    } sctp;
-	    struct {
-		__be16 key;
-	    } gre;
-	} u;
-	u_int8_t protonum;
-	struct {
-	} __nfct_hash_offsetend;
-	u_int8_t dir;
+        union nf_inet_addr u3;
+        union
+        {
+            __be16 all;
+            struct {
+                __be16 port;
+            } tcp;
+            struct {
+                __be16 port;
+            } udp;
+            struct {
+                u_int8_t type;
+                u_int8_t code;
+            } icmp;
+            struct {
+                __be16 port;
+            } dccp;
+            struct {
+                __be16 port;
+            } sctp;
+            struct {
+                __be16 key;
+            } gre;
+        } u;
+        u_int8_t protonum;
+        struct {
+        } __nfct_hash_offsetend;
+        u_int8_t dir;
     } dst;
 };
 
@@ -77346,7 +77944,8 @@ struct nf_ct_gre {
     unsigned int timeout;
 };
 
-union nf_conntrack_proto {
+union nf_conntrack_proto
+{
     struct nf_ct_dccp dccp;
     struct ip_ct_sctp sctp;
     struct ip_ct_tcp tcp;
@@ -77428,13 +78027,14 @@ struct ip_msfilter {
     __be32 imsf_interface;
     __u32 imsf_fmode;
     __u32 imsf_numsrc;
-    union {
-	__be32 imsf_slist[1];
-	struct {
-	    struct {
-	    } __empty_imsf_slist_flex;
-	    __be32 imsf_slist_flex[0];
-	};
+    union
+    {
+        __be32 imsf_slist[1];
+        struct {
+            struct {
+            } __empty_imsf_slist_flex;
+            __be32 imsf_slist_flex[0];
+        };
     };
 };
 
@@ -77447,9 +78047,10 @@ struct ip_mc_list {
     struct ip_sf_list *sources;
     struct ip_sf_list *tomb;
     long unsigned int sfcount[2];
-    union {
-	struct ip_mc_list *next;
-	struct ip_mc_list *next_rcu;
+    union
+    {
+        struct ip_mc_list *next;
+        struct ip_mc_list *next_rcu;
     };
     struct ip_mc_list *next_hash;
     struct timer_list timer;
@@ -77569,11 +78170,13 @@ struct ipv6_route_iter {
 };
 
 struct bpf_iter__ipv6_route {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct fib6_info *rt;
+    union
+    {
+        struct fib6_info *rt;
     };
 };
 
@@ -77614,9 +78217,10 @@ struct lookup_args {
 };
 
 struct udp_skb_cb {
-    union {
-	struct inet_skb_parm h4;
-	struct inet6_skb_parm h6;
+    union
+    {
+        struct inet_skb_parm h4;
+        struct inet6_skb_parm h6;
     } header;
     __u16 cscov;
     __u8 partial_cov;
@@ -77805,18 +78409,19 @@ struct hv_guest_mapping_flush {
     u64 flags;
 };
 
-union hv_gpa_page_range {
+union hv_gpa_page_range
+{
     u64 address_space;
     struct {
-	u64 additional_pages : 11;
-	u64 largepage : 1;
-	u64 basepfn : 52;
+        u64 additional_pages : 11;
+        u64 largepage : 1;
+        u64 basepfn : 52;
     } page;
     struct {
-	u64 reserved : 12;
-	u64 page_size : 1;
-	u64 reserved1 : 8;
-	u64 base_large_pfn : 43;
+        u64 reserved : 12;
+        u64 page_size : 1;
+        u64 reserved1 : 8;
+        u64 base_large_pfn : 43;
     };
 };
 
@@ -78218,13 +78823,14 @@ struct memory_group {
     long unsigned int present_kernel_pages;
     long unsigned int present_movable_pages;
     bool is_dynamic;
-    union {
-	struct {
-	    long unsigned int max_pages;
-	} s;
-	struct {
-	    long unsigned int unit_pages;
-	} d;
+    union
+    {
+        struct {
+            long unsigned int max_pages;
+        } s;
+        struct {
+            long unsigned int unit_pages;
+        } d;
     };
 };
 
@@ -78335,9 +78941,10 @@ struct ext4_attr {
     short int attr_id;
     short int attr_ptr;
     short unsigned int attr_size;
-    union {
-	int offset;
-	void *explicit_ptr;
+    union
+    {
+        int offset;
+        void *explicit_ptr;
     } u;
 };
 
@@ -78380,9 +78987,10 @@ struct keyctl_pkey_query {
 struct keyctl_pkey_params {
     __s32 key_id;
     __u32 in_len;
-    union {
-	__u32 out_len;
-	__u32 in2_len;
+    union
+    {
+        __u32 out_len;
+        __u32 in2_len;
     };
     __u32 __spare[7];
 };
@@ -78882,11 +79490,12 @@ struct wwan_port {
     struct mutex data_lock;
     size_t headroom_len;
     size_t frag_len;
-    union {
-	struct {
-	    struct ktermios termios;
-	    int mdmbits;
-	} at_data;
+    union
+    {
+        struct {
+            struct ktermios termios;
+            int mdmbits;
+        } at_data;
     };
 };
 
@@ -79451,7 +80060,8 @@ struct tcp_bbr_info {
     __u32 bbr_cwnd_gain;
 };
 
-union tcp_cc_info {
+union tcp_cc_info
+{
     struct tcpvegas_info vegas;
     struct tcp_dctcp_info dctcp;
     struct tcp_bbr_info bbr;
@@ -79473,107 +80083,113 @@ enum {
     __MPTCP_SUBFLOW_ATTR_MAX = 12,
 };
 
-union ibs_fetch_ctl {
+union ibs_fetch_ctl
+{
     __u64 val;
     struct {
-	__u64 fetch_maxcnt : 16;
-	__u64 fetch_cnt : 16;
-	__u64 fetch_lat : 16;
-	__u64 fetch_en : 1;
-	__u64 fetch_val : 1;
-	__u64 fetch_comp : 1;
-	__u64 ic_miss : 1;
-	__u64 phy_addr_valid : 1;
-	__u64 l1tlb_pgsz : 2;
-	__u64 l1tlb_miss : 1;
-	__u64 l2tlb_miss : 1;
-	__u64 rand_en : 1;
-	__u64 fetch_l2_miss : 1;
-	__u64 l3_miss_only : 1;
-	__u64 fetch_oc_miss : 1;
-	__u64 fetch_l3_miss : 1;
-	__u64 reserved : 2;
+        __u64 fetch_maxcnt : 16;
+        __u64 fetch_cnt : 16;
+        __u64 fetch_lat : 16;
+        __u64 fetch_en : 1;
+        __u64 fetch_val : 1;
+        __u64 fetch_comp : 1;
+        __u64 ic_miss : 1;
+        __u64 phy_addr_valid : 1;
+        __u64 l1tlb_pgsz : 2;
+        __u64 l1tlb_miss : 1;
+        __u64 l2tlb_miss : 1;
+        __u64 rand_en : 1;
+        __u64 fetch_l2_miss : 1;
+        __u64 l3_miss_only : 1;
+        __u64 fetch_oc_miss : 1;
+        __u64 fetch_l3_miss : 1;
+        __u64 reserved : 2;
     };
 };
 
-union ibs_op_ctl {
+union ibs_op_ctl
+{
     __u64 val;
     struct {
-	__u64 opmaxcnt : 16;
-	__u64 l3_miss_only : 1;
-	__u64 op_en : 1;
-	__u64 op_val : 1;
-	__u64 cnt_ctl : 1;
-	__u64 opmaxcnt_ext : 7;
-	__u64 reserved0 : 5;
-	__u64 opcurcnt : 27;
-	__u64 reserved1 : 5;
+        __u64 opmaxcnt : 16;
+        __u64 l3_miss_only : 1;
+        __u64 op_en : 1;
+        __u64 op_val : 1;
+        __u64 cnt_ctl : 1;
+        __u64 opmaxcnt_ext : 7;
+        __u64 reserved0 : 5;
+        __u64 opcurcnt : 27;
+        __u64 reserved1 : 5;
     };
 };
 
-union ibs_op_data {
+union ibs_op_data
+{
     __u64 val;
     struct {
-	__u64 comp_to_ret_ctr : 16;
-	__u64 tag_to_ret_ctr : 16;
-	__u64 reserved1 : 2;
-	__u64 op_return : 1;
-	__u64 op_brn_taken : 1;
-	__u64 op_brn_misp : 1;
-	__u64 op_brn_ret : 1;
-	__u64 op_rip_invalid : 1;
-	__u64 op_brn_fuse : 1;
-	__u64 op_microcode : 1;
-	__u64 reserved2 : 23;
+        __u64 comp_to_ret_ctr : 16;
+        __u64 tag_to_ret_ctr : 16;
+        __u64 reserved1 : 2;
+        __u64 op_return : 1;
+        __u64 op_brn_taken : 1;
+        __u64 op_brn_misp : 1;
+        __u64 op_brn_ret : 1;
+        __u64 op_rip_invalid : 1;
+        __u64 op_brn_fuse : 1;
+        __u64 op_microcode : 1;
+        __u64 reserved2 : 23;
     };
 };
 
-union ibs_op_data2 {
+union ibs_op_data2
+{
     __u64 val;
     struct {
-	__u64 data_src_lo : 3;
-	__u64 reserved0 : 1;
-	__u64 rmt_node : 1;
-	__u64 cache_hit_st : 1;
-	__u64 data_src_hi : 2;
-	__u64 reserved1 : 56;
+        __u64 data_src_lo : 3;
+        __u64 reserved0 : 1;
+        __u64 rmt_node : 1;
+        __u64 cache_hit_st : 1;
+        __u64 data_src_hi : 2;
+        __u64 reserved1 : 56;
     };
 };
 
-union ibs_op_data3 {
+union ibs_op_data3
+{
     __u64 val;
     struct {
-	__u64 ld_op : 1;
-	__u64 st_op : 1;
-	__u64 dc_l1tlb_miss : 1;
-	__u64 dc_l2tlb_miss : 1;
-	__u64 dc_l1tlb_hit_2m : 1;
-	__u64 dc_l1tlb_hit_1g : 1;
-	__u64 dc_l2tlb_hit_2m : 1;
-	__u64 dc_miss : 1;
-	__u64 dc_mis_acc : 1;
-	__u64 reserved : 4;
-	__u64 dc_wc_mem_acc : 1;
-	__u64 dc_uc_mem_acc : 1;
-	__u64 dc_locked_op : 1;
-	__u64 dc_miss_no_mab_alloc : 1;
-	__u64 dc_lin_addr_valid : 1;
-	__u64 dc_phy_addr_valid : 1;
-	__u64 dc_l2_tlb_hit_1g : 1;
-	__u64 l2_miss : 1;
-	__u64 sw_pf : 1;
-	__u64 op_mem_width : 4;
-	__u64 op_dc_miss_open_mem_reqs : 6;
-	__u64 dc_miss_lat : 16;
-	__u64 tlb_refill_lat : 16;
+        __u64 ld_op : 1;
+        __u64 st_op : 1;
+        __u64 dc_l1tlb_miss : 1;
+        __u64 dc_l2tlb_miss : 1;
+        __u64 dc_l1tlb_hit_2m : 1;
+        __u64 dc_l1tlb_hit_1g : 1;
+        __u64 dc_l2tlb_hit_2m : 1;
+        __u64 dc_miss : 1;
+        __u64 dc_mis_acc : 1;
+        __u64 reserved : 4;
+        __u64 dc_wc_mem_acc : 1;
+        __u64 dc_uc_mem_acc : 1;
+        __u64 dc_locked_op : 1;
+        __u64 dc_miss_no_mab_alloc : 1;
+        __u64 dc_lin_addr_valid : 1;
+        __u64 dc_phy_addr_valid : 1;
+        __u64 dc_l2_tlb_hit_1g : 1;
+        __u64 l2_miss : 1;
+        __u64 sw_pf : 1;
+        __u64 op_mem_width : 4;
+        __u64 op_dc_miss_open_mem_reqs : 6;
+        __u64 dc_miss_lat : 16;
+        __u64 tlb_refill_lat : 16;
     };
 };
 
 struct perf_ibs_data {
     u32 size;
-    union {
-	u32 data[0];
-	u32 caps;
+    union
+    {
+        u32 data[0];
+        u32 caps;
     };
     u64 regs[8];
 };
@@ -79702,7 +80318,8 @@ struct legacy_pic {
     void (*make_irq)(unsigned int);
 };
 
-union apic_ir {
+union apic_ir
+{
     long unsigned int map[4];
     u32 regs[8];
 };
@@ -79756,11 +80373,13 @@ struct bpf_iter_seq_prog_info {
 };
 
 struct bpf_iter__bpf_prog {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_prog *prog;
+    union
+    {
+        struct bpf_prog *prog;
     };
 };
 
@@ -79794,8 +80413,9 @@ struct damos_quota_goal {
     enum damos_quota_goal_metric metric;
     long unsigned int target_value;
     long unsigned int current_value;
-    union {
-	u64 last_psi_total;
+    union
+    {
+        u64 last_psi_total;
     };
     struct list_head list;
 };
@@ -80284,9 +80904,10 @@ struct acpi_lpi_state {
 
 struct acpi_processor_power {
     int count;
-    union {
-	struct acpi_processor_cx states[8];
-	struct acpi_lpi_state lpi_states[8];
+    union
+    {
+        struct acpi_processor_cx states[8];
+        struct acpi_lpi_state lpi_states[8];
     };
     int timer_broadcast_on_state;
 };
@@ -80689,19 +81310,21 @@ struct ehci_regs {
     u32 txfill_tuning;
     u32 reserved2[6];
     u32 configured_flag;
-    union {
-	u32 port_status[15];
-	struct {
-	    u32 reserved3[9];
-	    u32 usbmode;
-	};
+    union
+    {
+        u32 port_status[15];
+        struct {
+            u32 reserved3[9];
+            u32 usbmode;
+        };
     };
-    union {
-	struct {
-	    u32 reserved4;
-	    u32 hostpc[15];
-	};
-	u32 brcm_insnreg[4];
+    union
+    {
+        struct {
+            u32 reserved4;
+            u32 hostpc[15];
+        };
+        u32 brcm_insnreg[4];
     };
     u32 reserved5[2];
     u32 usbmode_ex;
@@ -80717,7 +81340,8 @@ struct ehci_dbg_port {
 
 struct ehci_fstn;
 
-union ehci_shadow {
+union ehci_shadow
+{
     struct ehci_qh *qh;
     struct ehci_itd *itd;
     struct ehci_sitd *sitd;
@@ -80925,9 +81549,10 @@ struct dm_buffer {
 };
 
 struct buffer_tree {
-    union {
-	struct rw_semaphore lock;
-	rwlock_t spinlock;
+    union
+    {
+        struct rw_semaphore lock;
+        rwlock_t spinlock;
     } u;
     struct rb_root root;
     long : 64;
@@ -81157,35 +81782,36 @@ enum {
     PERF_TXN_ABORT_SHIFT = 32ULL,
 };
 
-union intel_x86_pebs_dse {
+union intel_x86_pebs_dse
+{
     u64 val;
     struct {
-	unsigned int ld_dse : 4;
-	unsigned int ld_stlb_miss : 1;
-	unsigned int ld_locked : 1;
-	unsigned int ld_data_blk : 1;
-	unsigned int ld_addr_blk : 1;
-	unsigned int ld_reserved : 24;
+        unsigned int ld_dse : 4;
+        unsigned int ld_stlb_miss : 1;
+        unsigned int ld_locked : 1;
+        unsigned int ld_data_blk : 1;
+        unsigned int ld_addr_blk : 1;
+        unsigned int ld_reserved : 24;
     };
     struct {
-	unsigned int st_l1d_hit : 1;
-	unsigned int st_reserved1 : 3;
-	unsigned int st_stlb_miss : 1;
-	unsigned int st_locked : 1;
-	unsigned int st_reserved2 : 26;
+        unsigned int st_l1d_hit : 1;
+        unsigned int st_reserved1 : 3;
+        unsigned int st_stlb_miss : 1;
+        unsigned int st_locked : 1;
+        unsigned int st_reserved2 : 26;
     };
     struct {
-	unsigned int st_lat_dse : 4;
-	unsigned int st_lat_stlb_miss : 1;
-	unsigned int st_lat_locked : 1;
-	unsigned int ld_reserved3 : 26;
+        unsigned int st_lat_dse : 4;
+        unsigned int st_lat_stlb_miss : 1;
+        unsigned int st_lat_locked : 1;
+        unsigned int ld_reserved3 : 26;
     };
     struct {
-	unsigned int mtl_dse : 5;
-	unsigned int mtl_locked : 1;
-	unsigned int mtl_stlb_miss : 1;
-	unsigned int mtl_fwd_blk : 1;
-	unsigned int ld_reserved4 : 24;
+        unsigned int mtl_dse : 5;
+        unsigned int mtl_locked : 1;
+        unsigned int mtl_stlb_miss : 1;
+        unsigned int mtl_fwd_blk : 1;
+        unsigned int ld_reserved4 : 24;
     };
 };
 
@@ -81235,17 +81861,18 @@ struct pebs_record_nhm {
     u64 lat;
 };
 
-union hsw_tsx_tuning {
+union hsw_tsx_tuning
+{
     struct {
-	u32 cycles_last_block : 32;
-	u32 hle_abort : 1;
-	u32 rtm_abort : 1;
-	u32 instruction_abort : 1;
-	u32 non_instruction_abort : 1;
-	u32 retry : 1;
-	u32 data_conflict : 1;
-	u32 capacity_writes : 1;
-	u32 capacity_reads : 1;
+        u32 cycles_last_block : 32;
+        u32 hle_abort : 1;
+        u32 rtm_abort : 1;
+        u32 instruction_abort : 1;
+        u32 non_instruction_abort : 1;
+        u32 retry : 1;
+        u32 data_conflict : 1;
+        u32 capacity_writes : 1;
+        u32 capacity_reads : 1;
     };
     u64 value;
 };
@@ -81647,9 +82274,10 @@ struct zpool_driver {
 
 struct zbud_pool {
     spinlock_t lock;
-    union {
-	struct list_head buddied;
-	struct list_head unbuddied[63];
+    union
+    {
+        struct list_head buddied;
+        struct list_head unbuddied[63];
     };
     u64 pages_nr;
 };
@@ -81710,7 +82338,8 @@ struct fscrypt_context_v2 {
     u8 nonce[16];
 };
 
-union fscrypt_context {
+union fscrypt_context
+{
     u8 version;
     struct fscrypt_context_v1 v1;
     struct fscrypt_context_v2 v2;
@@ -81897,7 +82526,8 @@ struct sctp_ep_common {
 
 typedef __s32 sctp_assoc_t;
 
-union sctp_addr {
+union sctp_addr
+{
     struct sockaddr_in v4;
     struct sockaddr_in6 v6;
     struct sockaddr sa;
@@ -81956,9 +82586,10 @@ enum sctp_state {
 struct sctp_stream_out_ext;
 
 struct sctp_stream_out {
-    union {
-	__u32 mid;
-	__u16 ssn;
+    union
+    {
+        __u32 mid;
+        __u16 ssn;
     };
     __u32 mid_uo;
     struct sctp_stream_out_ext *ext;
@@ -81966,9 +82597,10 @@ struct sctp_stream_out {
 };
 
 struct sctp_stream_in {
-    union {
-	__u32 mid;
-	__u16 ssn;
+    union
+    {
+        __u32 mid;
+        __u16 ssn;
     };
     __u32 mid_uo;
     __u32 fsn;
@@ -81981,27 +82613,28 @@ struct sctp_stream_interleave;
 
 struct sctp_stream {
     struct {
-	struct __genradix tree;
-	struct sctp_stream_out type[0];
+        struct __genradix tree;
+        struct sctp_stream_out type[0];
     } out;
     struct {
-	struct __genradix tree;
-	struct sctp_stream_in type[0];
+        struct __genradix tree;
+        struct sctp_stream_in type[0];
     } in;
     __u16 outcnt;
     __u16 incnt;
     struct sctp_stream_out *out_curr;
-    union {
-	struct {
-	    struct list_head prio_list;
-	};
-	struct {
-	    struct list_head rr_list;
-	    struct sctp_stream_out_ext *rr_next;
-	};
-	struct {
-	    struct list_head fc_list;
-	};
+    union
+    {
+        struct {
+            struct list_head prio_list;
+        };
+        struct {
+            struct list_head rr_list;
+            struct sctp_stream_out_ext *rr_next;
+        };
+        struct {
+            struct list_head fc_list;
+        };
     };
     struct sctp_stream_interleave *si;
 };
@@ -82071,38 +82704,38 @@ struct sctp_association {
     struct sctp_endpoint *ep;
     struct sctp_cookie c;
     struct {
-	struct list_head transport_addr_list;
-	__u32 rwnd;
-	__u16 transport_count;
-	__u16 port;
-	struct sctp_transport *primary_path;
-	union sctp_addr primary_addr;
-	struct sctp_transport *active_path;
-	struct sctp_transport *retran_path;
-	struct sctp_transport *last_sent_to;
-	struct sctp_transport *last_data_from;
-	struct sctp_tsnmap tsn_map;
-	__be16 addip_disabled_mask;
-	__u16 ecn_capable : 1;
-	__u16 ipv4_address : 1;
-	__u16 ipv6_address : 1;
-	__u16 asconf_capable : 1;
-	__u16 prsctp_capable : 1;
-	__u16 reconf_capable : 1;
-	__u16 intl_capable : 1;
-	__u16 auth_capable : 1;
-	__u16 sack_needed : 1;
-	__u16 sack_generation : 1;
-	__u16 zero_window_announced : 1;
-	__u32 sack_cnt;
-	__u32 adaptation_ind;
-	struct sctp_inithdr_host i;
-	void *cookie;
-	int cookie_len;
-	__u32 addip_serial;
-	struct sctp_random_param *peer_random;
-	struct sctp_chunks_param *peer_chunks;
-	struct sctp_hmac_algo_param *peer_hmacs;
+        struct list_head transport_addr_list;
+        __u32 rwnd;
+        __u16 transport_count;
+        __u16 port;
+        struct sctp_transport *primary_path;
+        union sctp_addr primary_addr;
+        struct sctp_transport *active_path;
+        struct sctp_transport *retran_path;
+        struct sctp_transport *last_sent_to;
+        struct sctp_transport *last_data_from;
+        struct sctp_tsnmap tsn_map;
+        __be16 addip_disabled_mask;
+        __u16 ecn_capable : 1;
+        __u16 ipv4_address : 1;
+        __u16 ipv6_address : 1;
+        __u16 asconf_capable : 1;
+        __u16 prsctp_capable : 1;
+        __u16 reconf_capable : 1;
+        __u16 intl_capable : 1;
+        __u16 auth_capable : 1;
+        __u16 sack_needed : 1;
+        __u16 sack_generation : 1;
+        __u16 zero_window_announced : 1;
+        __u32 sack_cnt;
+        __u32 adaptation_ind;
+        struct sctp_inithdr_host i;
+        void *cookie;
+        int cookie_len;
+        __u32 addip_serial;
+        struct sctp_random_param *peer_random;
+        struct sctp_chunks_param *peer_chunks;
+        struct sctp_hmac_algo_param *peer_hmacs;
     } peer;
     enum sctp_state state;
     int overall_error_count;
@@ -82419,9 +83052,10 @@ struct sctp_idatahdr {
     __be16 stream;
     __be16 reserved;
     __be32 mid;
-    union {
-	__u32 ppid;
-	__be32 fsn;
+    union
+    {
+        __u32 ppid;
+        __be32 fsn;
     };
     __u8 payload[0];
 };
@@ -82596,13 +83230,15 @@ struct sctp_ulpevent {
     struct sctp_association *asoc;
     struct sctp_chunk *chunk;
     unsigned int rmem_len;
-    union {
-	__u32 mid;
-	__u16 ssn;
+    union
+    {
+        __u32 mid;
+        __u16 ssn;
     };
-    union {
-	__u32 ppid;
-	__u32 fsn;
+    union
+    {
+        __u32 ppid;
+        __u32 fsn;
     };
     __u32 tsn;
     __u32 cumtsn;
@@ -82613,7 +83249,8 @@ struct sctp_ulpevent {
 
 union sctp_addr_param;
 
-union sctp_params {
+union sctp_params
+{
     void *v;
     struct sctp_paramhdr *p;
     struct sctp_cookie_preserve_param *life;
@@ -82641,34 +83278,37 @@ struct sctp_chunk {
     struct list_head list;
     refcount_t refcnt;
     int sent_count;
-    union {
-	struct list_head transmitted_list;
-	struct list_head stream_list;
+    union
+    {
+        struct list_head transmitted_list;
+        struct list_head stream_list;
     };
     struct list_head frag_list;
     struct sk_buff *skb;
-    union {
-	struct sk_buff *head_skb;
-	struct sctp_shared_key *shkey;
+    union
+    {
+        struct sk_buff *head_skb;
+        struct sctp_shared_key *shkey;
     };
     union sctp_params param_hdr;
-    union {
-	__u8 *v;
-	struct sctp_datahdr *data_hdr;
-	struct sctp_inithdr *init_hdr;
-	struct sctp_sackhdr *sack_hdr;
-	struct sctp_heartbeathdr *hb_hdr;
-	struct sctp_sender_hb_info *hbs_hdr;
-	struct sctp_shutdownhdr *shutdown_hdr;
-	struct sctp_signed_cookie *cookie_hdr;
-	struct sctp_ecnehdr *ecne_hdr;
-	struct sctp_cwrhdr *ecn_cwr_hdr;
-	struct sctp_errhdr *err_hdr;
-	struct sctp_addiphdr *addip_hdr;
-	struct sctp_fwdtsn_hdr *fwdtsn_hdr;
-	struct sctp_authhdr *auth_hdr;
-	struct sctp_idatahdr *idata_hdr;
-	struct sctp_ifwdtsn_hdr *ifwdtsn_hdr;
+    union
+    {
+        __u8 *v;
+        struct sctp_datahdr *data_hdr;
+        struct sctp_inithdr *init_hdr;
+        struct sctp_sackhdr *sack_hdr;
+        struct sctp_heartbeathdr *hb_hdr;
+        struct sctp_sender_hb_info *hbs_hdr;
+        struct sctp_shutdownhdr *shutdown_hdr;
+        struct sctp_signed_cookie *cookie_hdr;
+        struct sctp_ecnehdr *ecne_hdr;
+        struct sctp_cwrhdr *ecn_cwr_hdr;
+        struct sctp_errhdr *err_hdr;
+        struct sctp_addiphdr *addip_hdr;
+        struct sctp_fwdtsn_hdr *fwdtsn_hdr;
+        struct sctp_authhdr *auth_hdr;
+        struct sctp_idatahdr *idata_hdr;
+        struct sctp_ifwdtsn_hdr *ifwdtsn_hdr;
     } subh;
     __u8 *chunk_end;
     struct sctp_chunkhdr *chunk_hdr;
@@ -82834,7 +83474,8 @@ struct sctp_signed_cookie {
     struct sctp_cookie c;
 } __attribute__((packed));
 
-union sctp_addr_param {
+union sctp_addr_param
+{
     struct sctp_paramhdr p;
     struct sctp_ipv4addr_param v4;
     struct sctp_ipv6addr_param v6;
@@ -82948,17 +83589,17 @@ struct sctp_transport {
     struct sctp_packet packet;
     struct list_head send_ready;
     struct {
-	__u32 next_tsn_at_change;
-	char changeover_active;
-	char cycling_changeover;
-	char cacc_saw_newack;
+        __u32 next_tsn_at_change;
+        char changeover_active;
+        char cycling_changeover;
+        char cacc_saw_newack;
     } cacc;
     struct {
-	__u16 pmtu;
-	__u16 probe_size;
-	__u16 probe_high;
-	__u8 probe_count;
-	__u8 state;
+        __u16 pmtu;
+        __u16 probe_size;
+        __u16 probe_high;
+        __u8 probe_count;
+        __u8 state;
     } pl;
     __u64 hb_nonce;
     struct callback_head rcu;
@@ -82986,19 +83627,20 @@ struct sctp_stream_out_ext {
     __u64 abandoned_unsent[3];
     __u64 abandoned_sent[3];
     struct list_head outq;
-    union {
-	struct {
-	    struct list_head prio_list;
-	    struct sctp_stream_priorities *prio_head;
-	};
-	struct {
-	    struct list_head rr_list;
-	};
-	struct {
-	    struct list_head fc_list;
-	    __u32 fc_length;
-	    __u16 fc_weight;
-	};
+    union
+    {
+        struct {
+            struct list_head prio_list;
+            struct sctp_stream_priorities *prio_head;
+        };
+        struct {
+            struct list_head rr_list;
+        };
+        struct {
+            struct list_head fc_list;
+            __u32 fc_length;
+            __u16 fc_weight;
+        };
     };
 };
 
@@ -83031,19 +83673,19 @@ struct ipc_security_struct {
 
 struct sk_security_struct {
     enum {
-	NLBL_UNSET = 0,
-	NLBL_REQUIRE = 1,
-	NLBL_LABELED = 2,
-	NLBL_REQSKB = 3,
-	NLBL_CONNLABELED = 4,
+        NLBL_UNSET = 0,
+        NLBL_REQUIRE = 1,
+        NLBL_LABELED = 2,
+        NLBL_REQSKB = 3,
+        NLBL_CONNLABELED = 4,
     } nlbl_state;
     struct netlbl_lsm_secattr *nlbl_secattr;
     u32 sid;
     u32 peer_sid;
     u16 sclass;
     enum {
-	SCTP_ASSOC_UNSET = 0,
-	SCTP_ASSOC_SET = 1,
+        SCTP_ASSOC_UNSET = 0,
+        SCTP_ASSOC_SET = 1,
     } sctp_assoc_state;
 };
 
@@ -83095,9 +83737,10 @@ struct font_data {
 
 struct node_groups {
     unsigned int id;
-    union {
-	unsigned int ngroups;
-	unsigned int ncpus;
+    union
+    {
+        unsigned int ngroups;
+        unsigned int ncpus;
     };
 };
 
@@ -83149,10 +83792,10 @@ struct acpi_power_register {
 struct acpi_processor_errata {
     u8 smp;
     struct {
-	u8 throttle : 1;
-	u8 fdma : 1;
-	u8 reserved : 6;
-	u32 bmisx;
+        u8 throttle : 1;
+        u8 fdma : 1;
+        u8 reserved : 6;
+        u32 bmisx;
     } piix4;
 };
 
@@ -83325,9 +83968,10 @@ struct viommu_request {
 };
 
 struct viommu_event {
-    union {
-	u32 head;
-	struct virtio_iommu_fault fault;
+    union
+    {
+        u32 head;
+        struct virtio_iommu_fault fault;
     };
 };
 
@@ -83704,9 +84348,10 @@ struct dsa_bridge;
 struct dsa_lag;
 
 struct dsa_port {
-    union {
-	struct net_device *conduit;
-	struct net_device *user;
+    union
+    {
+        struct net_device *conduit;
+        struct net_device *user;
     };
     const struct dsa_device_ops *tag_ops;
     struct dsa_switch_tree *dst;
@@ -83714,10 +84359,10 @@ struct dsa_port {
     struct dsa_switch *ds;
     unsigned int index;
     enum {
-	DSA_PORT_TYPE_UNUSED = 0,
-	DSA_PORT_TYPE_CPU = 1,
-	DSA_PORT_TYPE_DSA = 2,
-	DSA_PORT_TYPE_USER = 3,
+        DSA_PORT_TYPE_UNUSED = 0,
+        DSA_PORT_TYPE_CPU = 1,
+        DSA_PORT_TYPE_DSA = 2,
+        DSA_PORT_TYPE_USER = 3,
     } type;
     const char *name;
     struct dsa_port *cpu_dp;
@@ -83744,9 +84389,10 @@ struct dsa_port {
     struct list_head fdbs;
     struct list_head mdbs;
     struct mutex vlans_lock;
-    union {
-	struct list_head vlans;
-	struct list_head user_vlans;
+    union
+    {
+        struct list_head vlans;
+        struct list_head user_vlans;
     };
 };
 
@@ -83755,8 +84401,8 @@ struct cpu_rmap {
     u16 size;
     void **obj;
     struct {
-	u16 index;
-	u16 dist;
+        u16 index;
+        u16 dist;
     } near[0];
 };
 
@@ -83819,9 +84465,10 @@ struct netdev_notifier_offload_xstats_ru {
 struct netdev_notifier_offload_xstats_info {
     struct netdev_notifier_info info;
     enum netdev_offload_xstats_type type;
-    union {
-	struct netdev_notifier_offload_xstats_rd *report_delta;
-	struct netdev_notifier_offload_xstats_ru *report_used;
+    union
+    {
+        struct netdev_notifier_offload_xstats_rd *report_delta;
+        struct netdev_notifier_offload_xstats_ru *report_used;
     };
 };
 
@@ -83915,7 +84562,8 @@ enum devlink_param_cmode {
     DEVLINK_PARAM_CMODE_MAX = 2,
 };
 
-union devlink_param_value {
+union devlink_param_value
+{
     u8 vu8;
     u16 vu16;
     u32 vu32;
@@ -84121,10 +84769,11 @@ enum dsa_db_type {
 
 struct dsa_db {
     enum dsa_db_type type;
-    union {
-	const struct dsa_port *dp;
-	struct dsa_lag lag;
-	struct dsa_bridge bridge;
+    union
+    {
+        const struct dsa_port *dp;
+        struct dsa_lag lag;
+        struct dsa_bridge bridge;
     };
 };
 
@@ -84330,9 +84979,10 @@ struct netdev_adjacent {
 };
 
 struct ipfrag_skb_cb {
-    union {
-	struct inet_skb_parm h4;
-	struct inet6_skb_parm h6;
+    union
+    {
+        struct inet_skb_parm h4;
+        struct inet6_skb_parm h6;
     };
     struct sk_buff *next_frag;
     int frag_run_len;
@@ -84634,9 +85284,10 @@ struct wpan_phy {
 struct ieee802154_addr {
     u8 mode;
     __le16 pan_id;
-    union {
-	__le16 short_addr;
-	__le64 extended_addr;
+    union
+    {
+        __le16 short_addr;
+        __le64 extended_addr;
     };
 };
 
@@ -84652,13 +85303,14 @@ struct wpan_dev_header_ops {
     int (*create)(struct sk_buff *, struct net_device *, const struct ieee802154_addr *, const struct ieee802154_addr *, unsigned int);
 };
 
-union fwnet_hwaddr {
+union fwnet_hwaddr
+{
     u8 u[16];
     struct {
-	__be64 uniq_id;
-	u8 max_rec;
-	u8 sspd;
-	u8 fifo[6];
+        __be64 uniq_id;
+        u8 max_rec;
+        u8 sspd;
+        u8 fifo[6];
     } uc;
 };
 
@@ -84959,13 +85611,15 @@ struct _fpstate_32 {
     __u32 reserved;
     struct _fpxreg _fxsr_st[8];
     struct _xmmreg _xmm[8];
-    union {
-	__u32 padding1[44];
-	__u32 padding[44];
+    union
+    {
+        __u32 padding1[44];
+        __u32 padding[44];
     };
-    union {
-	__u32 padding2[12];
-	struct _fpx_sw_bytes sw_reserved;
+    union
+    {
+        __u32 padding2[12];
+        struct _fpx_sw_bytes sw_reserved;
     };
 };
 
@@ -85151,15 +85805,15 @@ struct cfs_rq {
     long : 64;
     struct sched_avg avg;
     struct {
-	raw_spinlock_t lock;
-	int nr;
-	long unsigned int load_avg;
-	long unsigned int util_avg;
-	long unsigned int runnable_avg;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        raw_spinlock_t lock;
+        int nr;
+        long unsigned int load_avg;
+        long unsigned int util_avg;
+        long unsigned int runnable_avg;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     } removed;
     u64 last_update_tg_load_avg;
     long unsigned int tg_load_avg_contrib;
@@ -85214,8 +85868,8 @@ struct rt_rq {
     unsigned int rt_nr_running;
     unsigned int rr_nr_running;
     struct {
-	int curr;
-	int next;
+        int curr;
+        int next;
     } highest_prio;
     int overloaded;
     struct plist_head pushable_tasks;
@@ -85230,8 +85884,8 @@ struct dl_rq {
     struct rb_root_cached root;
     unsigned int dl_nr_running;
     struct {
-	u64 curr;
-	u64 next;
+        u64 curr;
+        u64 next;
     } earliest_dl;
     int overloaded;
     struct rb_root_cached pushable_dl_tasks_root;
@@ -86146,9 +86800,10 @@ struct cpc_reg {
 struct cpc_register_resource {
     acpi_object_type type;
     u64 *sys_mem_vaddr;
-    union {
-	struct cpc_reg reg;
-	u64 int_value;
+    union
+    {
+        struct cpc_reg reg;
+        u64 int_value;
     } cpc_entry;
 };
 
@@ -86554,9 +87209,10 @@ typedef void (*btf_trace_cros_ec_request_start)(void *, struct cros_ec_command *
 typedef void (*btf_trace_cros_ec_request_done)(void *, struct cros_ec_command *, int);
 
 struct skb_gso_cb {
-    union {
-	int mac_offset;
-	int data_offset;
+    union
+    {
+        int mac_offset;
+        int data_offset;
     };
     int encap_level;
     __wsum csum;
@@ -86740,11 +87396,13 @@ struct nl_seq_iter {
 };
 
 struct bpf_iter__netlink {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct netlink_sock *sk;
+    union
+    {
+        struct netlink_sock *sk;
     };
 };
 
@@ -86772,24 +87430,25 @@ struct xfrm_state_afinfo {
 
 struct cipso_v4_std_map_tbl {
     struct {
-	u32 *cipso;
-	u32 *local;
-	u32 cipso_size;
-	u32 local_size;
+        u32 *cipso;
+        u32 *local;
+        u32 cipso_size;
+        u32 local_size;
     } lvl;
     struct {
-	u32 *cipso;
-	u32 *local;
-	u32 cipso_size;
-	u32 local_size;
+        u32 *cipso;
+        u32 *local;
+        u32 cipso_size;
+        u32 local_size;
     } cat;
 };
 
 struct cipso_v4_doi {
     u32 doi;
     u32 type;
-    union {
-	struct cipso_v4_std_map_tbl *std;
+    union
+    {
+        struct cipso_v4_std_map_tbl *std;
     } map;
     u8 tags[5];
     refcount_t refcount;
@@ -87127,7 +87786,8 @@ struct synth_event_trace_state {
     bool add_name;
 };
 
-union trace_synth_field {
+union trace_synth_field
+{
     u8 as_u8;
     u16 as_u16;
     u32 as_u32;
@@ -87223,11 +87883,13 @@ struct btf_enum64 {
 };
 
 struct sk_msg_md {
-    union {
-	void *data;
+    union
+    {
+        void *data;
     };
-    union {
-	void *data_end;
+    union
+    {
+        void *data_end;
     };
     __u32 family;
     __u32 remote_ip4;
@@ -87237,28 +87899,33 @@ struct sk_msg_md {
     __u32 remote_port;
     __u32 local_port;
     __u32 size;
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
 };
 
 struct sk_reuseport_md {
-    union {
-	void *data;
+    union
+    {
+        void *data;
     };
-    union {
-	void *data_end;
+    union
+    {
+        void *data_end;
     };
     __u32 len;
     __u32 eth_protocol;
     __u32 ip_protocol;
     __u32 bind_inany;
     __u32 hash;
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
-    union {
-	struct bpf_sock *migrating_sk;
+    union
+    {
+        struct bpf_sock *migrating_sk;
     };
 };
 
@@ -87272,17 +87939,19 @@ struct bpf_sock_addr {
     __u32 protocol;
     __u32 msg_src_ip4;
     __u32 msg_src_ip6[4];
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
 };
 
 struct bpf_sock_ops {
     __u32 op;
-    union {
-	__u32 args[4];
-	__u32 reply;
-	__u32 replylong[4];
+    union
+    {
+        __u32 args[4];
+        __u32 reply;
+        __u32 replylong[4];
     };
     __u32 family;
     __u32 remote_ip4;
@@ -87317,14 +87986,17 @@ struct bpf_sock_ops {
     __u32 sk_txhash;
     __u64 bytes_received;
     __u64 bytes_acked;
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
-    union {
-	void *skb_data;
+    union
+    {
+        void *skb_data;
     };
-    union {
-	void *skb_data_end;
+    union
+    {
+        void *skb_data_end;
     };
     __u32 skb_len;
     __u32 skb_tcp_flags;
@@ -87336,14 +88008,17 @@ struct bpf_raw_tracepoint_args {
 };
 
 struct bpf_sockopt {
-    union {
-	struct bpf_sock *sk;
+    union
+    {
+        struct bpf_sock *sk;
     };
-    union {
-	void *optval;
+    union
+    {
+        void *optval;
     };
-    union {
-	void *optval_end;
+    union
+    {
+        void *optval_end;
     };
     __s32 level;
     __s32 optname;
@@ -87559,23 +88234,23 @@ struct btf_show {
     void (*showfn)(struct btf_show *, const char *, struct __va_list_tag *);
     const struct btf *btf;
     struct {
-	u8 depth;
-	u8 depth_to_show;
-	u8 depth_check;
-	u8 array_member : 1;
-	u8 array_terminated : 1;
-	u16 array_encoding;
-	u32 type_id;
-	int status;
-	const struct btf_type *type;
-	const struct btf_member *member;
-	char name[80];
+        u8 depth;
+        u8 depth_to_show;
+        u8 depth_check;
+        u8 array_member : 1;
+        u8 array_terminated : 1;
+        u16 array_encoding;
+        u32 type_id;
+        int status;
+        const struct btf_type *type;
+        const struct btf_member *member;
+        char name[80];
     } state;
     struct {
-	u32 size;
-	void *head;
-	void *data;
-	u8 safe[32];
+        u32 size;
+        void *head;
+        void *data;
+        u8 safe[32];
     } obj;
 };
 
@@ -87596,14 +88271,15 @@ enum {
 struct btf_field_info {
     enum btf_field_type type;
     u32 off;
-    union {
-	struct {
-	    u32 type_id;
-	} kptr;
-	struct {
-	    const char *node_name;
-	    u32 value_btf_id;
-	} graph_root;
+    union
+    {
+        struct {
+            u32 type_id;
+        } kptr;
+        struct {
+            const char *node_name;
+            u32 value_btf_id;
+        } graph_root;
     };
 };
 
@@ -87722,8 +88398,8 @@ struct bpf_cand_cache {
     u16 kind;
     u16 cnt;
     struct {
-	const struct btf *btf;
-	u32 id;
+        const struct btf *btf;
+        u32 id;
     } cands[0];
 };
 
@@ -87842,16 +88518,17 @@ struct evm_ima_xattr_data {
 struct ima_digest_data {
     u8 algo;
     u8 length;
-    union {
-	struct {
-	    u8 unused;
-	    u8 type;
-	} sha1;
-	struct {
-	    u8 type;
-	    u8 algo;
-	} ng;
-	u8 data[2];
+    union
+    {
+        struct {
+            u8 unused;
+            u8 type;
+        } sha1;
+        struct {
+            u8 type;
+            u8 algo;
+        } ng;
+        u8 data[2];
     } xattr;
     u8 digest[0];
 };
@@ -88113,49 +88790,52 @@ struct dmar_domain {
     struct list_head devices;
     struct list_head dev_pasids;
     int iommu_superpage;
-    union {
-	struct {
-	    struct dma_pte *pgd;
-	    int gaw;
-	    int agaw;
-	    u64 max_addr;
-	    spinlock_t s1_lock;
-	    struct list_head s1_domains;
-	};
-	struct {
-	    struct dmar_domain *s2_domain;
-	    long unsigned int s1_pgtbl;
-	    struct iommu_hwpt_vtd_s1 s1_cfg;
-	    struct list_head s2_link;
-	};
+    union
+    {
+        struct {
+            struct dma_pte *pgd;
+            int gaw;
+            int agaw;
+            u64 max_addr;
+            spinlock_t s1_lock;
+            struct list_head s1_domains;
+        };
+        struct {
+            struct dmar_domain *s2_domain;
+            long unsigned int s1_pgtbl;
+            struct iommu_hwpt_vtd_s1 s1_cfg;
+            struct list_head s2_link;
+        };
     };
     struct iommu_domain domain;
 };
 
 struct page_req_dsc {
-    union {
-	struct {
-	    u64 type : 8;
-	    u64 pasid_present : 1;
-	    u64 priv_data_present : 1;
-	    u64 rsvd : 6;
-	    u64 rid : 16;
-	    u64 pasid : 20;
-	    u64 exe_req : 1;
-	    u64 pm_req : 1;
-	    u64 rsvd2 : 10;
-	};
-	u64 qw_0;
+    union
+    {
+        struct {
+            u64 type : 8;
+            u64 pasid_present : 1;
+            u64 priv_data_present : 1;
+            u64 rsvd : 6;
+            u64 rid : 16;
+            u64 pasid : 20;
+            u64 exe_req : 1;
+            u64 pm_req : 1;
+            u64 rsvd2 : 10;
+        };
+        u64 qw_0;
     };
-    union {
-	struct {
-	    u64 rd_req : 1;
-	    u64 wr_req : 1;
-	    u64 lpig : 1;
-	    u64 prg_index : 9;
-	    u64 addr : 52;
-	};
-	u64 qw_1;
+    union
+    {
+        struct {
+            u64 rd_req : 1;
+            u64 wr_req : 1;
+            u64 lpig : 1;
+            u64 prg_index : 9;
+            u64 addr : 52;
+        };
+        u64 qw_1;
     };
     u64 priv_data[2];
 };
@@ -88431,10 +89111,11 @@ struct rtc_wkalrm {
 
 struct rtc_param {
     __u64 param;
-    union {
-	__u64 uvalue;
-	__s64 svalue;
-	__u64 ptr;
+    union
+    {
+        __u64 uvalue;
+        __s64 svalue;
+        __u64 ptr;
     };
     __u32 index;
     __u32 __pad;
@@ -88696,9 +89377,10 @@ struct arg_dev_net_ip {
 
 struct arg_netdev_event {
     const struct net_device *dev;
-    union {
-	unsigned char nh_flags;
-	long unsigned int event;
+    union
+    {
+        unsigned char nh_flags;
+        long unsigned int event;
     };
 };
 
@@ -88768,14 +89450,15 @@ struct xdp_options {
 
 struct xsk_tx_metadata {
     __u64 flags;
-    union {
-	struct {
-	    __u16 csum_start;
-	    __u16 csum_offset;
-	} request;
-	struct {
-	    __u64 tx_timestamp;
-	} completion;
+    union
+    {
+        struct {
+            __u16 csum_start;
+            __u16 csum_offset;
+        } request;
+        struct {
+            __u64 tx_timestamp;
+        } completion;
     };
 };
 
@@ -88870,9 +89553,9 @@ struct xdp_sock {
     bool zc;
     bool sg;
     enum {
-	XSK_READY = 0,
-	XSK_BOUND = 1,
-	XSK_UNBOUND = 2,
+        XSK_READY = 0,
+        XSK_BOUND = 1,
+        XSK_UNBOUND = 2,
     } state;
     long : 64;
     struct xsk_queue *tx;
@@ -89003,36 +89686,39 @@ struct amd_hostbridge {
     u32 device;
 };
 
-union cpuid10_eax {
+union cpuid10_eax
+{
     struct {
-	unsigned int version_id : 8;
-	unsigned int num_counters : 8;
-	unsigned int bit_width : 8;
-	unsigned int mask_length : 8;
+        unsigned int version_id : 8;
+        unsigned int num_counters : 8;
+        unsigned int bit_width : 8;
+        unsigned int mask_length : 8;
     } split;
     unsigned int full;
 };
 
-union cpuid10_ebx {
+union cpuid10_ebx
+{
     struct {
-	unsigned int no_unhalted_core_cycles : 1;
-	unsigned int no_instructions_retired : 1;
-	unsigned int no_unhalted_reference_cycles : 1;
-	unsigned int no_llc_reference : 1;
-	unsigned int no_llc_misses : 1;
-	unsigned int no_branch_instruction_retired : 1;
-	unsigned int no_branch_misses_retired : 1;
+        unsigned int no_unhalted_core_cycles : 1;
+        unsigned int no_instructions_retired : 1;
+        unsigned int no_unhalted_reference_cycles : 1;
+        unsigned int no_llc_reference : 1;
+        unsigned int no_llc_misses : 1;
+        unsigned int no_branch_instruction_retired : 1;
+        unsigned int no_branch_misses_retired : 1;
     } split;
     unsigned int full;
 };
 
-union cpuid10_edx {
+union cpuid10_edx
+{
     struct {
-	unsigned int num_counters_fixed : 5;
-	unsigned int bit_width_fixed : 8;
-	unsigned int reserved1 : 2;
-	unsigned int anythread_deprecated : 1;
-	unsigned int reserved2 : 16;
+        unsigned int num_counters_fixed : 5;
+        unsigned int bit_width_fixed : 8;
+        unsigned int reserved1 : 2;
+        unsigned int anythread_deprecated : 1;
+        unsigned int reserved2 : 16;
     } split;
     unsigned int full;
 };
@@ -89304,9 +89990,10 @@ enum bpf_stack_build_id_status {
 struct bpf_stack_build_id {
     __s32 status;
     unsigned char build_id[20];
-    union {
-	__u64 offset;
-	__u64 ip;
+    union
+    {
+        __u64 offset;
+        __u64 ip;
     };
 };
 
@@ -89398,9 +90085,10 @@ struct vmap_area {
     long unsigned int va_end;
     struct rb_node rb_node;
     struct list_head list;
-    union {
-	long unsigned int subtree_max_size;
-	struct vm_struct *vm;
+    union
+    {
+        long unsigned int subtree_max_size;
+        struct vm_struct *vm;
     };
     long unsigned int flags;
 };
@@ -89856,12 +90544,13 @@ struct vblk {
     u32 sequence;
     u8 flags;
     u8 type;
-    union {
-	struct vblk_comp comp;
-	struct vblk_dgrp dgrp;
-	struct vblk_disk disk;
-	struct vblk_part part;
-	struct vblk_volu volu;
+    union
+    {
+        struct vblk_comp comp;
+        struct vblk_dgrp dgrp;
+        struct vblk_disk disk;
+        struct vblk_part part;
+        struct vblk_volu volu;
     } vblk;
     struct list_head list;
 };
@@ -89882,9 +90571,10 @@ struct xattr_name {
 };
 
 struct xattr_ctx {
-    union {
-	const void *cvalue;
-	void *value;
+    union
+    {
+        const void *cvalue;
+        void *value;
     };
     void *kvalue;
     size_t size;
@@ -89915,7 +90605,8 @@ struct xenfb_resize {
     int32_t offset;
 };
 
-union xenfb_out_event {
+union xenfb_out_event
+{
     uint8_t type;
     struct xenfb_update update;
     struct xenfb_resize resize;
@@ -90119,13 +90810,14 @@ enum utf16_endian {
 struct usb_string_descriptor {
     __u8 bLength;
     __u8 bDescriptorType;
-    union {
-	__le16 legacy_padding;
-	struct {
-	    struct {
-	    } __empty_wData;
-	    __le16 wData[0];
-	};
+    union
+    {
+        __le16 legacy_padding;
+        struct {
+            struct {
+            } __empty_wData;
+            __le16 wData[0];
+        };
     };
 };
 
@@ -90326,12 +91018,13 @@ struct efi_rel_offset_dev_path {
 };
 
 struct efi_dev_path {
-    union {
-	struct efi_generic_dev_path header;
-	struct efi_acpi_dev_path acpi;
-	struct efi_pci_dev_path pci;
-	struct efi_vendor_dev_path vendor;
-	struct efi_rel_offset_dev_path rel_offset;
+    union
+    {
+        struct efi_generic_dev_path header;
+        struct efi_acpi_dev_path acpi;
+        struct efi_pci_dev_path pci;
+        struct efi_vendor_dev_path vendor;
+        struct efi_rel_offset_dev_path rel_offset;
     };
 };
 
@@ -90514,17 +91207,21 @@ struct sock_map_seq_info {
 };
 
 struct bpf_iter__sockmap {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_map *map;
+    union
+    {
+        struct bpf_map *map;
     };
-    union {
-	void *key;
+    union
+    {
+        void *key;
     };
-    union {
-	struct sock *sk;
+    union
+    {
+        struct sock *sk;
     };
 };
 
@@ -90787,9 +91484,9 @@ struct ncsi_channel {
     struct ncsi_channel_vlan_filter vlan_filter;
     struct ncsi_channel_stats stats;
     struct {
-	struct timer_list timer;
-	bool enabled;
-	unsigned int state;
+        struct timer_list timer;
+        bool enabled;
+        unsigned int state;
     } monitor;
     struct list_head node;
     struct list_head link;
@@ -90898,10 +91595,11 @@ struct ncsi_cmd_arg {
     unsigned char channel;
     short unsigned int payload;
     unsigned int req_flags;
-    union {
-	unsigned char bytes[16];
-	short unsigned int words[8];
-	unsigned int dwords[4];
+    union
+    {
+        unsigned char bytes[16];
+        short unsigned int words[8];
+        unsigned int dwords[4];
     };
     unsigned char *data;
     struct genl_info *info;
@@ -91169,11 +91867,13 @@ struct bpf_iter_seq_task_info {
 };
 
 struct bpf_iter__task {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct task_struct *task;
+    union
+    {
+        struct task_struct *task;
     };
 };
 
@@ -91185,15 +91885,18 @@ struct bpf_iter_seq_task_file_info {
 };
 
 struct bpf_iter__task_file {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct task_struct *task;
+    union
+    {
+        struct task_struct *task;
     };
     u32 fd;
-    union {
-	struct file *file;
+    union
+    {
+        struct file *file;
     };
 };
 
@@ -91214,14 +91917,17 @@ enum bpf_task_vma_iter_find_op {
 };
 
 struct bpf_iter__task_vma {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct task_struct *task;
+    union
+    {
+        struct task_struct *task;
     };
-    union {
-	struct vm_area_struct *vma;
+    union
+    {
+        struct vm_area_struct *vma;
     };
 };
 
@@ -91372,9 +92078,10 @@ struct eppoll_entry {
 struct eventpoll;
 
 struct epitem {
-    union {
-	struct rb_node rbn;
-	struct callback_head rcu;
+    union
+    {
+        struct rb_node rbn;
+        struct callback_head rcu;
     };
     struct list_head rdllink;
     struct epitem *next;
@@ -91459,9 +92166,10 @@ struct bsg_device {
 
 struct io_futex {
     struct file *file;
-    union {
-	u32 *uaddr;
-	struct futex_waitv *uwaitv;
+    union
+    {
+        u32 *uaddr;
+        struct futex_waitv *uwaitv;
     };
     long unsigned int futex_val;
     long unsigned int futex_mask;
@@ -91472,9 +92180,10 @@ struct io_futex {
 };
 
 struct io_futex_data {
-    union {
-	struct futex_q q;
-	struct io_cache_entry cache;
+    union
+    {
+        struct futex_q q;
+        struct io_cache_entry cache;
     };
     struct io_kiocb *req;
 };
@@ -91560,9 +92269,10 @@ struct xenbus_file_priv {
     struct list_head transactions;
     struct list_head watches;
     unsigned int len;
-    union {
-	struct xsd_sockmsg msg;
-	char buffer[4096];
+    union
+    {
+        struct xsd_sockmsg msg;
+        char buffer[4096];
     } u;
     struct mutex reply_mutex;
     struct list_head read_buffers;
@@ -91761,9 +92471,10 @@ struct spi_controller {
     u32 max_speed_hz;
     u16 flags;
     bool devm_allocated;
-    union {
-	bool slave;
-	bool target;
+    union
+    {
+        bool slave;
+        bool target;
     };
     size_t (*max_transfer_size)(struct spi_device *);
     size_t (*max_message_size)(struct spi_device *);
@@ -91807,9 +92518,10 @@ struct spi_controller {
     int (*unprepare_transfer_hardware)(struct spi_controller *);
     int (*prepare_message)(struct spi_controller *, struct spi_message *);
     int (*unprepare_message)(struct spi_controller *, struct spi_message *);
-    union {
-	int (*slave_abort)(struct spi_controller *);
-	int (*target_abort)(struct spi_controller *);
+    union
+    {
+        int (*slave_abort)(struct spi_controller *);
+        int (*target_abort)(struct spi_controller *);
     };
     void (*set_cs)(struct spi_device *, bool);
     int (*transfer_one)(struct spi_controller *, struct spi_device *, struct spi_transfer *);
@@ -91918,36 +92630,37 @@ enum spi_mem_data_dir {
 
 struct spi_mem_op {
     struct {
-	u8 nbytes;
-	u8 buswidth;
-	u8 dtr : 1;
-	u8 __pad : 7;
-	u16 opcode;
+        u8 nbytes;
+        u8 buswidth;
+        u8 dtr : 1;
+        u8 __pad : 7;
+        u16 opcode;
     } cmd;
     struct {
-	u8 nbytes;
-	u8 buswidth;
-	u8 dtr : 1;
-	u8 __pad : 7;
-	u64 val;
+        u8 nbytes;
+        u8 buswidth;
+        u8 dtr : 1;
+        u8 __pad : 7;
+        u64 val;
     } addr;
     struct {
-	u8 nbytes;
-	u8 buswidth;
-	u8 dtr : 1;
-	u8 __pad : 7;
+        u8 nbytes;
+        u8 buswidth;
+        u8 dtr : 1;
+        u8 __pad : 7;
     } dummy;
     struct {
-	u8 buswidth;
-	u8 dtr : 1;
-	u8 ecc : 1;
-	u8 __pad : 6;
-	enum spi_mem_data_dir dir;
-	unsigned int nbytes;
-	union {
-	    void *in;
-	    const void *out;
-	} buf;
+        u8 buswidth;
+        u8 dtr : 1;
+        u8 ecc : 1;
+        u8 __pad : 6;
+        enum spi_mem_data_dir dir;
+        unsigned int nbytes;
+        union
+        {
+            void *in;
+            const void *out;
+        } buf;
     } data;
 };
 
@@ -92290,15 +93003,16 @@ struct dm_exception_store {
 
 struct hid_debug_list {
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    char *type;
-	    const char *const_type;
-	    char (*rectype)[0];
-	    char *ptr;
-	    const char *ptr_const;
-	};
-	char buf[0];
+        union
+        {
+            struct __kfifo kfifo;
+            char *type;
+            const char *const_type;
+            char (*rectype)[0];
+            char *ptr;
+            const char *ptr_const;
+        };
+        char buf[0];
     } hid_debug_fifo;
     struct fasync_struct *fasync;
     struct hid_device *hdev;
@@ -93089,16 +93803,17 @@ struct tree_mod_elem {
     struct btrfs_disk_key key;
     u64 blockptr;
     struct {
-	int dst_slot;
-	int nr_items;
+        int dst_slot;
+        int nr_items;
     } move;
     struct tree_mod_root old_root;
 };
 
 struct keyctl_dh_params {
-    union {
-	__s32 private;
-	__s32 priv;
+    union
+    {
+        __s32 private;
+        __s32 priv;
     };
     __s32 prime;
     __s32 base;
@@ -93202,15 +93917,16 @@ struct io_uring_recvmsg_out {
 };
 
 struct io_async_msghdr {
-    union {
-	struct iovec fast_iov[8];
-	struct {
-	    struct iovec fast_iov_one;
-	    __kernel_size_t controllen;
-	    int namelen;
-	    __kernel_size_t payloadlen;
-	};
-	struct io_cache_entry cache;
+    union
+    {
+        struct iovec fast_iov[8];
+        struct {
+            struct iovec fast_iov_one;
+            __kernel_size_t controllen;
+            int namelen;
+            __kernel_size_t payloadlen;
+        };
+        struct io_cache_entry cache;
     };
     struct iovec *free_iov;
     struct sockaddr *uaddr;
@@ -93265,10 +93981,11 @@ struct io_connect {
 
 struct io_sr_msg {
     struct file *file;
-    union {
-	struct compat_msghdr *umsg_compat;
-	struct user_msghdr *umsg;
-	void *buf;
+    union
+    {
+        struct compat_msghdr *umsg_compat;
+        struct user_msghdr *umsg;
+        void *buf;
     };
     unsigned int len;
     unsigned int done_io;
@@ -93802,13 +94519,14 @@ struct key_vector {
     unsigned char pos;
     unsigned char bits;
     unsigned char slen;
-    union {
-	struct hlist_head leaf;
-	struct {
-	    struct {
-	    } __empty_tnode;
-	    struct key_vector *tnode[0];
-	};
+    union
+    {
+        struct hlist_head leaf;
+        struct {
+            struct {
+            } __empty_tnode;
+            struct key_vector *tnode[0];
+        };
     };
 };
 
@@ -93967,31 +94685,34 @@ enum _cache_type {
     CTYPE_UNIFIED = 3,
 };
 
-union _cpuid4_leaf_eax {
+union _cpuid4_leaf_eax
+{
     struct {
-	enum _cache_type type : 5;
-	unsigned int level : 3;
-	unsigned int is_self_initializing : 1;
-	unsigned int is_fully_associative : 1;
-	unsigned int reserved : 4;
-	unsigned int num_threads_sharing : 12;
-	unsigned int num_cores_on_die : 6;
+        enum _cache_type type : 5;
+        unsigned int level : 3;
+        unsigned int is_self_initializing : 1;
+        unsigned int is_fully_associative : 1;
+        unsigned int reserved : 4;
+        unsigned int num_threads_sharing : 12;
+        unsigned int num_cores_on_die : 6;
     } split;
     u32 full;
 };
 
-union _cpuid4_leaf_ebx {
+union _cpuid4_leaf_ebx
+{
     struct {
-	unsigned int coherency_line_size : 12;
-	unsigned int physical_line_partition : 10;
-	unsigned int ways_of_associativity : 10;
+        unsigned int coherency_line_size : 12;
+        unsigned int physical_line_partition : 10;
+        unsigned int ways_of_associativity : 10;
     } split;
     u32 full;
 };
 
-union _cpuid4_leaf_ecx {
+union _cpuid4_leaf_ecx
+{
     struct {
-	unsigned int number_of_sets : 32;
+        unsigned int number_of_sets : 32;
     } split;
     u32 full;
 };
@@ -94005,33 +94726,36 @@ struct _cpuid4_info_regs {
     struct amd_northbridge *nb;
 };
 
-union l1_cache {
+union l1_cache
+{
     struct {
-	unsigned int line_size : 8;
-	unsigned int lines_per_tag : 8;
-	unsigned int assoc : 8;
-	unsigned int size_in_kb : 8;
+        unsigned int line_size : 8;
+        unsigned int lines_per_tag : 8;
+        unsigned int assoc : 8;
+        unsigned int size_in_kb : 8;
     };
     unsigned int val;
 };
 
-union l2_cache {
+union l2_cache
+{
     struct {
-	unsigned int line_size : 8;
-	unsigned int lines_per_tag : 4;
-	unsigned int assoc : 4;
-	unsigned int size_in_kb : 16;
+        unsigned int line_size : 8;
+        unsigned int lines_per_tag : 4;
+        unsigned int assoc : 4;
+        unsigned int size_in_kb : 16;
     };
     unsigned int val;
 };
 
-union l3_cache {
+union l3_cache
+{
     struct {
-	unsigned int line_size : 8;
-	unsigned int lines_per_tag : 4;
-	unsigned int assoc : 4;
-	unsigned int res : 2;
-	unsigned int size_encoded : 14;
+        unsigned int line_size : 8;
+        unsigned int lines_per_tag : 4;
+        unsigned int assoc : 4;
+        unsigned int res : 2;
+        unsigned int size_encoded : 14;
     };
     unsigned int val;
 };
@@ -94048,74 +94772,79 @@ enum {
     X86_IRQ_ALLOC_LEGACY = 1,
 };
 
-union IO_APIC_reg_00 {
+union IO_APIC_reg_00
+{
     u32 raw;
     struct {
-	u32 __reserved_2 : 14;
-	u32 LTS : 1;
-	u32 delivery_type : 1;
-	u32 __reserved_1 : 8;
-	u32 ID : 8;
+        u32 __reserved_2 : 14;
+        u32 LTS : 1;
+        u32 delivery_type : 1;
+        u32 __reserved_1 : 8;
+        u32 ID : 8;
     } bits;
 };
 
-union IO_APIC_reg_01 {
+union IO_APIC_reg_01
+{
     u32 raw;
     struct {
-	u32 version : 8;
-	u32 __reserved_2 : 7;
-	u32 PRQ : 1;
-	u32 entries : 8;
-	u32 __reserved_1 : 8;
+        u32 version : 8;
+        u32 __reserved_2 : 7;
+        u32 PRQ : 1;
+        u32 entries : 8;
+        u32 __reserved_1 : 8;
     } bits;
 };
 
-union IO_APIC_reg_02 {
+union IO_APIC_reg_02
+{
     u32 raw;
     struct {
-	u32 __reserved_2 : 24;
-	u32 arbitration : 4;
-	u32 __reserved_1 : 4;
+        u32 __reserved_2 : 24;
+        u32 arbitration : 4;
+        u32 __reserved_1 : 4;
     } bits;
 };
 
-union IO_APIC_reg_03 {
+union IO_APIC_reg_03
+{
     u32 raw;
     struct {
-	u32 boot_DT : 1;
-	u32 __reserved_1 : 31;
+        u32 boot_DT : 1;
+        u32 __reserved_1 : 31;
     } bits;
 };
 
 struct IO_APIC_route_entry {
-    union {
-	struct {
-	    u64 vector : 8;
-	    u64 delivery_mode : 3;
-	    u64 dest_mode_logical : 1;
-	    u64 delivery_status : 1;
-	    u64 active_low : 1;
-	    u64 irr : 1;
-	    u64 is_level : 1;
-	    u64 masked : 1;
-	    u64 reserved_0 : 15;
-	    u64 reserved_1 : 17;
-	    u64 virt_destid_8_14 : 7;
-	    u64 destid_0_7 : 8;
-	};
-	struct {
-	    u64 ir_shared_0 : 8;
-	    u64 ir_zero : 3;
-	    u64 ir_index_15 : 1;
-	    u64 ir_shared_1 : 5;
-	    u64 ir_reserved_0 : 31;
-	    u64 ir_format : 1;
-	    u64 ir_index_0_14 : 15;
-	};
-	struct {
-	    u64 w1 : 32;
-	    u64 w2 : 32;
-	};
+    union
+    {
+        struct {
+            u64 vector : 8;
+            u64 delivery_mode : 3;
+            u64 dest_mode_logical : 1;
+            u64 delivery_status : 1;
+            u64 active_low : 1;
+            u64 irr : 1;
+            u64 is_level : 1;
+            u64 masked : 1;
+            u64 reserved_0 : 15;
+            u64 reserved_1 : 17;
+            u64 virt_destid_8_14 : 7;
+            u64 destid_0_7 : 8;
+        };
+        struct {
+            u64 ir_shared_0 : 8;
+            u64 ir_zero : 3;
+            u64 ir_index_15 : 1;
+            u64 ir_shared_1 : 5;
+            u64 ir_reserved_0 : 31;
+            u64 ir_format : 1;
+            u64 ir_index_0_14 : 15;
+        };
+        struct {
+            u64 w1 : 32;
+            u64 w2 : 32;
+        };
     };
 };
 
@@ -94396,22 +95125,23 @@ struct bpf_array {
     u32 elem_size;
     u32 index_mask;
     struct bpf_array_aux *aux;
-    union {
-	struct {
-	    struct {
-	    } __empty_value;
-	    char value[0];
-	};
-	struct {
-	    struct {
-	    } __empty_ptrs;
-	    void *ptrs[0];
-	};
-	struct {
-	    struct {
-	    } __empty_pptrs;
-	    void *pptrs[0];
-	};
+    union
+    {
+        struct {
+            struct {
+            } __empty_value;
+            char value[0];
+        };
+        struct {
+            struct {
+            } __empty_ptrs;
+            void *ptrs[0];
+        };
+        struct {
+            struct {
+            } __empty_pptrs;
+            void *pptrs[0];
+        };
     };
 };
 
@@ -94588,31 +95318,33 @@ struct uffd_msg {
     __u8 reserved1;
     __u16 reserved2;
     __u32 reserved3;
-    union {
-	struct {
-	    __u64 flags;
-	    __u64 address;
-	    union {
-		__u32 ptid;
-	    } feat;
-	} pagefault;
-	struct {
-	    __u32 ufd;
-	} fork;
-	struct {
-	    __u64 from;
-	    __u64 to;
-	    __u64 len;
-	} remap;
-	struct {
-	    __u64 start;
-	    __u64 end;
-	} remove;
-	struct {
-	    __u64 reserved1;
-	    __u64 reserved2;
-	    __u64 reserved3;
-	} reserved;
+    union
+    {
+        struct {
+            __u64 flags;
+            __u64 address;
+            union
+            {
+                __u32 ptid;
+            } feat;
+        } pagefault;
+        struct {
+            __u32 ufd;
+        } fork;
+        struct {
+            __u64 from;
+            __u64 to;
+            __u64 len;
+        } remap;
+        struct {
+            __u64 start;
+            __u64 end;
+        } remove;
+        struct {
+            __u64 reserved1;
+            __u64 reserved2;
+            __u64 reserved3;
+        } reserved;
     } arg;
 };
 
@@ -94711,7 +95443,8 @@ struct autofs_packet_expire_multi {
     char name[256];
 };
 
-union autofs_packet_union {
+union autofs_packet_union
+{
     struct autofs_packet_hdr hdr;
     struct autofs_packet_missing missing;
     struct autofs_packet_expire expire;
@@ -94739,7 +95472,8 @@ typedef struct autofs_v5_packet autofs_packet_missing_direct_t;
 
 typedef struct autofs_v5_packet autofs_packet_expire_direct_t;
 
-union autofs_v5_packet_union {
+union autofs_v5_packet_union
+{
     struct autofs_packet_hdr hdr;
     struct autofs_v5_packet v5_packet;
     autofs_packet_missing_indirect_t missing_indirect;
@@ -94794,12 +95528,12 @@ enum {
 struct cryptomgr_param {
     struct rtattr *tb[34];
     struct {
-	struct rtattr attr;
-	struct crypto_attr_type data;
+        struct rtattr attr;
+        struct crypto_attr_type data;
     } type;
     struct {
-	struct rtattr attr;
-	struct crypto_attr_alg data;
+        struct rtattr attr;
+        struct crypto_attr_alg data;
     } attrs[32];
     char template[128];
     struct crypto_larval *larval;
@@ -95028,11 +95762,12 @@ struct pnp_option {
     struct list_head list;
     unsigned int flags;
     long unsigned int type;
-    union {
-	struct pnp_port port;
-	struct pnp_irq irq;
-	struct pnp_dma dma;
-	struct pnp_mem mem;
+    union
+    {
+        struct pnp_port port;
+        struct pnp_irq irq;
+        struct pnp_dma dma;
+        struct pnp_mem mem;
     } u;
 };
 
@@ -95085,16 +95820,17 @@ struct evtchn_status {
     evtchn_port_t port;
     uint32_t status;
     uint32_t vcpu;
-    union {
-	struct {
-	    domid_t dom;
-	} unbound;
-	struct {
-	    domid_t dom;
-	    evtchn_port_t port;
-	} interdomain;
-	uint32_t pirq;
-	uint32_t virq;
+    union
+    {
+        struct {
+            domid_t dom;
+        } unbound;
+        struct {
+            domid_t dom;
+            evtchn_port_t port;
+        } interdomain;
+        uint32_t pirq;
+        uint32_t virq;
     } u;
 };
 
@@ -95192,17 +95928,18 @@ struct irq_info___3 {
     u64 eoi_time;
     raw_spinlock_t lock;
     bool is_static;
-    union {
-	short unsigned int virq;
-	enum ipi_vector ipi;
-	struct {
-	    short unsigned int pirq;
-	    short unsigned int gsi;
-	    unsigned char vector;
-	    unsigned char flags;
-	    uint16_t domid;
-	} pirq;
-	struct xenbus_device *interdomain;
+    union
+    {
+        short unsigned int virq;
+        enum ipi_vector ipi;
+        struct {
+            short unsigned int pirq;
+            short unsigned int gsi;
+            unsigned char vector;
+            unsigned char flags;
+            uint16_t domid;
+        } pirq;
+        struct xenbus_device *interdomain;
     } u;
 };
 
@@ -95561,15 +96298,16 @@ struct vcap_u112_key {
 };
 
 struct vcap_client_keyfield_data {
-    union {
-	struct vcap_u1_key u1;
-	struct vcap_u32_key u32;
-	struct vcap_u48_key u48;
-	struct vcap_u56_key u56;
-	struct vcap_u64_key u64;
-	struct vcap_u72_key u72;
-	struct vcap_u112_key u112;
-	struct vcap_u128_key u128;
+    union
+    {
+        struct vcap_u1_key u1;
+        struct vcap_u32_key u32;
+        struct vcap_u48_key u48;
+        struct vcap_u56_key u56;
+        struct vcap_u64_key u64;
+        struct vcap_u72_key u72;
+        struct vcap_u112_key u112;
+        struct vcap_u128_key u128;
     };
 };
 
@@ -95617,15 +96355,16 @@ struct vcap_u128_action {
 };
 
 struct vcap_client_actionfield_data {
-    union {
-	struct vcap_u1_action u1;
-	struct vcap_u32_action u32;
-	struct vcap_u48_action u48;
-	struct vcap_u56_action u56;
-	struct vcap_u64_action u64;
-	struct vcap_u72_action u72;
-	struct vcap_u112_action u112;
-	struct vcap_u128_action u128;
+    union
+    {
+        struct vcap_u1_action u1;
+        struct vcap_u32_action u32;
+        struct vcap_u48_action u48;
+        struct vcap_u56_action u56;
+        struct vcap_u64_action u64;
+        struct vcap_u72_action u72;
+        struct vcap_u112_action u112;
+        struct vcap_u128_action u128;
     };
 };
 
@@ -95768,17 +96507,21 @@ struct bpf_iter_seq_sk_storage_map_info {
 };
 
 struct bpf_iter__bpf_sk_storage_map {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_map *map;
+    union
+    {
+        struct bpf_map *map;
     };
-    union {
-	struct sock *sk;
+    union
+    {
+        struct sock *sk;
     };
-    union {
-	void *value;
+    union
+    {
+        void *value;
     };
 };
 
@@ -95911,21 +96654,22 @@ union efi_simple_text_output_protocol;
 
 typedef union efi_simple_text_output_protocol efi_simple_text_output_protocol_t;
 
-typedef union {
+typedef union
+{
     struct {
-	efi_table_hdr_t hdr;
-	long unsigned int fw_vendor;
-	u32 fw_revision;
-	long unsigned int con_in_handle;
-	efi_simple_text_input_protocol_t *con_in;
-	long unsigned int con_out_handle;
-	efi_simple_text_output_protocol_t *con_out;
-	long unsigned int stderr_handle;
-	long unsigned int stderr;
-	efi_runtime_services_t *runtime;
-	efi_boot_services_t *boottime;
-	long unsigned int nr_tables;
-	long unsigned int tables;
+        efi_table_hdr_t hdr;
+        long unsigned int fw_vendor;
+        u32 fw_revision;
+        long unsigned int con_in_handle;
+        efi_simple_text_input_protocol_t *con_in;
+        long unsigned int con_out_handle;
+        efi_simple_text_output_protocol_t *con_out;
+        long unsigned int stderr_handle;
+        long unsigned int stderr;
+        efi_runtime_services_t *runtime;
+        efi_boot_services_t *boottime;
+        long unsigned int nr_tables;
+        long unsigned int tables;
     };
     efi_system_table_32_t mixed_mode;
 } efi_system_table_t;
@@ -96405,7 +97149,8 @@ enum {
     fail = 2,
 };
 
-union cpumask_rcuhead {
+union cpumask_rcuhead
+{
     cpumask_t cpumask;
     struct callback_head rcu;
 };
@@ -96893,11 +97638,12 @@ struct scomp_alg {
     void (*free_ctx)(struct crypto_scomp *, void *);
     int (*compress)(struct crypto_scomp *, const u8 *, unsigned int, u8 *, unsigned int *, void *);
     int (*decompress)(struct crypto_scomp *, const u8 *, unsigned int, u8 *, unsigned int *, void *);
-    union {
-	struct {
-	    struct crypto_alg base;
-	};
-	struct comp_alg_common calg;
+    union
+    {
+        struct {
+            struct crypto_alg base;
+        };
+        struct comp_alg_common calg;
     };
 };
 
@@ -97391,7 +98137,8 @@ struct drm_wait_vblank_reply {
     long int tval_usec;
 };
 
-union drm_wait_vblank {
+union drm_wait_vblank
+{
     struct drm_wait_vblank_request request;
     struct drm_wait_vblank_reply reply;
 };
@@ -97433,8 +98180,8 @@ typedef struct drm_client32 drm_client32_t;
 struct drm_stats32 {
     u32 count;
     struct {
-	u32 value;
-	enum drm_stat_type type;
+        u32 value;
+        enum drm_stat_type type;
     } data[15];
 };
 
@@ -97453,7 +98200,8 @@ struct drm_wait_vblank_reply32 {
     s32 tval_usec;
 };
 
-union drm_wait_vblank32 {
+union drm_wait_vblank32
+{
     struct drm_wait_vblank_request32 request;
     struct drm_wait_vblank_reply32 reply;
 };
@@ -97775,11 +98523,12 @@ struct xfrm_algo_desc {
     char *compat;
     u8 available : 1;
     u8 pfkey_supported : 1;
-    union {
-	struct xfrm_algo_aead_info aead;
-	struct xfrm_algo_auth_info auth;
-	struct xfrm_algo_encr_info encr;
-	struct xfrm_algo_comp_info comp;
+    union
+    {
+        struct xfrm_algo_aead_info aead;
+        struct xfrm_algo_auth_info auth;
+        struct xfrm_algo_encr_info encr;
+        struct xfrm_algo_comp_info comp;
     } uinfo;
     struct sadb_alg desc;
 };
@@ -98966,8 +99715,8 @@ struct xz_dec_lzma2 {
     struct lzma2_dec lzma2;
     struct lzma_dec lzma;
     struct {
-	uint32_t size;
-	uint8_t buf[63];
+        uint32_t size;
+        uint8_t buf[63];
     } temp;
 };
 
@@ -99077,15 +99826,16 @@ struct ivhd_entry {
     u8 type;
     u16 devid;
     u8 flags;
-    union {
-	struct {
-	    u32 ext;
-	    u32 hidh;
-	};
-	struct {
-	    u32 ext;
-	    u32 hidh;
-	} ext_hid;
+    union
+    {
+        struct {
+            u32 ext;
+            u32 hidh;
+        };
+        struct {
+            u32 ext;
+            u32 hidh;
+        } ext_hid;
     };
     u64 cid;
     u8 uidf;
@@ -99118,16 +99868,17 @@ enum iommu_init_state {
     IOMMU_CMDLINE_DISABLED = 9,
 };
 
-union intcapxt {
+union intcapxt
+{
     u64 capxt;
     struct {
-	u64 reserved_0 : 2;
-	u64 dest_mode_logical : 1;
-	u64 reserved_1 : 5;
-	u64 destid_0_23 : 24;
-	u64 vector : 8;
-	u64 reserved_2 : 16;
-	u64 destid_24_31 : 8;
+        u64 reserved_0 : 2;
+        u64 dest_mode_logical : 1;
+        u64 reserved_1 : 5;
+        u64 destid_0_23 : 24;
+        u64 vector : 8;
+        u64 reserved_2 : 16;
+        u64 destid_24_31 : 8;
     };
 };
 
@@ -99353,27 +100104,29 @@ struct ms_hyperv_tsc_page {
     volatile s64 tsc_offset;
 };
 
-union hv_reference_tsc_msr {
+union hv_reference_tsc_msr
+{
     u64 as_uint64;
     struct {
-	u64 enable : 1;
-	u64 reserved : 11;
-	u64 pfn : 52;
+        u64 enable : 1;
+        u64 reserved : 11;
+        u64 pfn : 52;
     };
 };
 
-union hv_stimer_config {
+union hv_stimer_config
+{
     u64 as_uint64;
     struct {
-	u64 enable : 1;
-	u64 periodic : 1;
-	u64 lazy : 1;
-	u64 auto_enable : 1;
-	u64 apic_vector : 8;
-	u64 direct_mode : 1;
-	u64 reserved_z0 : 3;
-	u64 sintx : 4;
-	u64 reserved_z1 : 44;
+        u64 enable : 1;
+        u64 periodic : 1;
+        u64 lazy : 1;
+        u64 auto_enable : 1;
+        u64 apic_vector : 8;
+        u64 direct_mode : 1;
+        u64 reserved_z0 : 3;
+        u64 sintx : 4;
+        u64 reserved_z1 : 44;
     };
 };
 
@@ -99407,9 +100160,10 @@ struct xdp_attachment_info {
 
 struct xdp_mem_allocator {
     struct xdp_mem_info mem;
-    union {
-	void *allocator;
-	struct page_pool *page_pool;
+    union
+    {
+        void *allocator;
+        struct page_pool *page_pool;
     };
     struct rhash_head node;
     struct callback_head rcu;
@@ -99757,39 +100511,39 @@ struct kioctx {
     long : 64;
     long : 64;
     struct {
-	atomic_t reqs_available;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        atomic_t reqs_available;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     };
     struct {
-	spinlock_t ctx_lock;
-	struct list_head active_reqs;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        spinlock_t ctx_lock;
+        struct list_head active_reqs;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     };
     struct {
-	struct mutex ring_lock;
-	wait_queue_head_t wait;
-	long : 64;
+        struct mutex ring_lock;
+        wait_queue_head_t wait;
+        long : 64;
     };
     struct {
-	unsigned int tail;
-	unsigned int completed_events;
-	spinlock_t completion_lock;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
-	long : 64;
+        unsigned int tail;
+        unsigned int completed_events;
+        spinlock_t completion_lock;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
+        long : 64;
     };
     struct page *internal_pages[8];
     struct file *aio_ring_file;
@@ -99830,11 +100584,12 @@ struct poll_iocb {
 };
 
 struct aio_kiocb {
-    union {
-	struct file *ki_filp;
-	struct kiocb rw;
-	struct fsync_iocb fsync;
-	struct poll_iocb poll;
+    union
+    {
+        struct file *ki_filp;
+        struct kiocb rw;
+        struct fsync_iocb fsync;
+        struct poll_iocb poll;
     };
     struct kioctx *ki_ctx;
     kiocb_cancel_fn *ki_cancel;
@@ -99980,12 +100735,13 @@ struct crypto_hash_walk {
 
 struct ahash_instance {
     void (*free)(struct ahash_instance *);
-    union {
-	struct {
-	    char head[96];
-	    struct crypto_instance base;
-	} s;
-	struct ahash_alg alg;
+    union
+    {
+        struct {
+            char head[96];
+            struct crypto_instance base;
+        } s;
+        struct ahash_alg alg;
     };
 };
 
@@ -100334,13 +101090,15 @@ struct exec_proc_event {
 struct id_proc_event {
     __kernel_pid_t process_pid;
     __kernel_pid_t process_tgid;
-    union {
-	__u32 ruid;
-	__u32 rgid;
+    union
+    {
+        __u32 ruid;
+        __u32 rgid;
     } r;
-    union {
-	__u32 euid;
-	__u32 egid;
+    union
+    {
+        __u32 euid;
+        __u32 egid;
     } e;
 };
 
@@ -100382,18 +101140,19 @@ struct proc_event {
     enum proc_cn_event what;
     __u32 cpu;
     __u64 timestamp_ns;
-    union {
-	struct {
-	    __u32 err;
-	} ack;
-	struct fork_proc_event fork;
-	struct exec_proc_event exec;
-	struct id_proc_event id;
-	struct sid_proc_event sid;
-	struct ptrace_proc_event ptrace;
-	struct comm_proc_event comm;
-	struct coredump_proc_event coredump;
-	struct exit_proc_event exit;
+    union
+    {
+        struct {
+            __u32 err;
+        } ack;
+        struct fork_proc_event fork;
+        struct exec_proc_event exec;
+        struct id_proc_event id;
+        struct sid_proc_event sid;
+        struct ptrace_proc_event ptrace;
+        struct comm_proc_event comm;
+        struct coredump_proc_event coredump;
+        struct exit_proc_event exit;
     } event_data;
 };
 
@@ -100623,7 +101382,8 @@ enum {
     __TCA_FLOWER_KEY_CT_FLAGS_MAX = 33,
 };
 
-union tcp_word_hdr {
+union tcp_word_hdr
+{
     struct tcphdr hdr;
     __be32 words[5];
 };
@@ -100697,8 +101457,8 @@ struct batadv_unicast_packet {
 
 struct nf_conntrack_tuple_mask {
     struct {
-	union nf_inet_addr u3;
-	union nf_conntrack_man_proto u;
+        union nf_inet_addr u3;
+        union nf_conntrack_man_proto u;
     } src;
 };
 
@@ -100798,8 +101558,8 @@ struct netlink_policy_dump_state {
     unsigned int attr_idx;
     unsigned int n_alloc;
     struct {
-	const struct nla_policy *policy;
-	unsigned int maxtype;
+        const struct nla_policy *policy;
+        unsigned int maxtype;
     } policies[0];
 };
 
@@ -100950,26 +101710,28 @@ struct ethtool_rx_flow_spec_input {
 
 struct ethtool_devlink_compat {
     struct devlink *devlink;
-    union {
-	struct ethtool_flash efl;
-	struct ethtool_drvinfo info;
+    union
+    {
+        struct ethtool_flash efl;
+        struct ethtool_drvinfo info;
     };
 };
 
 struct ethtool_link_usettings {
     struct ethtool_link_settings base;
     struct {
-	__u32 supported[4];
-	__u32 advertising[4];
-	__u32 lp_advertising[4];
+        __u32 supported[4];
+        __u32 advertising[4];
+        __u32 lp_advertising[4];
     } link_modes;
 };
 
 struct ethtool_rx_flow_key {
     struct flow_dissector_key_basic basic;
-    union {
-	struct flow_dissector_key_ipv4_addrs ipv4;
-	struct flow_dissector_key_ipv6_addrs ipv6;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs ipv4;
+        struct flow_dissector_key_ipv6_addrs ipv6;
     };
     struct flow_dissector_key_ports tp;
     struct flow_dissector_key_ip ip;
@@ -101193,74 +101955,80 @@ enum hv_interrupt_type {
     HV_X64_INTERRUPT_TYPE_MAXIMUM = 10,
 };
 
-union hv_msi_address_register {
+union hv_msi_address_register
+{
     u32 as_uint32;
     struct {
-	u32 reserved1 : 2;
-	u32 destination_mode : 1;
-	u32 redirection_hint : 1;
-	u32 reserved2 : 8;
-	u32 destination_id : 8;
-	u32 msi_base : 12;
+        u32 reserved1 : 2;
+        u32 destination_mode : 1;
+        u32 redirection_hint : 1;
+        u32 reserved2 : 8;
+        u32 destination_id : 8;
+        u32 msi_base : 12;
     };
 };
 
-union hv_msi_data_register {
+union hv_msi_data_register
+{
     u32 as_uint32;
     struct {
-	u32 vector : 8;
-	u32 delivery_mode : 3;
-	u32 reserved1 : 3;
-	u32 level_assert : 1;
-	u32 trigger_mode : 1;
-	u32 reserved2 : 16;
+        u32 vector : 8;
+        u32 delivery_mode : 3;
+        u32 reserved1 : 3;
+        u32 level_assert : 1;
+        u32 trigger_mode : 1;
+        u32 reserved2 : 16;
     };
 };
 
-union hv_msi_entry {
+union hv_msi_entry
+{
     u64 as_uint64;
     struct {
-	union hv_msi_address_register address;
-	union hv_msi_data_register data;
+        union hv_msi_address_register address;
+        union hv_msi_data_register data;
     };
 };
 
-union hv_ioapic_rte {
+union hv_ioapic_rte
+{
     u64 as_uint64;
     struct {
-	u32 vector : 8;
-	u32 delivery_mode : 3;
-	u32 destination_mode : 1;
-	u32 delivery_status : 1;
-	u32 interrupt_polarity : 1;
-	u32 remote_irr : 1;
-	u32 trigger_mode : 1;
-	u32 interrupt_mask : 1;
-	u32 reserved1 : 15;
-	u32 reserved2 : 24;
-	u32 destination_id : 8;
+        u32 vector : 8;
+        u32 delivery_mode : 3;
+        u32 destination_mode : 1;
+        u32 delivery_status : 1;
+        u32 interrupt_polarity : 1;
+        u32 remote_irr : 1;
+        u32 trigger_mode : 1;
+        u32 interrupt_mask : 1;
+        u32 reserved1 : 15;
+        u32 reserved2 : 24;
+        u32 destination_id : 8;
     };
     struct {
-	u32 low_uint32;
-	u32 high_uint32;
+        u32 low_uint32;
+        u32 high_uint32;
     };
 };
 
 struct hv_interrupt_entry {
     u32 source;
     u32 reserved1;
-    union {
-	union hv_msi_entry msi_entry;
-	union hv_ioapic_rte ioapic_rte;
+    union
+    {
+        union hv_msi_entry msi_entry;
+        union hv_ioapic_rte ioapic_rte;
     };
 };
 
 struct hv_device_interrupt_target {
     u32 vector;
     u32 flags;
-    union {
-	u64 vp_mask;
-	struct hv_vpset vp_set;
+    union
+    {
+        u64 vp_mask;
+        struct hv_vpset vp_set;
     };
 };
 
@@ -101275,57 +102043,61 @@ typedef u16 hv_pci_rid;
 
 typedef u16 hv_pci_segment;
 
-union hv_pci_bdf {
+union hv_pci_bdf
+{
     u16 as_uint16;
     struct {
-	u8 function : 3;
-	u8 device : 5;
-	u8 bus;
+        u8 function : 3;
+        u8 device : 5;
+        u8 bus;
     };
 };
 
-union hv_pci_bus_range {
+union hv_pci_bus_range
+{
     u16 as_uint16;
     struct {
-	u8 subordinate_bus;
-	u8 secondary_bus;
+        u8 subordinate_bus;
+        u8 secondary_bus;
     };
 };
 
-union hv_device_id {
+union hv_device_id
+{
     u64 as_uint64;
     struct {
-	u64 reserved0 : 62;
-	u64 device_type : 2;
+        u64 reserved0 : 62;
+        u64 device_type : 2;
     };
     struct {
-	u64 id : 62;
-	u64 device_type : 2;
+        u64 id : 62;
+        u64 device_type : 2;
     } logical;
     struct {
-	union {
-	    hv_pci_rid rid;
-	    union hv_pci_bdf bdf;
-	};
-	hv_pci_segment segment;
-	union hv_pci_bus_range shadow_bus_range;
-	u16 phantom_function_bits : 2;
-	u16 source_shadow : 1;
-	u16 rsvdz0 : 11;
-	u16 device_type : 2;
+        union
+        {
+            hv_pci_rid rid;
+            union hv_pci_bdf bdf;
+        };
+        hv_pci_segment segment;
+        union hv_pci_bus_range shadow_bus_range;
+        u16 phantom_function_bits : 2;
+        u16 source_shadow : 1;
+        u16 rsvdz0 : 11;
+        u16 device_type : 2;
     } pci;
     struct {
-	u8 ioapic_id;
-	u8 rsvdz0;
-	u16 rsvdz1;
-	u16 rsvdz2;
-	u16 rsvdz3 : 14;
-	u16 device_type : 2;
+        u8 ioapic_id;
+        u8 rsvdz0;
+        u16 rsvdz1;
+        u16 rsvdz2;
+        u16 rsvdz3 : 14;
+        u16 device_type : 2;
     } ioapic;
     struct {
-	u32 input_mapping_base;
-	u32 input_mapping_count : 30;
-	u32 device_type : 2;
+        u32 input_mapping_base;
+        u32 input_mapping_count : 30;
+        u32 device_type : 2;
     } acpi;
 };
 
@@ -101806,9 +102578,10 @@ struct configfs_buffer {
     int cb_max_size;
     struct config_item *item;
     struct module *owner;
-    union {
-	struct configfs_attribute *attr;
-	struct configfs_bin_attribute *bin_attr;
+    union
+    {
+        struct configfs_attribute *attr;
+        struct configfs_bin_attribute *bin_attr;
     };
 };
 
@@ -101840,8 +102613,8 @@ struct btrfs_backref_share_check_ctx {
     struct btrfs_backref_shared_cache_entry path_cache_entries[8];
     bool use_path_cache;
     struct {
-	u64 bytenr;
-	bool is_shared;
+        u64 bytenr;
+        bool is_shared;
     } prev_extents_cache[8];
     int prev_extents_cache_slot;
 };
@@ -101849,9 +102622,10 @@ struct btrfs_backref_share_check_ctx {
 struct btrfs_subpage {
     spinlock_t lock;
     atomic_t readers;
-    union {
-	atomic_t eb_refs;
-	atomic_t writers;
+    union
+    {
+        atomic_t eb_refs;
+        atomic_t writers;
     };
     long unsigned int bitmaps[0];
 };
@@ -102215,10 +102989,11 @@ struct splice_desc {
     size_t total_len;
     unsigned int len;
     unsigned int flags;
-    union {
-	void *userptr;
-	struct file *file;
-	void *data;
+    union
+    {
+        void *userptr;
+        struct file *file;
+        void *data;
     } u;
     void (*splice_eof)(struct splice_desc *);
     loff_t pos;
@@ -102466,24 +103241,25 @@ struct detailed_data_monitor_range {
     u8 max_hfreq_khz;
     u8 pixel_clock_mhz;
     u8 flags;
-    union {
-	struct {
-	    u8 reserved;
-	    u8 hfreq_start_khz;
-	    u8 c;
-	    __le16 m;
-	    u8 k;
-	    u8 j;
-	} __attribute__((packed)) gtf2;
-	struct {
-	    u8 version;
-	    u8 data1;
-	    u8 data2;
-	    u8 supported_aspects;
-	    u8 flags;
-	    u8 supported_scalings;
-	    u8 preferred_refresh;
-	} cvt;
+    union
+    {
+        struct {
+            u8 reserved;
+            u8 hfreq_start_khz;
+            u8 c;
+            __le16 m;
+            u8 k;
+            u8 j;
+        } __attribute__((packed)) gtf2;
+        struct {
+            u8 version;
+            u8 data1;
+            u8 data2;
+            u8 supported_aspects;
+            u8 flags;
+            u8 supported_scalings;
+            u8 preferred_refresh;
+        } cvt;
     } formula;
 };
 
@@ -102502,20 +103278,22 @@ struct detailed_non_pixel {
     u8 pad1;
     u8 type;
     u8 pad2;
-    union {
-	struct detailed_data_string str;
-	struct detailed_data_monitor_range range;
-	struct detailed_data_wpindex color;
-	struct std_timing timings[6];
-	struct cvt_timing cvt[4];
+    union
+    {
+        struct detailed_data_string str;
+        struct detailed_data_monitor_range range;
+        struct detailed_data_wpindex color;
+        struct std_timing timings[6];
+        struct cvt_timing cvt[4];
     } data;
 };
 
 struct detailed_timing {
     __le16 pixel_clock;
-    union {
-	struct detailed_pixel_timing pixel_data;
-	struct detailed_non_pixel other_data;
+    union
+    {
+        struct detailed_pixel_timing pixel_data;
+        struct detailed_non_pixel other_data;
     } data;
 };
 
@@ -102689,9 +103467,10 @@ struct of_pci_range_parser {
 };
 
 struct of_pci_range {
-    union {
-	u64 pci_addr;
-	u64 bus_addr;
+    union
+    {
+        u64 pci_addr;
+        u64 bus_addr;
     };
     u64 cpu_addr;
     u64 size;
@@ -102825,11 +103604,13 @@ struct udp_iter_state {
 };
 
 struct bpf_iter__udp {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct udp_sock *udp_sk;
+    union
+    {
+        struct udp_sock *udp_sk;
     };
     uid_t uid;
     long : 0;
@@ -102899,12 +103680,13 @@ struct maple_pnode;
 struct maple_range_64 {
     struct maple_pnode *parent;
     long unsigned int pivot[15];
-    union {
-	void *slot[16];
-	struct {
-	    void *pad[15];
-	    struct maple_metadata meta;
-	};
+    union
+    {
+        void *slot[16];
+        struct {
+            void *pad[15];
+            struct maple_metadata meta;
+        };
     };
 };
 
@@ -102929,23 +103711,24 @@ enum maple_type {
 };
 
 struct maple_node {
-    union {
-	struct {
-	    struct maple_pnode *parent;
-	    void *slot[31];
-	};
-	struct {
-	    void *pad;
-	    struct callback_head rcu;
-	    struct maple_enode *piv_parent;
-	    unsigned char parent_slot;
-	    enum maple_type type;
-	    unsigned char slot_len;
-	    unsigned int ma_flags;
-	};
-	struct maple_range_64 mr64;
-	struct maple_arange_64 ma64;
-	struct maple_alloc alloc;
+    union
+    {
+        struct {
+            struct maple_pnode *parent;
+            void *slot[31];
+        };
+        struct {
+            void *pad;
+            struct callback_head rcu;
+            struct maple_enode *piv_parent;
+            unsigned char parent_slot;
+            enum maple_type type;
+            unsigned char slot_len;
+            unsigned int ma_flags;
+        };
+        struct maple_range_64 mr64;
+        struct maple_arange_64 ma64;
+        struct maple_alloc alloc;
     };
 };
 
@@ -103019,12 +103802,13 @@ typedef void (*btf_trace_ma_write)(void *, const char *, struct ma_state *, long
 struct maple_big_node {
     struct maple_pnode *parent;
     long unsigned int pivot[33];
-    union {
-	struct maple_enode *slot[34];
-	struct {
-	    long unsigned int padding[21];
-	    long unsigned int gap[21];
-	};
+    union
+    {
+        struct maple_enode *slot[34];
+        struct {
+            long unsigned int padding[21];
+            long unsigned int gap[21];
+        };
     };
     unsigned char b_end;
     enum maple_type type;
@@ -103061,10 +103845,11 @@ struct hv_proximity_domain_flags {
     u32 proximity_info_valid : 1;
 };
 
-union hv_proximity_domain_info {
+union hv_proximity_domain_info
+{
     struct {
-	u32 domain_id;
-	struct hv_proximity_domain_flags flags;
+        u32 domain_id;
+        struct hv_proximity_domain_flags flags;
     };
     u64 as_uint64;
 };
@@ -103657,8 +104442,8 @@ struct fanotify_event {
     struct hlist_node merge_list;
     u32 mask;
     struct {
-	unsigned int type : 3;
-	unsigned int hash : 29;
+        unsigned int type : 3;
+        unsigned int hash : 29;
     };
     struct pid *pid;
 };
@@ -103667,8 +104452,8 @@ struct fanotify_fid_event {
     struct fanotify_event fae;
     __kernel_fsid_t fsid;
     struct {
-	struct fanotify_fh object_fh;
-	unsigned char _inline_fh_buf[12];
+        struct fanotify_fh object_fh;
+        unsigned char _inline_fh_buf[12];
     };
 };
 
@@ -103684,8 +104469,8 @@ struct fanotify_error_event {
     u32 err_count;
     __kernel_fsid_t fsid;
     struct {
-	struct fanotify_fh object_fh;
-	unsigned char _inline_fh_buf[128];
+        struct fanotify_fh object_fh;
+        unsigned char _inline_fh_buf[128];
     };
 };
 
@@ -103700,9 +104485,10 @@ struct fanotify_perm_event {
     u32 response;
     short unsigned int state;
     int fd;
-    union {
-	struct fanotify_response_info_header hdr;
-	struct fanotify_response_info_audit_rule audit_rule;
+    union
+    {
+        struct fanotify_response_info_header hdr;
+        struct fanotify_response_info_audit_rule audit_rule;
     };
 };
 
@@ -103770,9 +104556,10 @@ struct rpc_rqst {
     int rq_enc_pages_num;
     struct page **rq_enc_pages;
     void (*rq_release_snd_buf)(struct rpc_rqst *);
-    union {
-	struct list_head rq_list;
-	struct rb_node rq_recv;
+    union
+    {
+        struct list_head rq_list;
+        struct rb_node rq_recv;
     };
     struct list_head rq_xmit;
     struct list_head rq_xmit2;
@@ -103851,9 +104638,10 @@ struct rpc_task {
     long unsigned int tk_timeout;
     long unsigned int tk_runstate;
     struct rpc_wait_queue *tk_waitqueue;
-    union {
-	struct work_struct tk_work;
-	struct rpc_wait tk_wait;
+    union
+    {
+        struct work_struct tk_work;
+        struct rpc_wait tk_wait;
     } u;
     struct rpc_message tk_msg;
     void *tk_calldata;
@@ -103978,9 +104766,10 @@ struct rpc_clnt {
     const char *cl_principal;
     struct dentry *cl_debugfs;
     struct rpc_sysfs_client *cl_sysfs;
-    union {
-	struct rpc_xprt_iter cl_xpi;
-	struct work_struct cl_work;
+    union
+    {
+        struct rpc_xprt_iter cl_xpi;
+        struct work_struct cl_work;
     };
     const struct cred *cl_cred;
     unsigned int cl_max_connect;
@@ -104049,18 +104838,18 @@ struct rpc_xprt {
     struct list_head bc_pa_list;
     struct rb_root recv_queue;
     struct {
-	long unsigned int bind_count;
-	long unsigned int connect_count;
-	long unsigned int connect_start;
-	long unsigned int connect_time;
-	long unsigned int sends;
-	long unsigned int recvs;
-	long unsigned int bad_xids;
-	long unsigned int max_slots;
-	long long unsigned int req_u;
-	long long unsigned int bklog_u;
-	long long unsigned int sending_u;
-	long long unsigned int pending_u;
+        long unsigned int bind_count;
+        long unsigned int connect_count;
+        long unsigned int connect_start;
+        long unsigned int connect_time;
+        long unsigned int sends;
+        long unsigned int recvs;
+        long unsigned int bad_xids;
+        long unsigned int max_slots;
+        long long unsigned int req_u;
+        long long unsigned int bklog_u;
+        long long unsigned int sending_u;
+        long long unsigned int pending_u;
     } stat;
     struct net *xprt_net;
     netns_tracker ns_tracker;
@@ -104382,22 +105171,23 @@ typedef struct {
 } nfs4_verifier;
 
 struct nfs4_stateid_struct {
-    union {
-	char data[16];
-	struct {
-	    __be32 seqid;
-	    char other[12];
-	};
+    union
+    {
+        char data[16];
+        struct {
+            __be32 seqid;
+            char other[12];
+        };
     };
     enum {
-	NFS4_INVALID_STATEID_TYPE = 0,
-	NFS4_SPECIAL_STATEID_TYPE = 1,
-	NFS4_OPEN_STATEID_TYPE = 2,
-	NFS4_LOCK_STATEID_TYPE = 3,
-	NFS4_DELEGATION_STATEID_TYPE = 4,
-	NFS4_LAYOUT_STATEID_TYPE = 5,
-	NFS4_PNFS_DS_STATEID_TYPE = 6,
-	NFS4_REVOKED_STATEID_TYPE = 7,
+        NFS4_INVALID_STATEID_TYPE = 0,
+        NFS4_SPECIAL_STATEID_TYPE = 1,
+        NFS4_OPEN_STATEID_TYPE = 2,
+        NFS4_LOCK_STATEID_TYPE = 3,
+        NFS4_DELEGATION_STATEID_TYPE = 4,
+        NFS4_LAYOUT_STATEID_TYPE = 5,
+        NFS4_PNFS_DS_STATEID_TYPE = 6,
+        NFS4_REVOKED_STATEID_TYPE = 7,
     } type;
 };
 
@@ -104493,14 +105283,15 @@ struct nfs_fattr {
     kgid_t gid;
     dev_t rdev;
     __u64 size;
-    union {
-	struct {
-	    __u32 blocksize;
-	    __u32 blocks;
-	} nfs2;
-	struct {
-	    __u64 used;
-	} nfs3;
+    union
+    {
+        struct {
+            __u32 blocksize;
+            __u32 blocks;
+        } nfs2;
+        struct {
+            __u64 used;
+        } nfs3;
     } du;
     struct nfs_fsid fsid;
     __u64 fileid;
@@ -104798,13 +105589,14 @@ struct nfs_pgio_args {
     __u32 count;
     unsigned int pgbase;
     struct page **pages;
-    union {
-	unsigned int replen;
-	struct {
-	    const u32 *bitmask;
-	    u32 bitmask_store[3];
-	    enum nfs3_stable_how stable;
-	};
+    union
+    {
+        unsigned int replen;
+        struct {
+            const u32 *bitmask;
+            u32 bitmask_store[3];
+            enum nfs3_stable_how stable;
+        };
     };
 };
 
@@ -104813,16 +105605,17 @@ struct nfs_pgio_res {
     struct nfs_fattr *fattr;
     __u64 count;
     __u32 op_status;
-    union {
-	struct {
-	    unsigned int replen;
-	    int eof;
-	    void *scratch;
-	};
-	struct {
-	    struct nfs_writeverf *verf;
-	    const struct nfs_server *server;
-	};
+    union
+    {
+        struct {
+            unsigned int replen;
+            int eof;
+            void *scratch;
+        };
+        struct {
+            struct nfs_writeverf *verf;
+            const struct nfs_server *server;
+        };
     };
 };
 
@@ -105340,12 +106133,13 @@ struct svc_deferred_req {
 };
 
 struct svc_process_info {
-    union {
-	int (*dispatch)(struct svc_rqst *);
-	struct {
-	    unsigned int lovers;
-	    unsigned int hivers;
-	} mismatch;
+    union
+    {
+        int (*dispatch)(struct svc_rqst *);
+        struct {
+            unsigned int lovers;
+            unsigned int hivers;
+        } mismatch;
     };
 };
 
@@ -105497,16 +106291,16 @@ struct efivarfs_fs_info {
 struct vfs_cap_data {
     __le32 magic_etc;
     struct {
-	__le32 permitted;
-	__le32 inheritable;
+        __le32 permitted;
+        __le32 inheritable;
     } data[2];
 };
 
 struct vfs_ns_cap_data {
     __le32 magic_etc;
     struct {
-	__le32 permitted;
-	__le32 inheritable;
+        __le32 permitted;
+        __le32 inheritable;
     } data[2];
     __le32 rootid;
 };
@@ -105650,12 +106444,12 @@ typedef struct {
 
 struct xz_dec_bcj {
     enum {
-	BCJ_X86 = 4,
-	BCJ_POWERPC = 5,
-	BCJ_IA64 = 6,
-	BCJ_ARM = 7,
-	BCJ_ARMTHUMB = 8,
-	BCJ_SPARC = 9,
+        BCJ_X86 = 4,
+        BCJ_POWERPC = 5,
+        BCJ_IA64 = 6,
+        BCJ_ARM = 7,
+        BCJ_ARMTHUMB = 8,
+        BCJ_SPARC = 9,
     } type;
     enum xz_ret ret;
     bool single_call;
@@ -105665,9 +106459,9 @@ struct xz_dec_bcj {
     size_t out_pos;
     size_t out_size;
     struct {
-	size_t filtered;
-	size_t size;
-	uint8_t buf[16];
+        size_t filtered;
+        size_t size;
+        uint8_t buf[16];
     } temp;
 };
 
@@ -106161,20 +106955,23 @@ enum {
 
 struct bpf_tunnel_key {
     __u32 tunnel_id;
-    union {
-	__u32 remote_ipv4;
-	__u32 remote_ipv6[4];
+    union
+    {
+        __u32 remote_ipv4;
+        __u32 remote_ipv6[4];
     };
     __u8 tunnel_tos;
     __u8 tunnel_ttl;
-    union {
-	__u16 tunnel_ext;
-	__be16 tunnel_flags;
+    union
+    {
+        __u16 tunnel_ext;
+        __be16 tunnel_flags;
     };
     __u32 tunnel_label;
-    union {
-	__u32 local_ipv4;
-	__u32 local_ipv6[4];
+    union
+    {
+        __u32 local_ipv4;
+        __u32 local_ipv6[4];
     };
 };
 
@@ -106183,9 +106980,10 @@ struct bpf_xfrm_state {
     __u32 spi;
     __u16 family;
     __u16 ext;
-    union {
-	__u32 remote_ipv4;
-	__u32 remote_ipv6[4];
+    union
+    {
+        __u32 remote_ipv4;
+        __u32 remote_ipv6[4];
     };
 };
 
@@ -106219,19 +107017,20 @@ struct bpf_tcp_sock {
 };
 
 struct bpf_sock_tuple {
-    union {
-	struct {
-	    __be32 saddr;
-	    __be32 daddr;
-	    __be16 sport;
-	    __be16 dport;
-	} ipv4;
-	struct {
-	    __be32 saddr[4];
-	    __be32 daddr[4];
-	    __be16 sport;
-	    __be16 dport;
-	} ipv6;
+    union
+    {
+        struct {
+            __be32 saddr;
+            __be32 daddr;
+            __be16 sport;
+            __be16 dport;
+        } ipv4;
+        struct {
+            __be32 saddr[4];
+            __be32 daddr[4];
+            __be16 sport;
+            __be16 dport;
+        } ipv6;
     };
 };
 
@@ -106290,30 +107089,35 @@ struct bpf_fib_lookup {
     __u8 l4_protocol;
     __be16 sport;
     __be16 dport;
-    union {
-	__u16 tot_len;
-	__u16 mtu_result;
+    union
+    {
+        __u16 tot_len;
+        __u16 mtu_result;
     };
     __u32 ifindex;
-    union {
-	__u8 tos;
-	__be32 flowinfo;
-	__u32 rt_metric;
+    union
+    {
+        __u8 tos;
+        __be32 flowinfo;
+        __u32 rt_metric;
     };
-    union {
-	__be32 ipv4_src;
-	__u32 ipv6_src[4];
+    union
+    {
+        __be32 ipv4_src;
+        __u32 ipv6_src[4];
     };
-    union {
-	__be32 ipv4_dst;
-	__u32 ipv6_dst[4];
+    union
+    {
+        __be32 ipv4_dst;
+        __u32 ipv6_dst[4];
     };
-    union {
-	struct {
-	    __be16 h_vlan_proto;
-	    __be16 h_vlan_TCI;
-	};
-	__u32 tbid;
+    union
+    {
+        struct {
+            __be16 h_vlan_proto;
+            __be16 h_vlan_TCI;
+        };
+        __u32 tbid;
     };
     __u8 smac[6];
     __u8 dmac[6];
@@ -106321,9 +107125,10 @@ struct bpf_fib_lookup {
 
 struct bpf_redir_neigh {
     __u32 nh_family;
-    union {
-	__be32 ipv4_nh;
-	__u32 ipv6_nh[4];
+    union
+    {
+        __be32 ipv4_nh;
+        __u32 ipv6_nh[4];
     };
 };
 
@@ -106451,9 +107256,10 @@ typedef u64 (*btf_bpf_skb_load_helper_32)(const struct sk_buff *, const void *, 
 typedef u64 (*btf_bpf_skb_load_helper_32_no_cache)(const struct sk_buff *, int);
 
 struct bpf_scratchpad {
-    union {
-	__be32 diff[128];
-	u8 buff[512];
+    union
+    {
+        __be32 diff[128];
+        u8 buff[512];
     };
 };
 
@@ -107125,11 +107931,13 @@ struct kallsym_iter {
 };
 
 struct bpf_iter__ksym {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct kallsym_iter *ksym;
+    union
+    {
+        struct kallsym_iter *ksym;
     };
 };
 
@@ -107196,12 +108004,13 @@ struct rv_monitor_def {
 };
 
 struct kmem_cache_cpu {
-    union {
-	struct {
-	    void **freelist;
-	    long unsigned int tid;
-	};
-	freelist_aba_t freelist_tid;
+    union
+    {
+        struct {
+            void **freelist;
+            long unsigned int tid;
+        };
+        freelist_aba_t freelist_tid;
     };
     struct slab *slab;
     struct slab *partial;
@@ -107562,12 +108371,13 @@ struct shmem_inode_info {
     long unsigned int flags;
     long unsigned int alloced;
     long unsigned int swapped;
-    union {
-	struct offset_ctx dir_offsets;
-	struct {
-	    struct list_head shrinklist;
-	    struct list_head swaplist;
-	};
+    union
+    {
+        struct offset_ctx dir_offsets;
+        struct {
+            struct list_head shrinklist;
+            struct list_head swaplist;
+        };
     };
     struct timespec64 i_crtime;
     struct shared_policy policy;
@@ -107934,9 +108744,10 @@ struct dma_fence_chain {
     struct dma_fence *prev;
     u64 prev_seqno;
     struct dma_fence *fence;
-    union {
-	struct dma_fence_cb cb;
-	struct irq_work work;
+    union
+    {
+        struct dma_fence_cb cb;
+        struct irq_work work;
     };
     spinlock_t lock;
 };
@@ -108082,8 +108893,8 @@ struct synaptics_data {
 struct min_max_quirk {
     const char *const *pnp_ids;
     struct {
-	u32 min;
-	u32 max;
+        u32 min;
+        u32 max;
     } board_id;
     u32 x_min;
     u32 x_max;
@@ -108464,18 +109275,20 @@ struct mptcp_subflow_data {
 };
 
 struct mptcp_subflow_addrs {
-    union {
-	__kernel_sa_family_t sa_family;
-	struct sockaddr sa_local;
-	struct sockaddr_in sin_local;
-	struct sockaddr_in6 sin6_local;
-	struct __kernel_sockaddr_storage ss_local;
+    union
+    {
+        __kernel_sa_family_t sa_family;
+        struct sockaddr sa_local;
+        struct sockaddr_in sin_local;
+        struct sockaddr_in6 sin6_local;
+        struct __kernel_sockaddr_storage ss_local;
     };
-    union {
-	struct sockaddr sa_remote;
-	struct sockaddr_in sin_remote;
-	struct sockaddr_in6 sin6_remote;
-	struct __kernel_sockaddr_storage ss_remote;
+    union
+    {
+        struct sockaddr sa_remote;
+        struct sockaddr_in sin_remote;
+        struct sockaddr_in6 sin6_remote;
+        struct __kernel_sockaddr_storage ss_remote;
     };
 };
 
@@ -108617,7 +109430,8 @@ struct uv2h_gr0_gam_gr_config_s {
     long unsigned int reserved : 60;
 };
 
-union uvyh_gr0_gam_gr_config_u {
+union uvyh_gr0_gam_gr_config_u
+{
     long unsigned int v;
     struct uvyh_gr0_gam_gr_config_s sy;
     struct uv5h_gr0_gam_gr_config_s s5;
@@ -108708,7 +109522,8 @@ struct uv2h_node_id_s {
     long unsigned int rsvd_62_63 : 2;
 };
 
-union uvh_node_id_u {
+union uvh_node_id_u
+{
     long unsigned int v;
     struct uvh_node_id_s s;
     struct uvxh_node_id_s sx;
@@ -108748,7 +109563,8 @@ struct uv5h_rh10_gam_addr_map_config_s {
     long unsigned int mk_tme_keyid_bits : 4;
 };
 
-union uvh_rh10_gam_addr_map_config_u {
+union uvh_rh10_gam_addr_map_config_u
+{
     long unsigned int v;
     struct uvh_rh10_gam_addr_map_config_s s;
     struct uvyh_rh10_gam_addr_map_config_s sy;
@@ -108782,7 +109598,8 @@ struct uv5h_rh10_gam_mmioh_overlay_config0_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh10_gam_mmioh_overlay_config0_u {
+union uvh_rh10_gam_mmioh_overlay_config0_u
+{
     long unsigned int v;
     struct uvh_rh10_gam_mmioh_overlay_config0_s s;
     struct uvyh_rh10_gam_mmioh_overlay_config0_s sy;
@@ -108816,7 +109633,8 @@ struct uv5h_rh10_gam_mmioh_overlay_config1_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh10_gam_mmioh_overlay_config1_u {
+union uvh_rh10_gam_mmioh_overlay_config1_u
+{
     long unsigned int v;
     struct uvh_rh10_gam_mmioh_overlay_config1_s s;
     struct uvyh_rh10_gam_mmioh_overlay_config1_s sy;
@@ -108844,7 +109662,8 @@ struct uv5h_rh10_gam_mmr_overlay_config_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh10_gam_mmr_overlay_config_u {
+union uvh_rh10_gam_mmr_overlay_config_u
+{
     long unsigned int v;
     struct uvh_rh10_gam_mmr_overlay_config_s s;
     struct uvyh_rh10_gam_mmr_overlay_config_s sy;
@@ -108881,7 +109700,8 @@ struct uv2h_rh_gam_addr_map_config_s {
     long unsigned int rsvd_10_63 : 54;
 };
 
-union uvh_rh_gam_addr_map_config_u {
+union uvh_rh_gam_addr_map_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_addr_map_config_s s;
     struct uvxh_rh_gam_addr_map_config_s sx;
@@ -108935,7 +109755,8 @@ struct uv2h_rh_gam_alias_2_overlay_config_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_alias_2_overlay_config_u {
+union uvh_rh_gam_alias_2_overlay_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_alias_2_overlay_config_s s;
     struct uvxh_rh_gam_alias_2_overlay_config_s sx;
@@ -108974,7 +109795,8 @@ struct uv2h_rh_gam_alias_2_redirect_config_s {
     long unsigned int rsvd_46_63 : 18;
 };
 
-union uvh_rh_gam_alias_2_redirect_config_u {
+union uvh_rh_gam_alias_2_redirect_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_alias_2_redirect_config_s s;
     struct uvxh_rh_gam_alias_2_redirect_config_s sx;
@@ -109037,7 +109859,8 @@ struct uv2h_rh_gam_gru_overlay_config_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_gru_overlay_config_u {
+union uvh_rh_gam_gru_overlay_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_gru_overlay_config_s s;
     struct uvxh_rh_gam_gru_overlay_config_s sx;
@@ -109074,7 +109897,8 @@ struct uv2h_rh_gam_mmioh_overlay_config_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_mmioh_overlay_config_u {
+union uvh_rh_gam_mmioh_overlay_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_mmioh_overlay_config_s s;
     struct uvxh_rh_gam_mmioh_overlay_config_s sx;
@@ -109126,7 +109950,8 @@ struct uv3h_rh_gam_mmioh_overlay_config0_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_mmioh_overlay_config0_u {
+union uvh_rh_gam_mmioh_overlay_config0_u
+{
     long unsigned int v;
     struct uvh_rh_gam_mmioh_overlay_config0_s s;
     struct uvxh_rh_gam_mmioh_overlay_config0_s sx;
@@ -109180,7 +110005,8 @@ struct uv3h_rh_gam_mmioh_overlay_config1_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_mmioh_overlay_config1_u {
+union uvh_rh_gam_mmioh_overlay_config1_u
+{
     long unsigned int v;
     struct uvh_rh_gam_mmioh_overlay_config1_s s;
     struct uvxh_rh_gam_mmioh_overlay_config1_s sx;
@@ -109224,7 +110050,8 @@ struct uv2h_rh_gam_mmr_overlay_config_s {
     long unsigned int enable : 1;
 };
 
-union uvh_rh_gam_mmr_overlay_config_u {
+union uvh_rh_gam_mmr_overlay_config_u
+{
     long unsigned int v;
     struct uvh_rh_gam_mmr_overlay_config_s s;
     struct uvxh_rh_gam_mmr_overlay_config_s sx;
@@ -109271,7 +110098,8 @@ struct uvh_apicid_s {
     long unsigned int unused2 : 3;
 };
 
-union uvh_apicid {
+union uvh_apicid
+{
     long unsigned int v;
     struct uvh_apicid_s s;
 };
@@ -109376,9 +110204,10 @@ typedef int (*tracing_map_cmp_fn_t)(void *, void *);
 
 struct tracing_map_field {
     tracing_map_cmp_fn_t cmp_fn;
-    union {
-	atomic64_t sum;
-	unsigned int offset;
+    union
+    {
+        atomic64_t sum;
+        unsigned int offset;
     };
 };
 
@@ -109614,17 +110443,19 @@ struct btrfs_ioctl_vol_args_v2 {
     __s64 fd;
     __u64 transid;
     __u64 flags;
-    union {
-	struct {
-	    __u64 size;
-	    struct btrfs_qgroup_inherit *qgroup_inherit;
-	};
-	__u64 unused[4];
+    union
+    {
+        struct {
+            __u64 size;
+            struct btrfs_qgroup_inherit *qgroup_inherit;
+        };
+        __u64 unused[4];
     };
-    union {
-	char name[4040];
-	__u64 devid;
-	__u64 subvolid;
+    union
+    {
+        char name[4040];
+        __u64 devid;
+        __u64 subvolid;
     };
 };
 
@@ -109656,9 +110487,10 @@ struct btrfs_ioctl_dev_replace_status_params {
 struct btrfs_ioctl_dev_replace_args {
     __u64 cmd;
     __u64 result;
-    union {
-	struct btrfs_ioctl_dev_replace_start_params start;
-	struct btrfs_ioctl_dev_replace_status_params status;
+    union
+    {
+        struct btrfs_ioctl_dev_replace_start_params start;
+        struct btrfs_ioctl_dev_replace_status_params status;
     };
     __u64 spare[64];
 };
@@ -109872,8 +110704,8 @@ struct btrfs_ioctl_get_subvol_info_args {
 struct btrfs_ioctl_get_subvol_rootref_args {
     __u64 min_treeid;
     struct {
-	__u64 treeid;
-	__u64 dirid;
+        __u64 treeid;
+        __u64 dirid;
     } rootref[255];
     __u8 num_items;
     __u8 align[7];
@@ -110101,10 +110933,11 @@ struct io_uring_probe {
 
 struct io_uring_restriction {
     __u16 opcode;
-    union {
-	__u8 register_op;
-	__u8 sqe_op;
-	__u8 sqe_flags;
+    union
+    {
+        __u8 register_op;
+        __u8 sqe_op;
+        __u8 sqe_flags;
     };
     __u8 resv;
     __u32 resv2[3];
@@ -110157,8 +110990,8 @@ struct io_pgtable_init_fns {
 struct drm_stats {
     long unsigned int count;
     struct {
-	long unsigned int value;
-	enum drm_stat_type type;
+        long unsigned int value;
+        enum drm_stat_type type;
     } data[15];
 };
 
@@ -110383,16 +111216,18 @@ struct ptp_extts_request {
 };
 
 struct ptp_perout_request {
-    union {
-	struct ptp_clock_time start;
-	struct ptp_clock_time phase;
+    union
+    {
+        struct ptp_clock_time start;
+        struct ptp_clock_time phase;
     };
     struct ptp_clock_time period;
     unsigned int index;
     unsigned int flags;
-    union {
-	struct ptp_clock_time on;
-	unsigned int rsv[4];
+    union
+    {
+        struct ptp_clock_time on;
+        unsigned int rsv[4];
     };
 };
 
@@ -110428,13 +111263,14 @@ struct timecounter {
 
 struct ptp_clock_request {
     enum {
-	PTP_CLK_REQ_EXTTS = 0,
-	PTP_CLK_REQ_PEROUT = 1,
-	PTP_CLK_REQ_PPS = 2,
+        PTP_CLK_REQ_EXTTS = 0,
+        PTP_CLK_REQ_PEROUT = 1,
+        PTP_CLK_REQ_PPS = 2,
     } type;
-    union {
-	struct ptp_extts_request extts;
-	struct ptp_perout_request perout;
+    union
+    {
+        struct ptp_extts_request extts;
+        struct ptp_perout_request perout;
     };
 };
 
@@ -110743,8 +111579,8 @@ struct acpi_hest_ia_error_bank {
 
 struct cstate_entry {
     struct {
-	unsigned int eax;
-	unsigned int ecx;
+        unsigned int eax;
+        unsigned int ecx;
     } states[8];
 };
 
@@ -110901,9 +111737,10 @@ enum shmem_param {
 
 struct user_arg_ptr {
     bool is_compat;
-    union {
-	const char *const *native;
-	const compat_uptr_t *compat;
+    union
+    {
+        const char *const *native;
+        const compat_uptr_t *compat;
     } ptr;
 };
 
@@ -111173,11 +112010,12 @@ struct acomp_alg {
     int (*init)(struct crypto_acomp *);
     void (*exit)(struct crypto_acomp *);
     unsigned int reqsize;
-    union {
-	struct {
-	    struct crypto_alg base;
-	};
-	struct comp_alg_common calg;
+    union
+    {
+        struct {
+            struct crypto_alg base;
+        };
+        struct comp_alg_common calg;
     };
 };
 
@@ -111441,14 +112279,14 @@ struct mpi_ec_ctx {
     MPI d;
     const char *name;
     struct {
-	struct {
-	    unsigned int a_is_pminus3 : 1;
-	    unsigned int two_inv_p : 1;
-	} valid;
-	int a_is_pminus3;
-	MPI two_inv_p;
-	mpi_barrett_t p_barrett;
-	MPI scratch[11];
+        struct {
+            unsigned int a_is_pminus3 : 1;
+            unsigned int two_inv_p : 1;
+        } valid;
+        int a_is_pminus3;
+        MPI two_inv_p;
+        mpi_barrett_t p_barrett;
+        MPI scratch[11];
     } t;
     void (*addm)(MPI, MPI, MPI, struct mpi_ec_ctx *);
     void (*subm)(MPI, MPI, MPI, struct mpi_ec_ctx *);
@@ -111483,16 +112321,16 @@ struct xz_dec_hash {
 
 struct xz_dec {
     enum {
-	SEQ_STREAM_HEADER = 0,
-	SEQ_BLOCK_START = 1,
-	SEQ_BLOCK_HEADER = 2,
-	SEQ_BLOCK_UNCOMPRESS = 3,
-	SEQ_BLOCK_PADDING = 4,
-	SEQ_BLOCK_CHECK = 5,
-	SEQ_INDEX = 6,
-	SEQ_INDEX_PADDING = 7,
-	SEQ_INDEX_CRC32 = 8,
-	SEQ_STREAM_FOOTER = 9,
+        SEQ_STREAM_HEADER = 0,
+        SEQ_BLOCK_START = 1,
+        SEQ_BLOCK_HEADER = 2,
+        SEQ_BLOCK_UNCOMPRESS = 3,
+        SEQ_BLOCK_PADDING = 4,
+        SEQ_BLOCK_CHECK = 5,
+        SEQ_INDEX = 6,
+        SEQ_INDEX_PADDING = 7,
+        SEQ_INDEX_CRC32 = 8,
+        SEQ_STREAM_FOOTER = 9,
     } sequence;
     uint32_t pos;
     vli_type vli;
@@ -111503,30 +112341,30 @@ struct xz_dec {
     enum xz_mode mode;
     bool allow_buf_error;
     struct {
-	vli_type compressed;
-	vli_type uncompressed;
-	uint32_t size;
+        vli_type compressed;
+        vli_type uncompressed;
+        uint32_t size;
     } block_header;
     struct {
-	vli_type compressed;
-	vli_type uncompressed;
-	vli_type count;
-	struct xz_dec_hash hash;
+        vli_type compressed;
+        vli_type uncompressed;
+        vli_type count;
+        struct xz_dec_hash hash;
     } block;
     struct {
-	enum {
-	    SEQ_INDEX_COUNT = 0,
-	    SEQ_INDEX_UNPADDED = 1,
-	    SEQ_INDEX_UNCOMPRESSED = 2,
-	} sequence;
-	vli_type size;
-	vli_type count;
-	struct xz_dec_hash hash;
+        enum {
+            SEQ_INDEX_COUNT = 0,
+            SEQ_INDEX_UNPADDED = 1,
+            SEQ_INDEX_UNCOMPRESSED = 2,
+        } sequence;
+        vli_type size;
+        vli_type count;
+        struct xz_dec_hash hash;
     } index;
     struct {
-	size_t pos;
-	size_t size;
-	uint8_t buf[1024];
+        size_t pos;
+        size_t size;
+        uint8_t buf[1024];
     } temp;
     struct xz_dec_lzma2 *lzma2;
     struct xz_dec_bcj *bcj;
@@ -111678,9 +112516,10 @@ struct cdrom_generic_command {
     unsigned char data_direction;
     int quiet;
     int timeout;
-    union {
-	void *reserved[1];
-	void *unused;
+    union
+    {
+        void *reserved[1];
+        void *unused;
     };
 };
 
@@ -111968,9 +112807,10 @@ struct tc_fq_codel_cl_stats {
 
 struct tc_fq_codel_xstats {
     __u32 type;
-    union {
-	struct tc_fq_codel_qd_stats qdisc_stats;
-	struct tc_fq_codel_cl_stats class_stats;
+    union
+    {
+        struct tc_fq_codel_qd_stats qdisc_stats;
+        struct tc_fq_codel_cl_stats class_stats;
     };
 };
 
@@ -112183,13 +113023,15 @@ struct cpuhp_cpu_state {
 
 struct cpuhp_step {
     const char *name;
-    union {
-	int (*single)(unsigned int);
-	int (*multi)(unsigned int, struct hlist_node *);
+    union
+    {
+        int (*single)(unsigned int);
+        int (*multi)(unsigned int, struct hlist_node *);
     } startup;
-    union {
-	int (*single)(unsigned int);
-	int (*multi)(unsigned int, struct hlist_node *);
+    union
+    {
+        int (*single)(unsigned int);
+        int (*multi)(unsigned int, struct hlist_node *);
     } teardown;
     struct hlist_head list;
     bool cant_stop;
@@ -112451,12 +113293,13 @@ struct migrate_struct {
 
 struct btrfs_disk_balance_args {
     __le64 profiles;
-    union {
-	__le64 usage;
-	struct {
-	    __le32 usage_min;
-	    __le32 usage_max;
-	};
+    union
+    {
+        __le64 usage;
+        struct {
+            __le32 usage_min;
+            __le32 usage_max;
+        };
     };
     __le64 devid;
     __le64 pstart;
@@ -112465,12 +113308,13 @@ struct btrfs_disk_balance_args {
     __le64 vend;
     __le64 target;
     __le64 flags;
-    union {
-	__le64 limit;
-	struct {
-	    __le32 limit_min;
-	    __le32 limit_max;
-	};
+    union
+    {
+        __le64 limit;
+        struct {
+            __le32 limit_min;
+            __le32 limit_max;
+        };
     };
     __le32 stripes_min;
     __le32 stripes_max;
@@ -112587,10 +113431,11 @@ struct hpet_info {
 
 struct hpet_timer {
     u64 hpet_config;
-    union {
-	u64 _hpet_hc64;
-	u32 _hpet_hc32;
-	long unsigned int _hpet_compare;
+    union
+    {
+        u64 _hpet_hc64;
+        u32 _hpet_hc32;
+        long unsigned int _hpet_compare;
     } _u1;
     u64 hpet_fsb[2];
 };
@@ -112602,10 +113447,11 @@ struct hpet {
     u64 res1;
     u64 hpet_isr;
     u64 res2[25];
-    union {
-	u64 _hpet_mc64;
-	u32 _hpet_mc32;
-	long unsigned int _hpet_mc;
+    union
+    {
+        u64 _hpet_mc64;
+        u32 _hpet_mc32;
+        long unsigned int _hpet_mc;
     } _u0;
     u64 res3;
     struct hpet_timer hpet_timers[0];
@@ -113026,23 +113872,25 @@ enum {
 };
 
 struct branch_entry {
-    union {
-	struct {
-	    u64 ip : 58;
-	    u64 ip_sign_ext : 5;
-	    u64 mispredict : 1;
-	} split;
-	u64 full;
+    union
+    {
+        struct {
+            u64 ip : 58;
+            u64 ip_sign_ext : 5;
+            u64 mispredict : 1;
+        } split;
+        u64 full;
     } from;
-    union {
-	struct {
-	    u64 ip : 58;
-	    u64 ip_sign_ext : 3;
-	    u64 reserved : 1;
-	    u64 spec : 1;
-	    u64 valid : 1;
-	} split;
-	u64 full;
+    union
+    {
+        struct {
+            u64 ip : 58;
+            u64 ip_sign_ext : 3;
+            u64 reserved : 1;
+            u64 spec : 1;
+            u64 valid : 1;
+        } split;
+        u64 full;
     } to;
 };
 
@@ -113494,12 +114342,12 @@ struct hdmi_drm_infoframe {
     enum hdmi_eotf eotf;
     enum hdmi_metadata_type metadata_type;
     struct {
-	u16 x;
-	u16 y;
+        u16 x;
+        u16 y;
     } display_primaries[3];
     struct {
-	u16 x;
-	u16 y;
+        u16 x;
+        u16 y;
     } white_point;
     u16 max_display_mastering_luminance;
     u16 min_display_mastering_luminance;
@@ -113597,17 +114445,19 @@ struct hdmi_audio_infoframe {
     bool downmix_inhibit;
 };
 
-union hdmi_vendor_any_infoframe {
+union hdmi_vendor_any_infoframe
+{
     struct {
-	enum hdmi_infoframe_type type;
-	unsigned char version;
-	unsigned char length;
-	unsigned int oui;
+        enum hdmi_infoframe_type type;
+        unsigned char version;
+        unsigned char length;
+        unsigned int oui;
     } any;
     struct hdmi_vendor_infoframe hdmi;
 };
 
-union hdmi_infoframe {
+union hdmi_infoframe
+{
     struct hdmi_any_infoframe any;
     struct hdmi_avi_infoframe avi;
     struct hdmi_spd_infoframe spd;
@@ -114127,9 +114977,10 @@ struct xfrm_flo {
 
 struct xfrm_pol_inexact_node {
     struct rb_node node;
-    union {
-	xfrm_address_t addr;
-	struct callback_head rcu;
+    union
+    {
+        xfrm_address_t addr;
+        struct callback_head rcu;
     };
     u8 prefixlen;
     struct rb_root root;
@@ -114170,9 +115021,10 @@ struct xfrm_pol_inexact_candidates {
 struct xfrm_flow_keys {
     struct flow_dissector_key_basic basic;
     struct flow_dissector_key_control control;
-    union {
-	struct flow_dissector_key_ipv4_addrs ipv4;
-	struct flow_dissector_key_ipv6_addrs ipv6;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs ipv4;
+        struct flow_dissector_key_ipv6_addrs ipv6;
     } addrs;
     struct flow_dissector_key_ip ip;
     struct flow_dissector_key_icmp icmp;
@@ -114180,18 +115032,19 @@ struct xfrm_flow_keys {
     struct flow_dissector_key_keyid gre;
 };
 
-union amd_debug_extn_cfg {
+union amd_debug_extn_cfg
+{
     __u64 val;
     struct {
-	__u64 rsvd0 : 2;
-	__u64 brsmen : 1;
-	__u64 rsvd4_3 : 2;
-	__u64 vb : 1;
-	__u64 rsvd2 : 10;
-	__u64 msroff : 4;
-	__u64 rsvd3 : 4;
-	__u64 pmc : 3;
-	__u64 rsvd4 : 37;
+        __u64 rsvd0 : 2;
+        __u64 brsmen : 1;
+        __u64 rsvd4_3 : 2;
+        __u64 vb : 1;
+        __u64 rsvd2 : 10;
+        __u64 msroff : 4;
+        __u64 rsvd3 : 4;
+        __u64 pmc : 3;
+        __u64 rsvd4 : 37;
     };
 };
 
@@ -114214,12 +115067,13 @@ struct x86_cpu_desc {
     u32 x86_microcode_rev;
 };
 
-union mon_data_bits {
+union mon_data_bits
+{
     void *priv;
     struct {
-	unsigned int rid : 10;
-	enum resctrl_event_id evtid : 8;
-	unsigned int domid : 14;
+        unsigned int rid : 10;
+        enum resctrl_event_id evtid : 8;
+        unsigned int domid : 14;
     } u;
 };
 
@@ -114237,12 +115091,13 @@ struct rmid_read {
 struct alt_instr {
     s32 instr_offset;
     s32 repl_offset;
-    union {
-	struct {
-	    u32 cpuid : 16;
-	    u32 flags : 16;
-	};
-	u32 ft_flags;
+    union
+    {
+        struct {
+            u32 cpuid : 16;
+            u32 flags : 16;
+        };
+        u32 ft_flags;
     };
     u8 instrlen;
     u8 replacementlen;
@@ -114395,9 +115250,10 @@ struct dentry_stat_t {
 };
 
 struct external_name {
-    union {
-	atomic_t count;
-	struct callback_head head;
+    union
+    {
+        atomic_t count;
+        struct callback_head head;
     } u;
     unsigned char name[0];
 };
@@ -114416,9 +115272,10 @@ struct check_mount {
 
 struct select_data {
     struct dentry *start;
-    union {
-	long int found;
-	struct dentry *victim;
+    union
+    {
+        long int found;
+        struct dentry *victim;
     };
     struct list_head dispose;
 };
@@ -114623,9 +115480,10 @@ struct eventfs_attr {
 };
 
 struct eventfs_inode {
-    union {
-	struct list_head list;
-	struct callback_head rcu;
+    union
+    {
+        struct list_head list;
+        struct callback_head rcu;
     };
     struct list_head children;
     const struct eventfs_entry *entries;
@@ -114706,12 +115564,12 @@ struct assoc_array_edit {
     struct assoc_array_node *adjust_count_on;
     long int adjust_count_by;
     struct {
-	struct assoc_array_ptr **ptr;
-	struct assoc_array_ptr *to;
+        struct assoc_array_ptr **ptr;
+        struct assoc_array_ptr *to;
     } set[2];
     struct {
-	u8 *p;
-	u8 to;
+        u8 *p;
+        u8 to;
     } set_parent_slot[1];
     u8 segment_cache[17];
 };
@@ -115212,17 +116070,18 @@ enum motionsense_command {
 struct ec_response_motion_sensor_data {
     uint8_t flags;
     uint8_t sensor_num;
-    union {
-	int16_t data[3];
-	struct {
-	    uint16_t reserved;
-	    uint32_t timestamp;
-	} __attribute__((packed));
-	struct {
-	    uint8_t activity;
-	    uint8_t state;
-	    int16_t add_info[2];
-	};
+    union
+    {
+        int16_t data[3];
+        struct {
+            uint16_t reserved;
+            uint32_t timestamp;
+        } __attribute__((packed));
+        struct {
+            uint8_t activity;
+            uint8_t state;
+            int16_t add_info[2];
+        };
     };
 };
 
@@ -115249,151 +116108,153 @@ struct ec_motion_sense_activity {
 
 struct ec_params_motion_sense {
     uint8_t cmd;
-    union {
-	struct {
-	    uint8_t max_sensor_count;
-	} dump;
-	struct {
-	    int16_t data;
-	} kb_wake_angle;
-	struct {
-	    uint8_t sensor_num;
-	} info;
-	struct {
-	    uint8_t sensor_num;
-	} info_3;
-	struct {
-	    uint8_t sensor_num;
-	} data;
-	struct {
-	    uint8_t sensor_num;
-	} fifo_flush;
-	struct {
-	    uint8_t sensor_num;
-	} perform_calib;
-	struct {
-	    uint8_t sensor_num;
-	} list_activities;
-	struct {
-	    uint8_t sensor_num;
-	    uint8_t roundup;
-	    uint16_t reserved;
-	    int32_t data;
-	} ec_rate;
-	struct {
-	    uint8_t sensor_num;
-	    uint8_t roundup;
-	    uint16_t reserved;
-	    int32_t data;
-	} sensor_odr;
-	struct {
-	    uint8_t sensor_num;
-	    uint8_t roundup;
-	    uint16_t reserved;
-	    int32_t data;
-	} sensor_range;
-	struct {
-	    uint8_t sensor_num;
-	    uint16_t flags;
-	    int16_t temp;
-	    int16_t offset[3];
-	} __attribute__((packed)) sensor_offset;
-	struct {
-	    uint8_t sensor_num;
-	    uint16_t flags;
-	    int16_t temp;
-	    uint16_t scale[3];
-	} __attribute__((packed)) sensor_scale;
-	struct {
-	    uint32_t max_data_vector;
-	} fifo_read;
-	struct ec_motion_sense_activity set_activity;
-	struct {
-	    int8_t enable;
-	} fifo_int_enable;
-	struct {
-	    uint8_t sensor_id;
-	    uint8_t spoof_enable;
-	    uint8_t reserved;
-	    int16_t components[3];
-	} __attribute__((packed)) spoof;
-	struct {
-	    int16_t lid_angle;
-	    int16_t hys_degree;
-	} tablet_mode_threshold;
+    union
+    {
+        struct {
+            uint8_t max_sensor_count;
+        } dump;
+        struct {
+            int16_t data;
+        } kb_wake_angle;
+        struct {
+            uint8_t sensor_num;
+        } info;
+        struct {
+            uint8_t sensor_num;
+        } info_3;
+        struct {
+            uint8_t sensor_num;
+        } data;
+        struct {
+            uint8_t sensor_num;
+        } fifo_flush;
+        struct {
+            uint8_t sensor_num;
+        } perform_calib;
+        struct {
+            uint8_t sensor_num;
+        } list_activities;
+        struct {
+            uint8_t sensor_num;
+            uint8_t roundup;
+            uint16_t reserved;
+            int32_t data;
+        } ec_rate;
+        struct {
+            uint8_t sensor_num;
+            uint8_t roundup;
+            uint16_t reserved;
+            int32_t data;
+        } sensor_odr;
+        struct {
+            uint8_t sensor_num;
+            uint8_t roundup;
+            uint16_t reserved;
+            int32_t data;
+        } sensor_range;
+        struct {
+            uint8_t sensor_num;
+            uint16_t flags;
+            int16_t temp;
+            int16_t offset[3];
+        } __attribute__((packed)) sensor_offset;
+        struct {
+            uint8_t sensor_num;
+            uint16_t flags;
+            int16_t temp;
+            uint16_t scale[3];
+        } __attribute__((packed)) sensor_scale;
+        struct {
+            uint32_t max_data_vector;
+        } fifo_read;
+        struct ec_motion_sense_activity set_activity;
+        struct {
+            int8_t enable;
+        } fifo_int_enable;
+        struct {
+            uint8_t sensor_id;
+            uint8_t spoof_enable;
+            uint8_t reserved;
+            int16_t components[3];
+        } __attribute__((packed)) spoof;
+        struct {
+            int16_t lid_angle;
+            int16_t hys_degree;
+        } tablet_mode_threshold;
     };
 } __attribute__((packed));
 
 struct ec_response_motion_sense {
-    union {
-	struct {
-	    uint8_t module_flags;
-	    uint8_t sensor_count;
-	    struct {
-		struct {
-		} __empty_sensor;
-		struct ec_response_motion_sensor_data sensor[0];
-	    };
-	} dump;
-	struct {
-	    uint8_t type;
-	    uint8_t location;
-	    uint8_t chip;
-	} info;
-	struct {
-	    uint8_t type;
-	    uint8_t location;
-	    uint8_t chip;
-	    uint32_t min_frequency;
-	    uint32_t max_frequency;
-	    uint32_t fifo_max_event_count;
-	} info_3;
-	struct ec_response_motion_sensor_data data;
-	struct {
-	    int32_t ret;
-	} ec_rate;
-	struct {
-	    int32_t ret;
-	} sensor_odr;
-	struct {
-	    int32_t ret;
-	} sensor_range;
-	struct {
-	    int32_t ret;
-	} kb_wake_angle;
-	struct {
-	    int32_t ret;
-	} fifo_int_enable;
-	struct {
-	    int32_t ret;
-	} spoof;
-	struct {
-	    int16_t temp;
-	    int16_t offset[3];
-	} sensor_offset;
-	struct {
-	    int16_t temp;
-	    int16_t offset[3];
-	} perform_calib;
-	struct {
-	    int16_t temp;
-	    uint16_t scale[3];
-	} sensor_scale;
-	struct ec_response_motion_sense_fifo_info fifo_info;
-	struct ec_response_motion_sense_fifo_info fifo_flush;
-	struct ec_response_motion_sense_fifo_data fifo_read;
-	struct {
-	    uint16_t reserved;
-	    uint32_t enabled;
-	    uint32_t disabled;
-	} __attribute__((packed)) list_activities;
-	struct {
-	    uint16_t value;
-	} lid_angle;
-	struct {
-	    uint16_t lid_angle;
-	    uint16_t hys_degree;
-	} tablet_mode_threshold;
+    union
+    {
+        struct {
+            uint8_t module_flags;
+            uint8_t sensor_count;
+            struct {
+                struct {
+                } __empty_sensor;
+                struct ec_response_motion_sensor_data sensor[0];
+            };
+        } dump;
+        struct {
+            uint8_t type;
+            uint8_t location;
+            uint8_t chip;
+        } info;
+        struct {
+            uint8_t type;
+            uint8_t location;
+            uint8_t chip;
+            uint32_t min_frequency;
+            uint32_t max_frequency;
+            uint32_t fifo_max_event_count;
+        } info_3;
+        struct ec_response_motion_sensor_data data;
+        struct {
+            int32_t ret;
+        } ec_rate;
+        struct {
+            int32_t ret;
+        } sensor_odr;
+        struct {
+            int32_t ret;
+        } sensor_range;
+        struct {
+            int32_t ret;
+        } kb_wake_angle;
+        struct {
+            int32_t ret;
+        } fifo_int_enable;
+        struct {
+            int32_t ret;
+        } spoof;
+        struct {
+            int16_t temp;
+            int16_t offset[3];
+        } sensor_offset;
+        struct {
+            int16_t temp;
+            int16_t offset[3];
+        } perform_calib;
+        struct {
+            int16_t temp;
+            uint16_t scale[3];
+        } sensor_scale;
+        struct ec_response_motion_sense_fifo_info fifo_info;
+        struct ec_response_motion_sense_fifo_info fifo_flush;
+        struct ec_response_motion_sense_fifo_data fifo_read;
+        struct {
+            uint16_t reserved;
+            uint32_t enabled;
+            uint32_t disabled;
+        } __attribute__((packed)) list_activities;
+        struct {
+            uint16_t value;
+        } lid_angle;
+        struct {
+            uint16_t lid_angle;
+            uint16_t hys_degree;
+        } tablet_mode_threshold;
     };
 };
 
@@ -115412,13 +116273,14 @@ enum ec_mkbp_event {
     EC_MKBP_EVENT_COUNT = 13,
 };
 
-union ec_response_get_next_data_v1 {
+union ec_response_get_next_data_v1
+{
     uint8_t key_matrix[16];
     uint32_t host_event;
     uint64_t host_event64;
     struct {
-	uint8_t reserved[3];
-	struct ec_response_motion_sense_fifo_info info;
+        uint8_t reserved[3];
+        struct ec_response_motion_sense_fifo_info info;
     } sensor_fifo;
     uint32_t buttons;
     uint32_t switches;
@@ -115676,17 +116538,21 @@ enum actions {
 };
 
 struct bpf_iter__bpf_map_elem {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct bpf_map *map;
+    union
+    {
+        struct bpf_map *map;
     };
-    union {
-	void *key;
+    union
+    {
+        void *key;
     };
-    union {
-	void *value;
+    union
+    {
+        void *value;
     };
 };
 
@@ -115823,21 +116689,23 @@ struct ksm_stable_node;
 
 struct ksm_rmap_item {
     struct ksm_rmap_item *rmap_list;
-    union {
-	struct anon_vma *anon_vma;
-	int nid;
+    union
+    {
+        struct anon_vma *anon_vma;
+        int nid;
     };
     struct mm_struct *mm;
     long unsigned int address;
     unsigned int oldchecksum;
     rmap_age_t age;
     rmap_age_t remaining_skips;
-    union {
-	struct rb_node node;
-	struct {
-	    struct ksm_stable_node *head;
-	    struct hlist_node hlist;
-	};
+    union
+    {
+        struct rb_node node;
+        struct {
+            struct ksm_stable_node *head;
+            struct hlist_node hlist;
+        };
     };
 };
 
@@ -115849,20 +116717,22 @@ struct ksm_scan {
 };
 
 struct ksm_stable_node {
-    union {
-	struct rb_node node;
-	struct {
-	    struct list_head *head;
-	    struct {
-		struct hlist_node hlist_dup;
-		struct list_head list;
-	    };
-	};
+    union
+    {
+        struct rb_node node;
+        struct {
+            struct list_head *head;
+            struct {
+                struct hlist_node hlist_dup;
+                struct list_head list;
+            };
+        };
     };
     struct hlist_head hlist;
-    union {
-	long unsigned int kpfn;
-	long unsigned int chain_prune_time;
+    union
+    {
+        long unsigned int kpfn;
+        long unsigned int chain_prune_time;
     };
     int rmap_hlist_len;
     int nid;
@@ -115968,9 +116838,10 @@ struct ecryptfs_auth_tok {
     u32 flags;
     struct ecryptfs_session_key session_key;
     u8 reserved[32];
-    union {
-	struct ecryptfs_password password;
-	struct ecryptfs_private_key private_key;
+    union
+    {
+        struct ecryptfs_password password;
+        struct ecryptfs_private_key private_key;
     } token;
 };
 
@@ -116037,9 +116908,10 @@ struct percentile_stats {
 };
 
 struct latency_stat {
-    union {
-	struct percentile_stats ps;
-	struct blk_rq_stat rqs;
+    union
+    {
+        struct percentile_stats ps;
+        struct blk_rq_stat rqs;
     };
 };
 
@@ -116122,8 +116994,8 @@ struct physdev_manage_pci_ext {
     unsigned int is_extfn;
     unsigned int is_virtfn;
     struct {
-	uint8_t bus;
-	uint8_t devfn;
+        uint8_t bus;
+        uint8_t devfn;
     } physfn;
 };
 
@@ -116141,8 +117013,8 @@ struct physdev_pci_device_add {
     uint8_t devfn;
     uint32_t flags;
     struct {
-	uint8_t bus;
-	uint8_t devfn;
+        uint8_t bus;
+        uint8_t devfn;
     } physfn;
     uint32_t optarr[0];
 };
@@ -116209,9 +117081,10 @@ struct server_hdr {
 struct acpi_tcpa {
     struct acpi_table_header hdr;
     u16 platform_class;
-    union {
-	struct client_hdr client;
-	struct server_hdr server;
+    union
+    {
+        struct client_hdr client;
+        struct server_hdr server;
     };
 };
 
@@ -116357,10 +117230,10 @@ typedef struct cistpl_altstr_t cistpl_altstr_t;
 struct cistpl_device_t {
     u_char ndev;
     struct {
-	u_char type;
-	u_char wp;
-	u_int speed;
-	u_int size;
+        u_char type;
+        u_char wp;
+        u_int speed;
+        u_int size;
     } dev[4];
 };
 
@@ -116369,8 +117242,8 @@ typedef struct cistpl_device_t cistpl_device_t;
 struct cistpl_jedec_t {
     u_char nid;
     struct {
-	u_char mfr;
-	u_char info;
+        u_char mfr;
+        u_char info;
     } id[4];
 };
 
@@ -116413,8 +117286,8 @@ struct cistpl_io_t {
     u_char flags;
     u_char nwin;
     struct {
-	u_int base;
-	u_int len;
+        u_int base;
+        u_int len;
     } win[16];
 };
 
@@ -116431,9 +117304,9 @@ struct cistpl_mem_t {
     u_char flags;
     u_char nwin;
     struct {
-	u_int len;
-	u_int card_addr;
-	u_int host_addr;
+        u_int len;
+        u_int card_addr;
+        u_int host_addr;
     } win[8];
 };
 
@@ -116499,7 +117372,8 @@ struct cistpl_format_t {
 
 typedef struct cistpl_format_t cistpl_format_t;
 
-union cisparse_t {
+union cisparse_t
+{
     cistpl_device_t device;
     cistpl_checksum_t checksum;
     cistpl_longlink_t longlink;
@@ -116721,21 +117595,23 @@ struct debug_buffer {
     char *page;
 };
 
-union hfi_capabilities {
+union hfi_capabilities
+{
     struct {
-	u8 performance : 1;
-	u8 energy_efficiency : 1;
-	u8 __reserved : 6;
+        u8 performance : 1;
+        u8 energy_efficiency : 1;
+        u8 __reserved : 6;
     } split;
     u8 bits;
 };
 
-union cpuid6_edx {
+union cpuid6_edx
+{
     struct {
-	union hfi_capabilities capabilities;
-	u32 table_pages : 4;
-	u32 __reserved : 4;
-	s32 index : 16;
+        union hfi_capabilities capabilities;
+        u32 table_pages : 4;
+        u32 __reserved : 4;
+        s32 index : 16;
     } split;
     u32 full;
 };
@@ -116746,9 +117622,10 @@ struct hfi_cpu_data {
 };
 
 struct hfi_instance {
-    union {
-	void *local_table;
-	u64 *timestamp;
+    union
+    {
+        void *local_table;
+        u64 *timestamp;
     };
     void *hdr;
     void *data;
@@ -116799,9 +117676,10 @@ struct mmsghdr {
 
 struct ifconf {
     int ifc_len;
-    union {
-	char *ifcu_buf;
-	struct ifreq *ifcu_req;
+    union
+    {
+        char *ifcu_buf;
+        struct ifreq *ifcu_req;
     } ifc_ifcu;
 };
 
@@ -116821,23 +117699,25 @@ struct compat_if_settings {
 };
 
 struct compat_ifreq {
-    union {
-	char ifrn_name[16];
+    union
+    {
+        char ifrn_name[16];
     } ifr_ifrn;
-    union {
-	struct sockaddr ifru_addr;
-	struct sockaddr ifru_dstaddr;
-	struct sockaddr ifru_broadaddr;
-	struct sockaddr ifru_netmask;
-	struct sockaddr ifru_hwaddr;
-	short int ifru_flags;
-	compat_int_t ifru_ivalue;
-	compat_int_t ifru_mtu;
-	struct compat_ifmap ifru_map;
-	char ifru_slave[16];
-	char ifru_newname[16];
-	compat_caddr_t ifru_data;
-	struct compat_if_settings ifru_settings;
+    union
+    {
+        struct sockaddr ifru_addr;
+        struct sockaddr ifru_dstaddr;
+        struct sockaddr ifru_broadaddr;
+        struct sockaddr ifru_netmask;
+        struct sockaddr ifru_hwaddr;
+        short int ifru_flags;
+        compat_int_t ifru_ivalue;
+        compat_int_t ifru_mtu;
+        struct compat_ifmap ifru_map;
+        char ifru_slave[16];
+        char ifru_newname[16];
+        compat_caddr_t ifru_data;
+        struct compat_if_settings ifru_settings;
     } ifr_ifru;
 };
 
@@ -116929,12 +117809,13 @@ enum {
     UNCORE_TYPE_MAX = 3,
 };
 
-union amd_uncore_info {
+union amd_uncore_info
+{
     struct {
-	u64 aux_data : 32;
-	u64 num_pmcs : 8;
-	u64 gid : 8;
-	u64 cid : 8;
+        u64 aux_data : 32;
+        u64 num_pmcs : 8;
+        u64 gid : 8;
+        u64 cid : 8;
     } split;
     u64 full;
 };
@@ -117286,7 +118167,8 @@ struct trace_eval_map_tail {
     const char *end;
 };
 
-union trace_eval_map_item {
+union trace_eval_map_item
+{
     struct trace_eval_map map;
     struct trace_eval_map_head head;
     struct trace_eval_map_tail tail;
@@ -117497,12 +118379,13 @@ struct kpp_alg {
 
 struct kpp_instance {
     void (*free)(struct kpp_instance *);
-    union {
-	struct {
-	    char head[48];
-	    struct crypto_instance base;
-	} s;
-	struct kpp_alg alg;
+    union
+    {
+        struct {
+            char head[48];
+            struct crypto_instance base;
+        } s;
+        struct kpp_alg alg;
     };
 };
 
@@ -117902,9 +118785,10 @@ struct tc_mq_opt_offload_graft_params {
 struct tc_mq_qopt_offload {
     enum tc_mq_command command;
     u32 handle;
-    union {
-	struct tc_qopt_offload_stats stats;
-	struct tc_mq_opt_offload_graft_params graft_params;
+    union
+    {
+        struct tc_qopt_offload_stats stats;
+        struct tc_mq_opt_offload_graft_params graft_params;
     };
 };
 
@@ -117983,12 +118867,13 @@ struct mfc6_cache_cmp_arg {
 
 struct mfc6_cache {
     struct mr_mfc _c;
-    union {
-	struct {
-	    struct in6_addr mf6c_mcastgrp;
-	    struct in6_addr mf6c_origin;
-	};
-	struct mfc6_cache_cmp_arg cmparg;
+    union
+    {
+        struct {
+            struct in6_addr mf6c_mcastgrp;
+            struct in6_addr mf6c_origin;
+        };
+        struct mfc6_cache_cmp_arg cmparg;
     };
 };
 
@@ -118146,15 +119031,16 @@ struct optimistic_spin_node {
 };
 
 struct nbcon_state {
-    union {
-	unsigned int atom;
-	struct {
-	    unsigned int prio : 2;
-	    unsigned int req_prio : 2;
-	    unsigned int unsafe : 1;
-	    unsigned int unsafe_takeover : 1;
-	    unsigned int cpu : 24;
-	};
+    union
+    {
+        unsigned int atom;
+        struct {
+            unsigned int prio : 2;
+            unsigned int req_prio : 2;
+            unsigned int unsafe : 1;
+            unsigned int unsafe_takeover : 1;
+            unsigned int cpu : 24;
+        };
     };
 };
 
@@ -118232,10 +119118,11 @@ struct rcu_node {
     long : 64;
 };
 
-union rcu_noqs {
+union rcu_noqs
+{
     struct {
-	u8 norm;
-	u8 exp;
+        u8 norm;
+        u8 exp;
     } b;
     u16 s;
 };
@@ -118453,11 +119340,13 @@ struct rcu_stall_chk_rdr {
 };
 
 struct bpf_iter__cgroup {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct cgroup *cgroup;
+    union
+    {
+        struct cgroup *cgroup;
     };
 };
 
@@ -118787,9 +119676,10 @@ struct acpi_probe_entry {
     __u8 id[5];
     __u8 type;
     acpi_probe_entry_validate_subtbl subtable_valid;
-    union {
-	acpi_tbl_table_handler probe_table;
-	acpi_tbl_entry_handler probe_subtbl;
+    union
+    {
+        acpi_tbl_table_handler probe_table;
+        acpi_tbl_entry_handler probe_subtbl;
     };
     kernel_ulong_t driver_data;
 };
@@ -118831,24 +119721,25 @@ struct grant_entry_header {
     domid_t domid;
 };
 
-union grant_entry_v2 {
+union grant_entry_v2
+{
     struct grant_entry_header hdr;
     struct {
-	struct grant_entry_header hdr;
-	uint32_t pad0;
-	uint64_t frame;
+        struct grant_entry_header hdr;
+        uint32_t pad0;
+        uint64_t frame;
     } full_page;
     struct {
-	struct grant_entry_header hdr;
-	uint16_t page_off;
-	uint16_t length;
-	uint64_t frame;
+        struct grant_entry_header hdr;
+        uint16_t page_off;
+        uint16_t length;
+        uint64_t frame;
     } sub_page;
     struct {
-	struct grant_entry_header hdr;
-	domid_t trans_domid;
-	uint16_t pad0;
-	grant_ref_t gref;
+        struct grant_entry_header hdr;
+        domid_t trans_domid;
+        uint16_t pad0;
+        grant_ref_t gref;
     } transitive;
     uint32_t __spacer[4];
 };
@@ -118863,9 +119754,10 @@ struct gnttab_setup_table {
 };
 
 struct gnttab_copy_ptr {
-    union {
-	grant_ref_t ref;
-	xen_pfn_t gmfn;
+    union
+    {
+        grant_ref_t ref;
+        xen_pfn_t gmfn;
     } u;
     domid_t domid;
     uint16_t offset;
@@ -119640,9 +120532,10 @@ struct binder_object_header {
 struct flat_binder_object {
     struct binder_object_header hdr;
     __u32 flags;
-    union {
-	binder_uintptr_t binder;
-	__u32 handle;
+    union
+    {
+        binder_uintptr_t binder;
+        __u32 handle;
     };
     binder_uintptr_t cookie;
 };
@@ -119650,9 +120543,10 @@ struct flat_binder_object {
 struct binder_fd_object {
     struct binder_object_header hdr;
     __u32 pad_flags;
-    union {
-	binder_uintptr_t pad_binder;
-	__u32 fd;
+    union
+    {
+        binder_uintptr_t pad_binder;
+        __u32 fd;
     };
     binder_uintptr_t cookie;
 };
@@ -119752,9 +120646,10 @@ enum transaction_flags {
 };
 
 struct binder_transaction_data {
-    union {
-	__u32 handle;
-	binder_uintptr_t ptr;
+    union
+    {
+        __u32 handle;
+        binder_uintptr_t ptr;
     } target;
     binder_uintptr_t cookie;
     __u32 code;
@@ -119763,12 +120658,13 @@ struct binder_transaction_data {
     __kernel_uid32_t sender_euid;
     binder_size_t data_size;
     binder_size_t offsets_size;
-    union {
-	struct {
-	    binder_uintptr_t buffer;
-	    binder_uintptr_t offsets;
-	} ptr;
-	__u8 buf[8];
+    union
+    {
+        struct {
+            binder_uintptr_t buffer;
+            binder_uintptr_t offsets;
+        } ptr;
+        __u8 buf[8];
     } data;
 };
 
@@ -119899,9 +120795,10 @@ struct binder_node {
     int debug_id;
     spinlock_t lock;
     struct binder_work work;
-    union {
-	struct rb_node rb_node;
-	struct hlist_node dead_node;
+    union
+    {
+        struct rb_node rb_node;
+        struct hlist_node dead_node;
     };
     struct binder_proc *proc;
     struct hlist_head refs;
@@ -119912,15 +120809,15 @@ struct binder_node {
     binder_uintptr_t ptr;
     binder_uintptr_t cookie;
     struct {
-	u8 has_strong_ref : 1;
-	u8 pending_strong_ref : 1;
-	u8 has_weak_ref : 1;
-	u8 pending_weak_ref : 1;
+        u8 has_strong_ref : 1;
+        u8 pending_strong_ref : 1;
+        u8 has_weak_ref : 1;
+        u8 pending_weak_ref : 1;
     };
     struct {
-	u8 accept_fds : 1;
-	u8 txn_security_ctx : 1;
-	u8 min_priority;
+        u8 accept_fds : 1;
+        u8 txn_security_ctx : 1;
+        u8 min_priority;
     };
     bool has_async_transaction;
     struct list_head async_todo;
@@ -120094,12 +120991,13 @@ struct binder_txn_fd_fixup {
 };
 
 struct binder_object {
-    union {
-	struct binder_object_header hdr;
-	struct flat_binder_object fbo;
-	struct binder_fd_object fdo;
-	struct binder_buffer_object bbo;
-	struct binder_fd_array_object fdao;
+    union
+    {
+        struct binder_object_header hdr;
+        struct flat_binder_object fbo;
+        struct binder_fd_object fdo;
+        struct binder_buffer_object bbo;
+        struct binder_fd_array_object fdao;
     };
 };
 
@@ -120446,9 +121344,10 @@ struct raw_sock {
 
 struct raw_frag_vec {
     struct msghdr *msg;
-    union {
-	struct icmphdr icmph;
-	char c[1];
+    union
+    {
+        struct icmphdr icmph;
+        char c[1];
     } hdr;
     int hlen;
 };
@@ -120917,26 +121816,26 @@ struct bpf_kfunc_call_arg_meta {
     u64 r0_size;
     u32 subprogno;
     struct {
-	u64 value;
-	bool found;
+        u64 value;
+        bool found;
     } arg_constant;
     struct btf *arg_btf;
     u32 arg_btf_id;
     bool arg_owning_ref;
     struct {
-	struct btf_field *field;
+        struct btf_field *field;
     } arg_list_head;
     struct {
-	struct btf_field *field;
+        struct btf_field *field;
     } arg_rbtree_root;
     struct {
-	enum bpf_dynptr_type type;
-	u32 id;
-	u32 ref_obj_id;
+        enum bpf_dynptr_type type;
+        u32 id;
+        u32 ref_obj_id;
     } initialized_dynptr;
     struct {
-	u8 spi;
-	u8 frameno;
+        u8 spi;
+        u8 frameno;
     } iter;
     u64 mem_size;
 };
@@ -121212,7 +122111,8 @@ enum {
     RES_SOFT_LIMIT = 4,
 };
 
-union mc_target {
+union mc_target
+{
     struct folio *folio;
     swp_entry_t ent;
 };
@@ -122026,15 +122926,16 @@ struct ip6_tnl {
 
 struct xfrm_skb_cb {
     struct xfrm_tunnel_skb_cb header;
-    union {
-	struct {
-	    __u32 low;
-	    __u32 hi;
-	} output;
-	struct {
-	    __be32 low;
-	    __be32 hi;
-	} input;
+    union
+    {
+        struct {
+            __u32 low;
+            __u32 hi;
+        } output;
+        struct {
+            __be32 low;
+            __be32 hi;
+        } input;
     } seq;
 };
 
@@ -122052,9 +122953,10 @@ struct xfrm_trans_tasklet {
 };
 
 struct xfrm_trans_cb {
-    union {
-	struct inet_skb_parm h4;
-	struct inet6_skb_parm h6;
+    union
+    {
+        struct inet_skb_parm h4;
+        struct inet6_skb_parm h6;
     } header;
     int (*finish)(struct net *, struct sock *, struct sk_buff *);
     struct net *net;
@@ -122284,9 +123186,10 @@ struct cfg80211_bss_select_adjust {
 
 struct cfg80211_bss_selection {
     enum nl80211_bss_select_attr behaviour;
-    union {
-	enum nl80211_band band_pref;
-	struct cfg80211_bss_select_adjust adjust;
+    union
+    {
+        enum nl80211_band band_pref;
+        struct cfg80211_bss_select_adjust adjust;
     } param;
 };
 
@@ -122373,17 +123276,17 @@ struct wireless_dev {
     long unsigned int cac_start_time;
     unsigned int cac_time_ms;
     struct {
-	struct cfg80211_ibss_params ibss;
-	struct cfg80211_connect_params connect;
-	struct cfg80211_cached_keys *keys;
-	const u8 *ie;
-	size_t ie_len;
-	u8 bssid[6];
-	u8 prev_bssid[6];
-	u8 ssid[32];
-	s8 default_key;
-	s8 default_mgmt_key;
-	bool prev_bssid_valid;
+        struct cfg80211_ibss_params ibss;
+        struct cfg80211_connect_params connect;
+        struct cfg80211_cached_keys *keys;
+        const u8 *ie;
+        size_t ie_len;
+        u8 bssid[6];
+        u8 prev_bssid[6];
+        u8 ssid[32];
+        s8 default_key;
+        s8 default_mgmt_key;
+        bool prev_bssid_valid;
     } wext;
     struct wiphy_work cqm_rssi_work;
     struct cfg80211_cqm_config *cqm_config;
@@ -122391,48 +123294,50 @@ struct wireless_dev {
     spinlock_t pmsr_lock;
     struct work_struct pmsr_free_wk;
     long unsigned int unprot_beacon_reported;
-    union {
-	struct {
-	    u8 connected_addr[6];
-	    u8 ssid[32];
-	    u8 ssid_len;
-	    long : 0;
-	} client;
-	struct {
-	    int beacon_interval;
-	    struct cfg80211_chan_def preset_chandef;
-	    struct cfg80211_chan_def chandef;
-	    u8 id[32];
-	    u8 id_len;
-	    u8 id_up_len;
-	} mesh;
-	struct {
-	    struct cfg80211_chan_def preset_chandef;
-	    u8 ssid[32];
-	    u8 ssid_len;
-	} ap;
-	struct {
-	    struct cfg80211_internal_bss *current_bss;
-	    struct cfg80211_chan_def chandef;
-	    int beacon_interval;
-	    u8 ssid[32];
-	    u8 ssid_len;
-	} ibss;
-	struct {
-	    struct cfg80211_chan_def chandef;
-	} ocb;
+    union
+    {
+        struct {
+            u8 connected_addr[6];
+            u8 ssid[32];
+            u8 ssid_len;
+            long : 0;
+        } client;
+        struct {
+            int beacon_interval;
+            struct cfg80211_chan_def preset_chandef;
+            struct cfg80211_chan_def chandef;
+            u8 id[32];
+            u8 id_len;
+            u8 id_up_len;
+        } mesh;
+        struct {
+            struct cfg80211_chan_def preset_chandef;
+            u8 ssid[32];
+            u8 ssid_len;
+        } ap;
+        struct {
+            struct cfg80211_internal_bss *current_bss;
+            struct cfg80211_chan_def chandef;
+            int beacon_interval;
+            u8 ssid[32];
+            u8 ssid_len;
+        } ibss;
+        struct {
+            struct cfg80211_chan_def chandef;
+        } ocb;
     } u;
     struct {
-	u8 addr[6];
-	union {
-	    struct {
-		unsigned int beacon_interval;
-		struct cfg80211_chan_def chandef;
-	    } ap;
-	    struct {
-		struct cfg80211_internal_bss *current_bss;
-	    } client;
-	};
+        u8 addr[6];
+        union
+        {
+            struct {
+                unsigned int beacon_interval;
+                struct cfg80211_chan_def chandef;
+            } ap;
+            struct {
+                struct cfg80211_internal_bss *current_bss;
+            } client;
+        };
     } links[15];
     u16 valid_links;
 };
@@ -122448,8 +123353,9 @@ struct iw_encode_ext {
 };
 
 struct iwreq {
-    union {
-	char ifrn_name[16];
+    union
+    {
+        char ifrn_name[16];
     } ifr_ifrn;
     union iwreq_data u;
 };
@@ -122469,13 +123375,14 @@ struct compat_iw_point {
 struct __compat_iw_event {
     __u16 len;
     __u16 cmd;
-    union {
-	compat_caddr_t pointer;
-	struct {
-	    struct {
-	    } __empty_ptr_bytes;
-	    __u8 ptr_bytes[0];
-	};
+    union
+    {
+        compat_caddr_t pointer;
+        struct {
+            struct {
+            } __empty_ptr_bytes;
+            __u8 ptr_bytes[0];
+        };
     };
 };
 
@@ -122641,25 +123548,27 @@ struct ieee80211_he_mcs_nss_supp {
 };
 
 struct ieee80211_eht_mcs_nss_supp_20mhz_only {
-    union {
-	struct {
-	    u8 rx_tx_mcs7_max_nss;
-	    u8 rx_tx_mcs9_max_nss;
-	    u8 rx_tx_mcs11_max_nss;
-	    u8 rx_tx_mcs13_max_nss;
-	};
-	u8 rx_tx_max_nss[4];
+    union
+    {
+        struct {
+            u8 rx_tx_mcs7_max_nss;
+            u8 rx_tx_mcs9_max_nss;
+            u8 rx_tx_mcs11_max_nss;
+            u8 rx_tx_mcs13_max_nss;
+        };
+        u8 rx_tx_max_nss[4];
     };
 };
 
 struct ieee80211_eht_mcs_nss_supp_bw {
-    union {
-	struct {
-	    u8 rx_tx_mcs9_max_nss;
-	    u8 rx_tx_mcs11_max_nss;
-	    u8 rx_tx_mcs13_max_nss;
-	};
-	u8 rx_tx_max_nss[3];
+    union
+    {
+        struct {
+            u8 rx_tx_mcs9_max_nss;
+            u8 rx_tx_mcs11_max_nss;
+            u8 rx_tx_mcs13_max_nss;
+        };
+        u8 rx_tx_max_nss[3];
     };
 };
 
@@ -122783,13 +123692,14 @@ struct ieee80211_sta_he_cap {
 } __attribute__((packed));
 
 struct ieee80211_eht_mcs_nss_supp {
-    union {
-	struct ieee80211_eht_mcs_nss_supp_20mhz_only only_20mhz;
-	struct {
-	    struct ieee80211_eht_mcs_nss_supp_bw _80;
-	    struct ieee80211_eht_mcs_nss_supp_bw _160;
-	    struct ieee80211_eht_mcs_nss_supp_bw _320;
-	} bw;
+    union
+    {
+        struct ieee80211_eht_mcs_nss_supp_20mhz_only only_20mhz;
+        struct {
+            struct ieee80211_eht_mcs_nss_supp_bw _80;
+            struct ieee80211_eht_mcs_nss_supp_bw _160;
+            struct ieee80211_eht_mcs_nss_supp_bw _320;
+        } bw;
     };
 };
 
@@ -122806,8 +123716,8 @@ struct ieee80211_sband_iftype_data {
     struct ieee80211_he_6ghz_capa he_6ghz_capa;
     struct ieee80211_sta_eht_cap eht_cap;
     struct {
-	const u8 *data;
-	unsigned int len;
+        const u8 *data;
+        unsigned int len;
     } vendor_elems;
 } __attribute__((packed));
 
@@ -122967,9 +123877,9 @@ struct wiphy {
     u8 support_only_he_mbssid : 1;
     const struct cfg80211_pmsr_capabilities *pmsr_capa;
     struct {
-	u64 peer;
-	u64 vif;
-	u8 max_retry;
+        u64 peer;
+        u64 vif;
+        u8 max_retry;
     } tid_config_support;
     u8 max_data_retry_count;
     const struct cfg80211_sar_capa *sar_capa;
@@ -123163,17 +124073,17 @@ struct cfg80211_pmsr_capabilities {
     u8 report_ap_tsf : 1;
     u8 randomize_mac_addr : 1;
     struct {
-	u32 preambles;
-	u32 bandwidths;
-	s8 max_bursts_exponent;
-	u8 max_ftms_per_burst;
-	u8 supported : 1;
-	u8 asap : 1;
-	u8 non_asap : 1;
-	u8 request_lci : 1;
-	u8 request_civicloc : 1;
-	u8 trigger_based : 1;
-	u8 non_trigger_based : 1;
+        u32 preambles;
+        u32 bandwidths;
+        s8 max_bursts_exponent;
+        u8 max_ftms_per_burst;
+        u8 supported : 1;
+        u8 asap : 1;
+        u8 non_asap : 1;
+        u8 request_lci : 1;
+        u8 request_civicloc : 1;
+        u8 trigger_based : 1;
+        u8 non_trigger_based : 1;
     } ftm;
 };
 
@@ -123299,34 +124209,34 @@ struct kvm_debug_exit_arch {
 
 struct kvm_vcpu_events {
     struct {
-	__u8 injected;
-	__u8 nr;
-	__u8 has_error_code;
-	__u8 pending;
-	__u32 error_code;
+        __u8 injected;
+        __u8 nr;
+        __u8 has_error_code;
+        __u8 pending;
+        __u32 error_code;
     } exception;
     struct {
-	__u8 injected;
-	__u8 nr;
-	__u8 soft;
-	__u8 shadow;
+        __u8 injected;
+        __u8 nr;
+        __u8 soft;
+        __u8 shadow;
     } interrupt;
     struct {
-	__u8 injected;
-	__u8 pending;
-	__u8 masked;
-	__u8 pad;
+        __u8 injected;
+        __u8 pending;
+        __u8 masked;
+        __u8 pad;
     } nmi;
     __u32 sipi_vector;
     __u32 flags;
     struct {
-	__u8 smm;
-	__u8 pending;
-	__u8 smm_inside_nmi;
-	__u8 latched_init;
+        __u8 smm;
+        __u8 pending;
+        __u8 smm_inside_nmi;
+        __u8 latched_init;
     } smi;
     struct {
-	__u8 pending;
+        __u8 pending;
     } triple_fault;
     __u8 reserved[26];
     __u8 exception_has_payload;
@@ -123348,7 +124258,7 @@ struct kvm_vmx_nested_state_hdr {
     __u64 vmxon_pa;
     __u64 vmcs12_pa;
     struct {
-	__u16 flags;
+        __u16 flags;
     } smm;
     __u16 pad;
     __u32 flags;
@@ -123367,22 +124277,24 @@ struct kvm_nested_state {
     __u16 flags;
     __u16 format;
     __u32 size;
-    union {
-	struct kvm_vmx_nested_state_hdr vmx;
-	struct kvm_svm_nested_state_hdr svm;
-	__u8 pad[120];
+    union
+    {
+        struct kvm_vmx_nested_state_hdr vmx;
+        struct kvm_svm_nested_state_hdr svm;
+        __u8 pad[120];
     } hdr;
-    union {
-	struct {
-	    struct {
-	    } __empty_vmx;
-	    struct kvm_vmx_nested_state_data vmx[0];
-	};
-	struct {
-	    struct {
-	    } __empty_svm;
-	    struct kvm_svm_nested_state_data svm[0];
-	};
+    union
+    {
+        struct {
+            struct {
+            } __empty_vmx;
+            struct kvm_vmx_nested_state_data vmx[0];
+        };
+        struct {
+            struct {
+            } __empty_svm;
+            struct kvm_svm_nested_state_data svm[0];
+        };
     } data;
 };
 
@@ -123399,41 +124311,43 @@ struct kvm_xen_hvm_config {
 struct kvm_hyperv_exit {
     __u32 type;
     __u32 pad1;
-    union {
-	struct {
-	    __u32 msr;
-	    __u32 pad2;
-	    __u64 control;
-	    __u64 evt_page;
-	    __u64 msg_page;
-	} synic;
-	struct {
-	    __u64 input;
-	    __u64 result;
-	    __u64 params[2];
-	} hcall;
-	struct {
-	    __u32 msr;
-	    __u32 pad2;
-	    __u64 control;
-	    __u64 status;
-	    __u64 send_page;
-	    __u64 recv_page;
-	    __u64 pending_page;
-	} syndbg;
+    union
+    {
+        struct {
+            __u32 msr;
+            __u32 pad2;
+            __u64 control;
+            __u64 evt_page;
+            __u64 msg_page;
+        } synic;
+        struct {
+            __u64 input;
+            __u64 result;
+            __u64 params[2];
+        } hcall;
+        struct {
+            __u32 msr;
+            __u32 pad2;
+            __u64 control;
+            __u64 status;
+            __u64 send_page;
+            __u64 recv_page;
+            __u64 pending_page;
+        } syndbg;
     } u;
 };
 
 struct kvm_xen_exit {
     __u32 type;
-    union {
-	struct {
-	    __u32 longmode;
-	    __u32 cpl;
-	    __u64 input;
-	    __u64 result;
-	    __u64 params[6];
-	} hcall;
+    union
+    {
+        struct {
+            __u32 longmode;
+            __u32 cpl;
+            __u64 input;
+            __u64 result;
+            __u64 params[6];
+        } hcall;
     } u;
 };
 
@@ -123447,170 +124361,176 @@ struct kvm_run {
     __u16 flags;
     __u64 cr8;
     __u64 apic_base;
-    union {
-	struct {
-	    __u64 hardware_exit_reason;
-	} hw;
-	struct {
-	    __u64 hardware_entry_failure_reason;
-	    __u32 cpu;
-	} fail_entry;
-	struct {
-	    __u32 exception;
-	    __u32 error_code;
-	} ex;
-	struct {
-	    __u8 direction;
-	    __u8 size;
-	    __u16 port;
-	    __u32 count;
-	    __u64 data_offset;
-	} io;
-	struct {
-	    struct kvm_debug_exit_arch arch;
-	} debug;
-	struct {
-	    __u64 phys_addr;
-	    __u8 data[8];
-	    __u32 len;
-	    __u8 is_write;
-	} mmio;
-	struct {
-	    __u64 phys_addr;
-	    __u8 data[8];
-	    __u32 len;
-	    __u8 is_write;
-	} iocsr_io;
-	struct {
-	    __u64 nr;
-	    __u64 args[6];
-	    __u64 ret;
-	    union {
-		__u64 flags;
-	    };
-	} hypercall;
-	struct {
-	    __u64 rip;
-	    __u32 is_write;
-	    __u32 pad;
-	} tpr_access;
-	struct {
-	    __u8 icptcode;
-	    __u16 ipa;
-	    __u32 ipb;
-	} s390_sieic;
-	__u64 s390_reset_flags;
-	struct {
-	    __u64 trans_exc_code;
-	    __u32 pgm_code;
-	} s390_ucontrol;
-	struct {
-	    __u32 dcrn;
-	    __u32 data;
-	    __u8 is_write;
-	} dcr;
-	struct {
-	    __u32 suberror;
-	    __u32 ndata;
-	    __u64 data[16];
-	} internal;
-	struct {
-	    __u32 suberror;
-	    __u32 ndata;
-	    __u64 flags;
-	    union {
-		struct {
-		    __u8 insn_size;
-		    __u8 insn_bytes[15];
-		};
-	    };
-	} emulation_failure;
-	struct {
-	    __u64 gprs[32];
-	} osi;
-	struct {
-	    __u64 nr;
-	    __u64 ret;
-	    __u64 args[9];
-	} papr_hcall;
-	struct {
-	    __u16 subchannel_id;
-	    __u16 subchannel_nr;
-	    __u32 io_int_parm;
-	    __u32 io_int_word;
-	    __u32 ipb;
-	    __u8 dequeued;
-	} s390_tsch;
-	struct {
-	    __u32 epr;
-	} epr;
-	struct {
-	    __u32 type;
-	    __u32 ndata;
-	    union {
-		__u64 data[16];
-	    };
-	} system_event;
-	struct {
-	    __u64 addr;
-	    __u8 ar;
-	    __u8 reserved;
-	    __u8 fc;
-	    __u8 sel1;
-	    __u16 sel2;
-	} s390_stsi;
-	struct {
-	    __u8 vector;
-	} eoi;
-	struct kvm_hyperv_exit hyperv;
-	struct {
-	    __u64 esr_iss;
-	    __u64 fault_ipa;
-	} arm_nisv;
-	struct {
-	    __u8 error;
-	    __u8 pad[7];
-	    __u32 reason;
-	    __u32 index;
-	    __u64 data;
-	} msr;
-	struct kvm_xen_exit xen;
-	struct {
-	    long unsigned int extension_id;
-	    long unsigned int function_id;
-	    long unsigned int args[6];
-	    long unsigned int ret[2];
-	} riscv_sbi;
-	struct {
-	    long unsigned int csr_num;
-	    long unsigned int new_value;
-	    long unsigned int write_mask;
-	    long unsigned int ret_value;
-	} riscv_csr;
-	struct {
-	    __u32 flags;
-	} notify;
-	struct {
-	    __u64 flags;
-	    __u64 gpa;
-	    __u64 size;
-	} memory_fault;
-	char padding[256];
+    union
+    {
+        struct {
+            __u64 hardware_exit_reason;
+        } hw;
+        struct {
+            __u64 hardware_entry_failure_reason;
+            __u32 cpu;
+        } fail_entry;
+        struct {
+            __u32 exception;
+            __u32 error_code;
+        } ex;
+        struct {
+            __u8 direction;
+            __u8 size;
+            __u16 port;
+            __u32 count;
+            __u64 data_offset;
+        } io;
+        struct {
+            struct kvm_debug_exit_arch arch;
+        } debug;
+        struct {
+            __u64 phys_addr;
+            __u8 data[8];
+            __u32 len;
+            __u8 is_write;
+        } mmio;
+        struct {
+            __u64 phys_addr;
+            __u8 data[8];
+            __u32 len;
+            __u8 is_write;
+        } iocsr_io;
+        struct {
+            __u64 nr;
+            __u64 args[6];
+            __u64 ret;
+            union
+            {
+                __u64 flags;
+            };
+        } hypercall;
+        struct {
+            __u64 rip;
+            __u32 is_write;
+            __u32 pad;
+        } tpr_access;
+        struct {
+            __u8 icptcode;
+            __u16 ipa;
+            __u32 ipb;
+        } s390_sieic;
+        __u64 s390_reset_flags;
+        struct {
+            __u64 trans_exc_code;
+            __u32 pgm_code;
+        } s390_ucontrol;
+        struct {
+            __u32 dcrn;
+            __u32 data;
+            __u8 is_write;
+        } dcr;
+        struct {
+            __u32 suberror;
+            __u32 ndata;
+            __u64 data[16];
+        } internal;
+        struct {
+            __u32 suberror;
+            __u32 ndata;
+            __u64 flags;
+            union
+            {
+                struct {
+                    __u8 insn_size;
+                    __u8 insn_bytes[15];
+                };
+            };
+        } emulation_failure;
+        struct {
+            __u64 gprs[32];
+        } osi;
+        struct {
+            __u64 nr;
+            __u64 ret;
+            __u64 args[9];
+        } papr_hcall;
+        struct {
+            __u16 subchannel_id;
+            __u16 subchannel_nr;
+            __u32 io_int_parm;
+            __u32 io_int_word;
+            __u32 ipb;
+            __u8 dequeued;
+        } s390_tsch;
+        struct {
+            __u32 epr;
+        } epr;
+        struct {
+            __u32 type;
+            __u32 ndata;
+            union
+            {
+                __u64 data[16];
+            };
+        } system_event;
+        struct {
+            __u64 addr;
+            __u8 ar;
+            __u8 reserved;
+            __u8 fc;
+            __u8 sel1;
+            __u16 sel2;
+        } s390_stsi;
+        struct {
+            __u8 vector;
+        } eoi;
+        struct kvm_hyperv_exit hyperv;
+        struct {
+            __u64 esr_iss;
+            __u64 fault_ipa;
+        } arm_nisv;
+        struct {
+            __u8 error;
+            __u8 pad[7];
+            __u32 reason;
+            __u32 index;
+            __u64 data;
+        } msr;
+        struct kvm_xen_exit xen;
+        struct {
+            long unsigned int extension_id;
+            long unsigned int function_id;
+            long unsigned int args[6];
+            long unsigned int ret[2];
+        } riscv_sbi;
+        struct {
+            long unsigned int csr_num;
+            long unsigned int new_value;
+            long unsigned int write_mask;
+            long unsigned int ret_value;
+        } riscv_csr;
+        struct {
+            __u32 flags;
+        } notify;
+        struct {
+            __u64 flags;
+            __u64 gpa;
+            __u64 size;
+        } memory_fault;
+        char padding[256];
     };
     __u64 kvm_valid_regs;
     __u64 kvm_dirty_regs;
-    union {
-	struct kvm_sync_regs regs;
-	char padding[2048];
+    union
+    {
+        struct kvm_sync_regs regs;
+        char padding[2048];
     } s;
 };
 
 struct kvm_coalesced_mmio {
     __u64 phys_addr;
     __u32 len;
-    union {
-	__u32 pad;
-	__u32 pio;
+    union
+    {
+        __u32 pad;
+        __u32 pio;
     };
     __u8 data[8];
 };
@@ -123686,8 +124606,8 @@ struct kvm_memory_slot {
     short int id;
     u16 as_id;
     struct {
-	struct file *file;
-	long unsigned int pgoff;
+        struct file *file;
+        long unsigned int pgoff;
     } gmem;
 };
 
@@ -123731,13 +124651,14 @@ struct kvm_vm_stat {
     u64 mmu_recycled;
     u64 mmu_cache_miss;
     u64 mmu_unsync;
-    union {
-	struct {
-	    atomic64_t pages_4k;
-	    atomic64_t pages_2m;
-	    atomic64_t pages_1g;
-	};
-	atomic64_t pages[3];
+    union
+    {
+        struct {
+            atomic64_t pages_4k;
+            atomic64_t pages_2m;
+            atomic64_t pages_1g;
+        };
+        atomic64_t pages[3];
     };
     u64 nx_lpage_splits;
     u64 max_mmu_page_hash_collisions;
@@ -123765,11 +124686,11 @@ enum hv_tsc_page_status {
 
 struct kvm_hv_syndbg {
     struct {
-	u64 control;
-	u64 status;
-	u64 send_page;
-	u64 recv_page;
-	u64 pending_page;
+        u64 control;
+        u64 status;
+        u64 send_page;
+        u64 recv_page;
+        u64 pending_page;
     } control;
     u64 options;
 };
@@ -123952,10 +124873,10 @@ struct kvm {
     struct mutex lock;
     struct kvm_io_bus *buses[4];
     struct {
-	spinlock_t lock;
-	struct list_head items;
-	struct list_head resampler_list;
-	struct mutex resampler_lock;
+        spinlock_t lock;
+        struct list_head items;
+        struct list_head resampler_list;
+        struct mutex resampler_lock;
     } irqfds;
     struct list_head ioeventfds;
     struct kvm_vm_stat stat;
@@ -124013,12 +124934,12 @@ typedef int perf_snapshot_branch_stack_t(struct perf_branch_entry *, unsigned in
 
 struct hv_nested_enlightenments_control {
     struct {
-	__u32 directhypercall : 1;
-	__u32 reserved : 31;
+        __u32 directhypercall : 1;
+        __u32 reserved : 31;
     } features;
     struct {
-	__u32 inter_partition_comm : 1;
-	__u32 reserved : 31;
+        __u32 inter_partition_comm : 1;
+        __u32 reserved : 31;
     } hypercallControls;
 };
 
@@ -124045,19 +124966,21 @@ struct hv_partition_assist_pg {
     u32 tlb_lock_count;
 };
 
-union hv_message_flags {
+union hv_message_flags
+{
     __u8 asu8;
     struct {
-	__u8 msg_pending : 1;
-	__u8 reserved : 7;
+        __u8 msg_pending : 1;
+        __u8 reserved : 7;
     };
 };
 
-union hv_port_id {
+union hv_port_id
+{
     __u32 asu32;
     struct {
-	__u32 id : 24;
-	__u32 reserved : 8;
+        __u32 id : 24;
+        __u32 reserved : 8;
     } u;
 };
 
@@ -124066,16 +124989,18 @@ struct hv_message_header {
     __u8 payload_size;
     union hv_message_flags message_flags;
     __u8 reserved[2];
-    union {
-	__u64 sender;
-	union hv_port_id port;
+    union
+    {
+        __u64 sender;
+        union hv_port_id port;
     };
 };
 
 struct hv_message {
     struct hv_message_header header;
-    union {
-	__u64 payload[30];
+    union
+    {
+        __u64 payload[30];
     } u;
 };
 
@@ -124114,46 +125039,49 @@ enum exit_fastpath_completion {
     EXIT_FASTPATH_EXIT_HANDLED = 2,
 };
 
-union kvm_mmu_page_role {
+union kvm_mmu_page_role
+{
     u32 word;
     struct {
-	unsigned int level : 4;
-	unsigned int has_4_byte_gpte : 1;
-	unsigned int quadrant : 2;
-	unsigned int direct : 1;
-	unsigned int access : 3;
-	unsigned int invalid : 1;
-	unsigned int efer_nx : 1;
-	unsigned int cr0_wp : 1;
-	unsigned int smep_andnot_wp : 1;
-	unsigned int smap_andnot_wp : 1;
-	unsigned int ad_disabled : 1;
-	unsigned int guest_mode : 1;
-	unsigned int passthrough : 1;
-	char : 5;
-	unsigned int smm : 8;
+        unsigned int level : 4;
+        unsigned int has_4_byte_gpte : 1;
+        unsigned int quadrant : 2;
+        unsigned int direct : 1;
+        unsigned int access : 3;
+        unsigned int invalid : 1;
+        unsigned int efer_nx : 1;
+        unsigned int cr0_wp : 1;
+        unsigned int smep_andnot_wp : 1;
+        unsigned int smap_andnot_wp : 1;
+        unsigned int ad_disabled : 1;
+        unsigned int guest_mode : 1;
+        unsigned int passthrough : 1;
+        char : 5;
+        unsigned int smm : 8;
     };
 };
 
-union kvm_mmu_extended_role {
+union kvm_mmu_extended_role
+{
     u32 word;
     struct {
-	unsigned int valid : 1;
-	unsigned int execonly : 1;
-	unsigned int cr4_pse : 1;
-	unsigned int cr4_pke : 1;
-	unsigned int cr4_smap : 1;
-	unsigned int cr4_smep : 1;
-	unsigned int cr4_la57 : 1;
-	unsigned int efer_lma : 1;
+        unsigned int valid : 1;
+        unsigned int execonly : 1;
+        unsigned int cr4_pse : 1;
+        unsigned int cr4_pke : 1;
+        unsigned int cr4_smap : 1;
+        unsigned int cr4_smep : 1;
+        unsigned int cr4_la57 : 1;
+        unsigned int efer_lma : 1;
     };
 };
 
-union kvm_cpu_role {
+union kvm_cpu_role
+{
     u64 as_u64;
     struct {
-	union kvm_mmu_page_role base;
-	union kvm_mmu_extended_role ext;
+        union kvm_mmu_page_role base;
+        union kvm_mmu_extended_role ext;
     };
 };
 
@@ -124286,9 +125214,10 @@ struct kvm_pmu {
     u64 raw_event_mask;
     struct kvm_pmc gp_counters[8];
     struct kvm_pmc fixed_counters[3];
-    union {
-	long unsigned int reprogram_pmi[1];
-	atomic64_t __reprogram_pmi;
+    union
+    {
+        long unsigned int reprogram_pmi[1];
+        atomic64_t __reprogram_pmi;
     };
     long unsigned int all_valid_pmc_idx[1];
     long unsigned int pmc_in_use[1];
@@ -124385,7 +125314,7 @@ struct kvm_vcpu_arch {
     struct kvm_cpuid_entry2 *cpuid_entries;
     struct kvm_hypervisor_cpuid kvm_cpuid;
     struct {
-	long unsigned int enabled[1];
+        long unsigned int enabled[1];
     } governed_features;
     u64 reserved_gpa_bits;
     int maxphyaddr;
@@ -124399,10 +125328,10 @@ struct kvm_vcpu_arch {
     struct gfn_to_pfn_cache pv_time;
     bool pvclock_set_guest_stopped_request;
     struct {
-	u8 preempted;
-	u64 msr_val;
-	u64 last_steal;
-	struct gfn_to_hva_cache cache;
+        u8 preempted;
+        u64 msr_val;
+        u64 last_steal;
+        struct gfn_to_hva_cache cache;
     } st;
     u64 l1_tsc_offset;
     u64 tsc_offset;
@@ -124455,30 +125384,30 @@ struct kvm_vcpu_arch {
     long unsigned int last_retry_eip;
     long unsigned int last_retry_addr;
     struct {
-	bool halted;
-	gfn_t gfns[64];
-	struct gfn_to_hva_cache data;
-	u64 msr_en_val;
-	u64 msr_int_val;
-	u16 vec;
-	u32 id;
-	bool send_user_only;
-	u32 host_apf_flags;
-	bool delivery_as_pf_vmexit;
-	bool pageready_pending;
+        bool halted;
+        gfn_t gfns[64];
+        struct gfn_to_hva_cache data;
+        u64 msr_en_val;
+        u64 msr_int_val;
+        u16 vec;
+        u32 id;
+        bool send_user_only;
+        u32 host_apf_flags;
+        bool delivery_as_pf_vmexit;
+        bool pageready_pending;
     } apf;
     struct {
-	u64 length;
-	u64 status;
+        u64 length;
+        u64 status;
     } osvw;
     struct {
-	u64 msr_val;
-	struct gfn_to_hva_cache data;
+        u64 msr_val;
+        struct gfn_to_hva_cache data;
     } pv_eoi;
     u64 msr_kvm_poll_control;
     long unsigned int exit_qualification;
     struct {
-	bool pv_unhalted;
+        bool pv_unhalted;
     } pv;
     int pending_ioapic_eoi;
     int pending_external_vector;
@@ -124487,8 +125416,8 @@ struct kvm_vcpu_arch {
     int last_vmentry_cpu;
     u64 msr_hwcr;
     struct {
-	u32 features;
-	bool enforce;
+        u32 features;
+        bool enforce;
     } pv_cpuid;
     bool guest_state_protected;
     bool pdptrs_from_userspace;
@@ -124567,14 +125496,14 @@ struct kvm_vcpu {
     int mmio_nr_fragments;
     struct kvm_mmio_fragment mmio_fragments[2];
     struct {
-	u32 queued;
-	struct list_head queue;
-	struct list_head done;
-	spinlock_t lock;
+        u32 queued;
+        struct list_head queue;
+        struct list_head done;
+        spinlock_t lock;
     } async_pf;
     struct {
-	bool in_spin_loop;
-	bool dy_eligible;
+        bool in_spin_loop;
+        bool dy_eligible;
     } spin_loop;
     bool preempted;
     bool ready;
@@ -124618,15 +125547,16 @@ enum hv_tlb_flush_fifos {
 struct kvm_vcpu_hv_tlb_flush_fifo {
     spinlock_t write_lock;
     struct {
-	union {
-	    struct __kfifo kfifo;
-	    u64 *type;
-	    const u64 *const_type;
-	    char (*rectype)[0];
-	    u64 *ptr;
-	    const u64 *ptr_const;
-	};
-	u64 buf[16];
+        union
+        {
+            struct __kfifo kfifo;
+            u64 *type;
+            const u64 *const_type;
+            char (*rectype)[0];
+            u64 *ptr;
+            const u64 *ptr_const;
+        };
+        u64 buf[16];
     } entries;
 };
 
@@ -124641,22 +125571,22 @@ struct kvm_vcpu_hv {
     long unsigned int stimer_pending_bitmap[1];
     bool enforce_cpuid;
     struct {
-	u32 features_eax;
-	u32 features_ebx;
-	u32 features_edx;
-	u32 enlightenments_eax;
-	u32 enlightenments_ebx;
-	u32 syndbg_cap_eax;
-	u32 nested_eax;
-	u32 nested_ebx;
+        u32 features_eax;
+        u32 features_ebx;
+        u32 features_edx;
+        u32 enlightenments_eax;
+        u32 enlightenments_ebx;
+        u32 syndbg_cap_eax;
+        u32 nested_eax;
+        u32 nested_ebx;
     } cpuid_cache;
     struct kvm_vcpu_hv_tlb_flush_fifo tlb_flush_fifo[2];
     u64 sparse_banks[64];
     struct hv_vp_assist_page vp_assist_page;
     struct {
-	u64 pa_page_gpa;
-	u64 vm_id;
-	u32 vp_id;
+        u64 pa_page_gpa;
+        u64 vm_id;
+        u32 vp_id;
     } nested;
 };
 
@@ -124676,9 +125606,10 @@ struct kvm_apic_map {
     struct callback_head rcu;
     enum kvm_apic_logical_mode logical_mode;
     u32 max_apic_id;
-    union {
-	struct kvm_lapic *xapic_flat_map[8];
-	struct kvm_lapic *xapic_cluster_map[64];
+    union
+    {
+        struct kvm_lapic *xapic_flat_map[8];
+        struct kvm_lapic *xapic_cluster_map[64];
     };
     struct kvm_lapic *phys_map[0];
 };
@@ -125395,9 +126326,10 @@ struct scrub_ctx {
 
 struct scrub_sector_verification {
     bool is_metadata;
-    union {
-	u8 *csum;
-	u64 generation;
+    union
+    {
+        u8 *csum;
+        u64 generation;
     };
 };
 
@@ -125498,9 +126430,10 @@ struct io_msg {
     u32 len;
     u32 cmd;
     u32 src_fd;
-    union {
-	u32 dst_fd;
-	u32 cqe_flags;
+    union
+    {
+        u32 dst_fd;
+        u32 cqe_flags;
     };
     u32 flags;
 };
@@ -125793,19 +126726,20 @@ struct stats_req_info {
 
 struct stats_reply_data {
     struct ethnl_reply_data base;
-    union {
-	struct {
-	    struct ethtool_eth_phy_stats phy_stats;
-	    struct ethtool_eth_mac_stats mac_stats;
-	    struct ethtool_eth_ctrl_stats ctrl_stats;
-	    struct ethtool_rmon_stats rmon_stats;
-	};
-	struct {
-	    struct ethtool_eth_phy_stats phy_stats;
-	    struct ethtool_eth_mac_stats mac_stats;
-	    struct ethtool_eth_ctrl_stats ctrl_stats;
-	    struct ethtool_rmon_stats rmon_stats;
-	} stats;
+    union
+    {
+        struct {
+            struct ethtool_eth_phy_stats phy_stats;
+            struct ethtool_eth_mac_stats mac_stats;
+            struct ethtool_eth_ctrl_stats ctrl_stats;
+            struct ethtool_rmon_stats rmon_stats;
+        };
+        struct {
+            struct ethtool_eth_phy_stats phy_stats;
+            struct ethtool_eth_mac_stats mac_stats;
+            struct ethtool_eth_ctrl_stats ctrl_stats;
+            struct ethtool_rmon_stats rmon_stats;
+        } stats;
     };
     const struct ethtool_rmon_hist_range *rmon_ranges;
 };
@@ -125831,16 +126765,18 @@ struct icmp_ext_echo_ctype3_hdr {
 
 struct icmp_ext_echo_iio {
     struct icmp_extobj_hdr extobj_hdr;
-    union {
-	char name[16];
-	__be32 ifindex;
-	struct {
-	    struct icmp_ext_echo_ctype3_hdr ctype3_hdr;
-	    union {
-		__be32 ipv4_addr;
-		struct in6_addr ipv6_addr;
-	    } ip_addr;
-	} addr;
+    union
+    {
+        char name[16];
+        __be32 ifindex;
+        struct {
+            struct icmp_ext_echo_ctype3_hdr ctype3_hdr;
+            union
+            {
+                __be32 ipv4_addr;
+                struct in6_addr ipv6_addr;
+            } ip_addr;
+        } addr;
     } ident;
 };
 
@@ -125849,8 +126785,8 @@ struct icmp_bxm {
     int offset;
     int data_len;
     struct {
-	struct icmphdr icmph;
-	__be32 times[3];
+        struct icmphdr icmph;
+        __be32 times[3];
     } data;
     int head_len;
     struct ip_options_data replyopts;
@@ -126071,12 +127007,13 @@ enum xfrm_nlgroups {
 };
 
 struct km_event {
-    union {
-	u32 hard;
-	u32 proto;
-	u32 byid;
-	u32 aevent;
-	u32 type;
+    union
+    {
+        u32 hard;
+        u32 proto;
+        u32 byid;
+        u32 aevent;
+        u32 type;
     } data;
     u32 seq;
     u32 portid;
@@ -127329,25 +128266,27 @@ struct mtrr_cleanup_result {
 struct uprobe_xol_ops;
 
 struct arch_uprobe {
-    union {
-	u8 insn[16];
-	u8 ixol[16];
+    union
+    {
+        u8 insn[16];
+        u8 ixol[16];
     };
     const struct uprobe_xol_ops *ops;
-    union {
-	struct {
-	    s32 offs;
-	    u8 ilen;
-	    u8 opc1;
-	} branch;
-	struct {
-	    u8 fixups;
-	    u8 ilen;
-	} defparam;
-	struct {
-	    u8 reg_offset;
-	    u8 ilen;
-	} push;
+    union
+    {
+        struct {
+            s32 offs;
+            u8 ilen;
+            u8 opc1;
+        } branch;
+        struct {
+            u8 fixups;
+            u8 ilen;
+        } defparam;
+        struct {
+            u8 reg_offset;
+            u8 ilen;
+        } push;
     };
 };
 
@@ -127556,9 +128495,10 @@ struct event_probe_data {
 
 struct bpf_cpumap_val {
     __u32 qsize;
-    union {
-	int fd;
-	__u32 id;
+    union
+    {
+        int fd;
+        __u32 id;
     } bpf_prog;
 };
 
@@ -127875,9 +128815,10 @@ struct hyp_sysfs_attr {
     struct attribute attr;
     ssize_t (*show)(struct hyp_sysfs_attr *, char *);
     ssize_t (*store)(struct hyp_sysfs_attr *, const char *, size_t);
-    union {
-	void *hyp_attr_data;
-	long unsigned int hyp_attr_value;
+    union
+    {
+        void *hyp_attr_data;
+        long unsigned int hyp_attr_value;
     };
 };
 
@@ -128539,14 +129480,15 @@ struct i2c_acpi_handler_data {
 struct gsb_buffer {
     u8 status;
     u8 len;
-    union {
-	u16 wdata;
-	u8 bdata;
-	struct {
-	    struct {
-	    } __empty_data;
-	    u8 data[0];
-	};
+    union
+    {
+        u16 wdata;
+        u8 bdata;
+        struct {
+            struct {
+            } __empty_data;
+            u8 data[0];
+        };
     };
 };
 
@@ -128654,14 +129596,15 @@ struct dmi_system_event_log {
     u8 access_method;
     u8 status;
     u32 change_token;
-    union {
-	struct {
-	    u16 index_addr;
-	    u16 data_addr;
-	} io;
-	u32 phys_addr32;
-	u16 gpnv_handle;
-	u32 access_method_address;
+    union
+    {
+        struct {
+            u16 index_addr;
+            u16 data_addr;
+        } io;
+        u32 phys_addr32;
+        u16 gpnv_handle;
+        u32 access_method_address;
     };
     u8 header_format;
     u8 type_descriptors_supported_count;
@@ -128933,9 +129876,10 @@ struct erspan_md2 {
 
 struct erspan_metadata {
     int version;
-    union {
-	__be32 index;
-	struct erspan_md2 md2;
+    union
+    {
+        __be32 index;
+        struct erspan_md2 md2;
     } u;
 };
 
@@ -129174,9 +130118,10 @@ struct args_out {
 };
 
 struct args_ismountpoint {
-    union {
-	struct args_in in;
-	struct args_out out;
+    union
+    {
+        struct args_in in;
+        struct args_out out;
     };
 };
 
@@ -129185,18 +130130,19 @@ struct autofs_dev_ioctl {
     __u32 ver_minor;
     __u32 size;
     __s32 ioctlfd;
-    union {
-	struct args_protover protover;
-	struct args_protosubver protosubver;
-	struct args_openmount openmount;
-	struct args_ready ready;
-	struct args_fail fail;
-	struct args_setpipefd setpipefd;
-	struct args_timeout timeout;
-	struct args_requester requester;
-	struct args_expire expire;
-	struct args_askumount askumount;
-	struct args_ismountpoint ismountpoint;
+    union
+    {
+        struct args_protover protover;
+        struct args_protosubver protosubver;
+        struct args_openmount openmount;
+        struct args_ready ready;
+        struct args_fail fail;
+        struct args_setpipefd setpipefd;
+        struct args_timeout timeout;
+        struct args_requester requester;
+        struct args_expire expire;
+        struct args_askumount askumount;
+        struct args_ismountpoint ismountpoint;
     };
     char path[0];
 };
@@ -129563,10 +130509,11 @@ enum board_ids {
     board_ahci_mcp79 = 12,
 };
 
-union input_seq_state {
+union input_seq_state
+{
     struct {
-	short unsigned int pos;
-	bool mutex_acquired;
+        short unsigned int pos;
+        bool mutex_acquired;
     };
     void *p;
 };
@@ -130517,9 +131464,10 @@ struct crypto_ccm_req_priv_ctx {
     u32 flags;
     struct scatterlist src[3];
     struct scatterlist dst[3];
-    union {
-	struct ahash_request ahreq;
-	struct skcipher_request skreq;
+    union
+    {
+        struct ahash_request ahreq;
+        struct skcipher_request skreq;
     };
 };
 
@@ -130740,7 +131688,8 @@ struct dvd_manufact {
     __u8 value[2048];
 };
 
-typedef union {
+typedef union
+{
     __u8 type;
     struct dvd_physical physical;
     struct dvd_copyright copyright;
@@ -130805,7 +131754,8 @@ struct dvd_lu_send_rpcstate {
     __u8 rpc_scheme;
 };
 
-typedef union {
+typedef union
+{
     __u8 type;
     struct dvd_lu_send_agid lsa;
     struct dvd_host_send_challenge hsc;
@@ -131298,8 +132248,9 @@ struct tc_fifo_qopt_offload {
     enum tc_fifo_command command;
     u32 handle;
     u32 parent;
-    union {
-	struct tc_qopt_offload_stats stats;
+    union
+    {
+        struct tc_qopt_offload_stats stats;
     };
 };
 
@@ -131359,32 +132310,35 @@ struct arch_lbr_state {
     struct lbr_entry entries[0];
 };
 
-union cpuid28_eax {
+union cpuid28_eax
+{
     struct {
-	unsigned int lbr_depth_mask : 8;
-	unsigned int reserved : 22;
-	unsigned int lbr_deep_c_reset : 1;
-	unsigned int lbr_lip : 1;
+        unsigned int lbr_depth_mask : 8;
+        unsigned int reserved : 22;
+        unsigned int lbr_deep_c_reset : 1;
+        unsigned int lbr_lip : 1;
     } split;
     unsigned int full;
 };
 
-union cpuid28_ebx {
+union cpuid28_ebx
+{
     struct {
-	unsigned int lbr_cpl : 1;
-	unsigned int lbr_filter : 1;
-	unsigned int lbr_call_stack : 1;
+        unsigned int lbr_cpl : 1;
+        unsigned int lbr_filter : 1;
+        unsigned int lbr_call_stack : 1;
     } split;
     unsigned int full;
 };
 
-union cpuid28_ecx {
+union cpuid28_ecx
+{
     struct {
-	unsigned int lbr_mispred : 1;
-	unsigned int lbr_timed_lbr : 1;
-	unsigned int lbr_br_type : 1;
-	unsigned int reserved : 13;
-	unsigned int lbr_counters : 4;
+        unsigned int lbr_mispred : 1;
+        unsigned int lbr_timed_lbr : 1;
+        unsigned int lbr_br_type : 1;
+        unsigned int reserved : 13;
+        unsigned int lbr_counters : 4;
     } split;
     unsigned int full;
 };
@@ -131423,16 +132377,17 @@ struct x86_perf_task_context_arch_lbr_xsave {
     long : 64;
     long : 64;
     long : 64;
-    union {
-	struct xregs_state xsave;
-	struct {
-	    struct fxregs_state i387;
-	    struct xstate_header header;
-	    struct arch_lbr_state lbr;
-	    long : 64;
-	    long : 64;
-	    long : 64;
-	};
+    union
+    {
+        struct xregs_state xsave;
+        struct {
+            struct fxregs_state i387;
+            struct xstate_header header;
+            struct arch_lbr_state lbr;
+            long : 64;
+            long : 64;
+            long : 64;
+        };
     };
 };
 
@@ -131452,11 +132407,12 @@ enum {
     ARCH_LBR_BR_TYPE_MAP_MAX = 16,
 };
 
-union ftrace_op_code_union {
+union ftrace_op_code_union
+{
     char code[7];
     struct {
-	char op[3];
-	int offset;
+        char op[3];
+        int offset;
     } __attribute__((packed));
 };
 
@@ -131480,20 +132436,21 @@ struct ptrace_syscall_info {
     __u32 arch;
     __u64 instruction_pointer;
     __u64 stack_pointer;
-    union {
-	struct {
-	    __u64 nr;
-	    __u64 args[6];
-	} entry;
-	struct {
-	    __s64 rval;
-	    __u8 is_error;
-	} exit;
-	struct {
-	    __u64 nr;
-	    __u64 args[6];
-	    __u32 ret_data;
-	} seccomp;
+    union
+    {
+        struct {
+            __u64 nr;
+            __u64 args[6];
+        } entry;
+        struct {
+            __s64 rval;
+            __u8 is_error;
+        } exit;
+        struct {
+            __u64 nr;
+            __u64 args[6];
+            __u32 ret_data;
+        } seccomp;
     };
 };
 
@@ -131607,9 +132564,10 @@ struct bpf_common_lru {
 typedef bool (*del_from_htab_func)(void *, struct bpf_lru_node *);
 
 struct bpf_lru {
-    union {
-	struct bpf_common_lru common_lru;
-	struct bpf_lru_list *percpu_lru;
+    union
+    {
+        struct bpf_common_lru common_lru;
+        struct bpf_lru_list *percpu_lru;
     };
     del_from_htab_func del_from_htab;
     void *del_arg;
@@ -131622,20 +132580,21 @@ struct bpf_lru {
     long : 64;
 };
 
-union swap_header {
+union swap_header
+{
     struct {
-	char reserved[4086];
-	char magic[10];
+        char reserved[4086];
+        char magic[10];
     } magic;
     struct {
-	char bootbits[1024];
-	__u32 version;
-	__u32 last_page;
-	__u32 nr_badpages;
-	unsigned char sws_uuid[16];
-	unsigned char sws_volume[16];
-	__u32 padding[117];
-	__u32 badpages[1];
+        char bootbits[1024];
+        __u32 version;
+        __u32 last_page;
+        __u32 nr_badpages;
+        unsigned char sws_uuid[16];
+        unsigned char sws_volume[16];
+        __u32 padding[117];
+        __u32 badpages[1];
     } info;
 };
 
@@ -131843,9 +132802,10 @@ struct btrfs_dev_replace_item {
 };
 
 struct netnode_security_struct {
-    union {
-	__be32 ipv4;
-	struct in6_addr ipv6;
+    union
+    {
+        __be32 ipv4;
+        struct in6_addr ipv6;
     } addr;
     u32 sid;
     u16 family;
@@ -131875,16 +132835,16 @@ enum assoc_array_walk_status {
 
 struct assoc_array_walk_result {
     struct {
-	struct assoc_array_node *node;
-	int level;
-	int slot;
+        struct assoc_array_node *node;
+        int level;
+        int slot;
     } terminal_node;
     struct {
-	struct assoc_array_shortcut *shortcut;
-	int level;
-	int sc_level;
-	long unsigned int sc_segments;
-	long unsigned int dissimilarity;
+        struct assoc_array_shortcut *shortcut;
+        int level;
+        int sc_level;
+        long unsigned int sc_segments;
+        long unsigned int dissimilarity;
     } wrong_shortcut;
 };
 
@@ -132039,15 +132999,16 @@ struct memory_initiator {
 
 struct xenbus_map_node {
     struct list_head next;
-    union {
-	struct {
-	    struct vm_struct *area;
-	} pv;
-	struct {
-	    struct page *pages[16];
-	    long unsigned int addrs[16];
-	    void *addr;
-	} hvm;
+    union
+    {
+        struct {
+            struct vm_struct *area;
+        } pv;
+        struct {
+            struct page *pages[16];
+            long unsigned int addrs[16];
+            void *addr;
+        } hvm;
     };
     grant_handle_t handles[16];
     unsigned int nr_handles;
@@ -132193,9 +133154,10 @@ struct mon_bin_hdr {
     int status;
     unsigned int len_urb;
     unsigned int len_cap;
-    union {
-	unsigned char setup[8];
-	struct iso_rec iso;
+    union
+    {
+        unsigned char setup[8];
+        struct iso_rec iso;
     } s;
     int interval;
     int start_frame;
@@ -132427,9 +133389,10 @@ struct dst_cache_pcpu {
     long unsigned int refresh_ts;
     struct dst_entry *dst;
     u32 cookie;
-    union {
-	struct in_addr in_saddr;
-	struct in6_addr in6_saddr;
+    union
+    {
+        struct in_addr in_saddr;
+        struct in6_addr in6_saddr;
     };
 };
 
@@ -133226,9 +134189,10 @@ struct seccomp_kaddfd {
     int fd;
     unsigned int flags;
     __u32 ioctl_flags;
-    union {
-	bool setfd;
-	int ret;
+    union
+    {
+        bool setfd;
+        int ret;
     };
     struct completion completion;
     struct list_head list;
@@ -133251,9 +134215,10 @@ struct bpf_lpm_trie_key_hdr {
 };
 
 struct bpf_lpm_trie_key_u8 {
-    union {
-	struct bpf_lpm_trie_key_hdr hdr;
-	__u32 prefixlen;
+    union
+    {
+        struct bpf_lpm_trie_key_hdr hdr;
+        __u32 prefixlen;
     };
     __u8 data[0];
 };
@@ -133477,13 +134442,15 @@ struct interval_tree_span_iter {
     struct interval_tree_node *nodes[2];
     long unsigned int first_index;
     long unsigned int last_index;
-    union {
-	long unsigned int start_hole;
-	long unsigned int start_used;
+    union
+    {
+        long unsigned int start_hole;
+        long unsigned int start_used;
     };
-    union {
-	long unsigned int last_hole;
-	long unsigned int last_used;
+    union
+    {
+        long unsigned int last_hole;
+        long unsigned int last_used;
     };
     int is_hole;
 };
@@ -133805,11 +134772,13 @@ struct bpf_unix_iter_state {
 };
 
 struct bpf_iter__unix {
-    union {
-	struct bpf_iter_meta *meta;
+    union
+    {
+        struct bpf_iter_meta *meta;
     };
-    union {
-	struct unix_sock *unix_sk;
+    union
+    {
+        struct unix_sock *unix_sk;
     };
     uid_t uid;
 };
@@ -133825,7 +134794,8 @@ struct tpacket_stats_v3 {
     unsigned int tp_freeze_q_cnt;
 };
 
-union tpacket_stats_u {
+union tpacket_stats_u
+{
     struct tpacket_stats stats1;
     struct tpacket_stats_v3 stats3;
 };
@@ -133942,9 +134912,10 @@ struct packet_ring_buffer {
     unsigned int pg_vec_pages;
     unsigned int pg_vec_len;
     unsigned int *pending_refcnt;
-    union {
-	long unsigned int *rx_owner_map;
-	struct tpacket_kbdq_core prb_bdqc;
+    union
+    {
+        long unsigned int *rx_owner_map;
+        struct tpacket_kbdq_core prb_bdqc;
     };
 };
 
@@ -133955,9 +134926,10 @@ struct packet_fanout {
     u16 id;
     u8 type;
     u8 flags;
-    union {
-	atomic_t rr_cur;
-	struct bpf_prog *bpf_prog;
+    union
+    {
+        atomic_t rr_cur;
+        struct bpf_prog *bpf_prog;
     };
     struct list_head list;
     spinlock_t lock;
@@ -134428,9 +135400,10 @@ struct crypto_gcm_req_priv_ctx {
     struct scatterlist dst[3];
     struct scatterlist sg;
     struct crypto_gcm_ghash_ctx ghash_ctx;
-    union {
-	struct ahash_request ahreq;
-	struct skcipher_request skreq;
+    union
+    {
+        struct ahash_request ahreq;
+        struct skcipher_request skreq;
     } u;
 };
 
@@ -134934,9 +135907,10 @@ struct vifctl {
     unsigned char vifc_flags;
     unsigned char vifc_threshold;
     unsigned int vifc_rate_limit;
-    union {
-	struct in_addr vifc_lcl_addr;
-	int vifc_lcl_ifindex;
+    union
+    {
+        struct in_addr vifc_lcl_addr;
+        int vifc_lcl_ifindex;
     };
     struct in_addr vifc_rmt_addr;
 };
@@ -135030,12 +136004,13 @@ struct mfc_cache_cmp_arg {
 
 struct mfc_cache {
     struct mr_mfc _c;
-    union {
-	struct {
-	    __be32 mfc_mcastgrp;
-	    __be32 mfc_origin;
-	};
-	struct mfc_cache_cmp_arg cmparg;
+    union
+    {
+        struct {
+            __be32 mfc_mcastgrp;
+            __be32 mfc_origin;
+        };
+        struct mfc_cache_cmp_arg cmparg;
     };
 };
 
@@ -135375,9 +136350,10 @@ enum {
 
 struct bpf_devmap_val {
     __u32 ifindex;
-    union {
-	int fd;
-	__u32 id;
+    union
+    {
+        int fd;
+        __u32 id;
     } bpf_prog;
 };
 
@@ -136052,12 +137028,13 @@ enum tsx_ctrl_states {
 };
 
 struct vmware_steal_time {
-    union {
-	uint64_t clock;
-	struct {
-	    uint32_t clock_low;
-	    uint32_t clock_high;
-	};
+    union
+    {
+        uint64_t clock;
+        struct {
+            uint32_t clock_low;
+            uint32_t clock_high;
+        };
     };
     uint64_t reserved[7];
 };
@@ -136090,10 +137067,11 @@ struct hpet_base {
     struct hpet_channel *channels;
 };
 
-union hpet_lock {
+union hpet_lock
+{
     struct {
-	arch_spinlock_t lock;
-	u32 value;
+        arch_spinlock_t lock;
+        u32 value;
     };
     u64 lockval;
 };
@@ -136113,19 +137091,20 @@ struct rmp_state {
 };
 
 struct rmpentry {
-    union {
-	struct {
-	    u64 assigned : 1;
-	    u64 pagesize : 1;
-	    u64 immutable : 1;
-	    u64 rsvd1 : 9;
-	    u64 gpa : 39;
-	    u64 asid : 10;
-	    u64 vmsa : 1;
-	    u64 validated : 1;
-	    u64 rsvd2 : 1;
-	};
-	u64 lo;
+    union
+    {
+        struct {
+            u64 assigned : 1;
+            u64 pagesize : 1;
+            u64 immutable : 1;
+            u64 rsvd1 : 9;
+            u64 gpa : 39;
+            u64 asid : 10;
+            u64 vmsa : 1;
+            u64 validated : 1;
+            u64 rsvd2 : 1;
+        };
+        u64 lo;
     };
     u64 hi;
 };
@@ -136153,9 +137132,10 @@ struct bpf_htab {
     struct bucket *buckets;
     void *elems;
     long : 64;
-    union {
-	struct pcpu_freelist freelist;
-	struct bpf_lru lru;
+    union
+    {
+        struct pcpu_freelist freelist;
+        struct bpf_lru lru;
     };
     struct htab_elem **extra_elems;
     struct percpu_counter pcount;
@@ -136176,19 +137156,22 @@ struct bpf_htab {
 };
 
 struct htab_elem {
-    union {
-	struct hlist_nulls_node hash_node;
-	struct {
-	    void *padding;
-	    union {
-		struct pcpu_freelist_node fnode;
-		struct htab_elem *batch_flink;
-	    };
-	};
+    union
+    {
+        struct hlist_nulls_node hash_node;
+        struct {
+            void *padding;
+            union
+            {
+                struct pcpu_freelist_node fnode;
+                struct htab_elem *batch_flink;
+            };
+        };
     };
-    union {
-	void *ptr_to_pptr;
-	struct bpf_lru_node lru_node;
+    union
+    {
+        void *ptr_to_pptr;
+        struct bpf_lru_node lru_node;
     };
     u32 hash;
     long : 0;
@@ -136241,9 +137224,10 @@ struct size_class {
 };
 
 struct link_free {
-    union {
-	long unsigned int next;
-	long unsigned int handle;
+    union
+    {
+        long unsigned int next;
+        long unsigned int handle;
     };
 };
 
@@ -136262,10 +137246,10 @@ struct zs_pool {
 
 struct zspage {
     struct {
-	unsigned int huge : 1;
-	unsigned int fullness : 4;
-	unsigned int class : 9;
-	unsigned int magic : 8;
+        unsigned int huge : 1;
+        unsigned int fullness : 4;
+        unsigned int class : 9;
+        unsigned int magic : 8;
     };
     unsigned int inuse;
     unsigned int freeobj;
@@ -136376,9 +137360,10 @@ struct io_cancel {
 };
 
 struct ddebug_class_param {
-    union {
-	long unsigned int *bits;
-	unsigned int *lvl;
+    union
+    {
+        long unsigned int *bits;
+        unsigned int *lvl;
     };
     char flags[8];
     const struct ddebug_class_map *map;
@@ -136497,14 +137482,15 @@ struct viot_iommu {
 };
 
 struct viot_endpoint {
-    union {
-	struct {
-	    u16 segment_start;
-	    u16 segment_end;
-	    u16 bdf_start;
-	    u16 bdf_end;
-	};
-	u64 address;
+    union
+    {
+        struct {
+            u16 segment_start;
+            u16 segment_end;
+            u16 bdf_start;
+            u16 bdf_end;
+        };
+        u64 address;
     };
     u32 endpoint_id;
     struct viot_iommu *viommu;
@@ -136520,10 +137506,11 @@ struct vcpu_runstate_info {
 typedef struct vcpu_runstate_info *__guest_handle_vcpu_runstate_info;
 
 struct vcpu_register_runstate_memory_area {
-    union {
-	__guest_handle_vcpu_runstate_info h;
-	struct vcpu_runstate_info *v;
-	uint64_t p;
+    union
+    {
+        __guest_handle_vcpu_runstate_info h;
+        struct vcpu_runstate_info *v;
+        uint64_t p;
     } addr;
 };
 
@@ -136688,12 +137675,13 @@ struct ff_effect_compat {
     __u16 direction;
     struct ff_trigger trigger;
     struct ff_replay replay;
-    union {
-	struct ff_constant_effect constant;
-	struct ff_ramp_effect ramp;
-	struct ff_periodic_effect_compat periodic;
-	struct ff_condition_effect condition[2];
-	struct ff_rumble_effect rumble;
+    union
+    {
+        struct ff_constant_effect constant;
+        struct ff_ramp_effect ramp;
+        struct ff_periodic_effect_compat periodic;
+        struct ff_condition_effect condition[2];
+        struct ff_rumble_effect rumble;
     } u;
 };
 
@@ -136904,29 +137892,30 @@ struct mptcp_out_options {
     u8 reset_transient : 1;
     u8 csum_reqd : 1;
     u8 allow_join_id0 : 1;
-    union {
-	struct {
-	    u64 sndr_key;
-	    u64 rcvr_key;
-	    u64 data_seq;
-	    u32 subflow_seq;
-	    u16 data_len;
-	    __sum16 csum;
-	};
-	struct {
-	    struct mptcp_addr_info addr;
-	    u64 ahmac;
-	};
-	struct {
-	    struct mptcp_ext ext_copy;
-	    u64 fail_seq;
-	};
-	struct {
-	    u32 nonce;
-	    u32 token;
-	    u64 thmac;
-	    u8 hmac[20];
-	};
+    union
+    {
+        struct {
+            u64 sndr_key;
+            u64 rcvr_key;
+            u64 data_seq;
+            u32 subflow_seq;
+            u16 data_len;
+            __sum16 csum;
+        };
+        struct {
+            struct mptcp_addr_info addr;
+            u64 ahmac;
+        };
+        struct {
+            struct mptcp_ext ext_copy;
+            u64 fail_seq;
+        };
+        struct {
+            u32 nonce;
+            u32 token;
+            u64 thmac;
+            u8 hmac[20];
+        };
     };
 };
 
@@ -137427,16 +138416,17 @@ enum {
 };
 
 struct fs_path {
-    union {
-	struct {
-	    char *start;
-	    char *end;
-	    char *buf;
-	    short unsigned int buf_len : 15;
-	    short unsigned int reversed : 1;
-	    char inline_buf[0];
-	};
-	char pad[256];
+    union
+    {
+        struct {
+            char *start;
+            char *end;
+            char *buf;
+            short unsigned int buf_len : 15;
+            short unsigned int reversed : 1;
+            char inline_buf[0];
+        };
+        char pad[256];
     };
 };
 
@@ -137719,8 +138709,9 @@ struct clk_gpio {
 struct physdev_dbgp_op {
     uint8_t op;
     uint8_t bus;
-    union {
-	struct physdev_pci_device pci;
+    union
+    {
+        struct physdev_pci_device pci;
     } u;
 };
 
@@ -137780,18 +138771,18 @@ struct drm_gpuva {
     struct drm_gpuvm_bo *vm_bo;
     enum drm_gpuva_flags flags;
     struct {
-	u64 addr;
-	u64 range;
+        u64 addr;
+        u64 range;
     } va;
     struct {
-	u64 offset;
-	struct drm_gem_object *obj;
-	struct list_head entry;
+        u64 offset;
+        struct drm_gem_object *obj;
+        struct list_head entry;
     } gem;
     struct {
-	struct rb_node node;
-	struct list_head entry;
-	u64 __subtree_last;
+        struct rb_node node;
+        struct list_head entry;
+        u64 __subtree_last;
     } rb;
 };
 
@@ -137809,22 +138800,22 @@ struct drm_gpuvm {
     u64 mm_start;
     u64 mm_range;
     struct {
-	struct rb_root_cached tree;
-	struct list_head list;
+        struct rb_root_cached tree;
+        struct list_head list;
     } rb;
     struct kref kref;
     struct drm_gpuva kernel_alloc_node;
     const struct drm_gpuvm_ops *ops;
     struct drm_gem_object *r_obj;
     struct {
-	struct list_head list;
-	struct list_head *local_list;
-	spinlock_t lock;
+        struct list_head list;
+        struct list_head *local_list;
+        spinlock_t lock;
     } extobj;
     struct {
-	struct list_head list;
-	struct list_head *local_list;
-	spinlock_t lock;
+        struct list_head list;
+        struct list_head *local_list;
+        spinlock_t lock;
     } evict;
 };
 
@@ -137834,12 +138825,12 @@ struct drm_gpuvm_bo {
     bool evicted;
     struct kref kref;
     struct {
-	struct list_head gpuva;
-	struct {
-	    struct list_head gem;
-	    struct list_head extobj;
-	    struct list_head evict;
-	} entry;
+        struct list_head gpuva;
+        struct {
+            struct list_head gem;
+            struct list_head extobj;
+            struct list_head evict;
+        } entry;
     } list;
 };
 
@@ -137866,12 +138857,12 @@ enum drm_gpuva_op_type {
 
 struct drm_gpuva_op_map {
     struct {
-	u64 addr;
-	u64 range;
+        u64 addr;
+        u64 range;
     } va;
     struct {
-	u64 offset;
-	struct drm_gem_object *obj;
+        u64 offset;
+        struct drm_gem_object *obj;
     } gem;
 };
 
@@ -137893,11 +138884,12 @@ struct drm_gpuva_op_prefetch {
 struct drm_gpuva_op {
     struct list_head entry;
     enum drm_gpuva_op_type op;
-    union {
-	struct drm_gpuva_op_map map;
-	struct drm_gpuva_op_remap remap;
-	struct drm_gpuva_op_unmap unmap;
-	struct drm_gpuva_op_prefetch prefetch;
+    union
+    {
+        struct drm_gpuva_op_map map;
+        struct drm_gpuva_op_remap remap;
+        struct drm_gpuva_op_unmap unmap;
+        struct drm_gpuva_op_prefetch prefetch;
     };
 };
 
@@ -137943,9 +138935,9 @@ struct scsi_stream_status_header {
     u16 reserved;
     __be16 number_of_open_streams;
     struct {
-	struct {
-	} __empty_stream_status;
-	struct scsi_stream_status stream_status[0];
+        struct {
+        } __empty_stream_status;
+        struct scsi_stream_status stream_status[0];
     };
 };
 
@@ -138120,15 +139112,15 @@ struct magicmouse_sc {
     int scroll_accel;
     long unsigned int scroll_jiffies;
     struct {
-	short int x;
-	short int y;
-	short int scroll_x;
-	short int scroll_y;
-	short int scroll_x_hr;
-	short int scroll_y_hr;
-	u8 size;
-	bool scroll_x_active;
-	bool scroll_y_active;
+        short int x;
+        short int y;
+        short int scroll_x;
+        short int scroll_y;
+        short int scroll_x_hr;
+        short int scroll_y_hr;
+        u8 size;
+        bool scroll_x_active;
+        bool scroll_y_active;
     } touches[16];
     int tracking_ids[16];
     struct hid_device *hdev;
@@ -141198,12 +142190,13 @@ struct br_mdb_entry {
     __u8 flags;
     __u16 vid;
     struct {
-	union {
-	    __be32 ip4;
-	    struct in6_addr ip6;
-	    unsigned char mac_addr[6];
-	} u;
-	__be16 proto;
+        union
+        {
+            __be32 ip4;
+            struct in6_addr ip6;
+            unsigned char mac_addr[6];
+        } u;
+        __be16 proto;
     } addr;
 };
 
@@ -141317,18 +142310,19 @@ struct switchdev_attr {
     u32 flags;
     void *complete_priv;
     void (*complete)(struct net_device *, int, void *);
-    union {
-	u8 stp_state;
-	struct switchdev_mst_state mst_state;
-	struct switchdev_brport_flags brport_flags;
-	bool mrouter;
-	clock_t ageing_time;
-	bool vlan_filtering;
-	u16 vlan_protocol;
-	bool mst;
-	bool mc_disabled;
-	u8 mrp_port_role;
-	struct switchdev_vlan_msti vlan_msti;
+    union
+    {
+        u8 stp_state;
+        struct switchdev_mst_state mst_state;
+        struct switchdev_brport_flags brport_flags;
+        bool mrouter;
+        clock_t ageing_time;
+        bool vlan_filtering;
+        u16 vlan_protocol;
+        bool mst;
+        bool mc_disabled;
+        u8 mrp_port_role;
+        struct switchdev_vlan_msti vlan_msti;
     } u;
 };
 
@@ -141463,10 +142457,11 @@ struct vcpu_set_singleshot_timer {
 typedef struct vcpu_time_info *__guest_handle_vcpu_time_info;
 
 struct vcpu_register_time_memory_area {
-    union {
-	__guest_handle_vcpu_time_info h;
-	struct pvclock_vcpu_time_info *v;
-	uint64_t p;
+    union
+    {
+        __guest_handle_vcpu_time_info h;
+        struct pvclock_vcpu_time_info *v;
+        uint64_t p;
     } addr;
 };
 
@@ -141486,65 +142481,75 @@ struct cpu_user_regs {
     uint64_t r14;
     uint64_t r13;
     uint64_t r12;
-    union {
-	uint64_t rbp;
-	uint64_t ebp;
-	uint32_t _ebp;
+    union
+    {
+        uint64_t rbp;
+        uint64_t ebp;
+        uint32_t _ebp;
     };
-    union {
-	uint64_t rbx;
-	uint64_t ebx;
-	uint32_t _ebx;
+    union
+    {
+        uint64_t rbx;
+        uint64_t ebx;
+        uint32_t _ebx;
     };
     uint64_t r11;
     uint64_t r10;
     uint64_t r9;
     uint64_t r8;
-    union {
-	uint64_t rax;
-	uint64_t eax;
-	uint32_t _eax;
+    union
+    {
+        uint64_t rax;
+        uint64_t eax;
+        uint32_t _eax;
     };
-    union {
-	uint64_t rcx;
-	uint64_t ecx;
-	uint32_t _ecx;
+    union
+    {
+        uint64_t rcx;
+        uint64_t ecx;
+        uint32_t _ecx;
     };
-    union {
-	uint64_t rdx;
-	uint64_t edx;
-	uint32_t _edx;
+    union
+    {
+        uint64_t rdx;
+        uint64_t edx;
+        uint32_t _edx;
     };
-    union {
-	uint64_t rsi;
-	uint64_t esi;
-	uint32_t _esi;
+    union
+    {
+        uint64_t rsi;
+        uint64_t esi;
+        uint32_t _esi;
     };
-    union {
-	uint64_t rdi;
-	uint64_t edi;
-	uint32_t _edi;
+    union
+    {
+        uint64_t rdi;
+        uint64_t edi;
+        uint32_t _edi;
     };
     uint32_t error_code;
     uint32_t entry_vector;
-    union {
-	uint64_t rip;
-	uint64_t eip;
-	uint32_t _eip;
+    union
+    {
+        uint64_t rip;
+        uint64_t eip;
+        uint32_t _eip;
     };
     uint16_t cs;
     uint16_t _pad0[1];
     uint8_t saved_upcall_mask;
     uint8_t _pad1[3];
-    union {
-	uint64_t rflags;
-	uint64_t eflags;
-	uint32_t _eflags;
+    union
+    {
+        uint64_t rflags;
+        uint64_t eflags;
+        uint32_t _eflags;
     };
-    union {
-	uint64_t rsp;
-	uint64_t esp;
-	uint32_t _esp;
+    union
+    {
+        uint64_t rsp;
+        uint64_t esp;
+        uint32_t _esp;
     };
     uint16_t ss;
     uint16_t _pad2[3];
@@ -141560,7 +142565,7 @@ struct cpu_user_regs {
 
 struct vcpu_guest_context {
     struct {
-	char x[512];
+        char x[512];
     } fpu_ctxt;
     long unsigned int flags;
     struct cpu_user_regs user_regs;
@@ -141660,12 +142665,13 @@ struct tmigr_cpu {
     struct tmigr_event cpuevt;
 };
 
-union tmigr_state {
+union tmigr_state
+{
     u32 state;
     struct {
-	u8 active;
-	u8 migrator;
-	u16 seq;
+        u8 active;
+        u8 migrator;
+        u16 seq;
     };
 };
 
@@ -142118,8 +143124,9 @@ struct intel_ir_data {
     struct irq_2_iommu irq_2_iommu;
     long : 64;
     struct irte___2 irte_entry;
-    union {
-	struct msi_msg msi_entry;
+    union
+    {
+        struct msi_msg msi_entry;
     };
 };
 
@@ -142258,8 +143265,9 @@ struct efi_system_resource_table {
 };
 
 struct esre_entry {
-    union {
-	struct efi_system_resource_entry_v1 *esre1;
+    union
+    {
+        struct efi_system_resource_entry_v1 *esre1;
     } esre;
     struct kobject kobj;
     struct list_head list;
@@ -142300,9 +143308,9 @@ struct compat_cmsghdr {
 
 struct nf_bridge_info {
     enum {
-	BRNF_PROTO_UNCHANGED = 0,
-	BRNF_PROTO_8021Q = 1,
-	BRNF_PROTO_PPPOE = 2,
+        BRNF_PROTO_UNCHANGED = 0,
+        BRNF_PROTO_8021Q = 1,
+        BRNF_PROTO_PPPOE = 2,
     } orig_proto : 8;
     u8 pkt_otherhost : 1;
     u8 in_prerouting : 1;
@@ -142311,10 +143319,11 @@ struct nf_bridge_info {
     __u16 frag_max_size;
     int physinif;
     struct net_device *physoutdev;
-    union {
-	__be32 ipv4_daddr;
-	struct in6_addr ipv6_daddr;
-	char neigh_header[8];
+    union
+    {
+        __be32 ipv4_daddr;
+        struct in6_addr ipv6_daddr;
+        char neigh_header[8];
     };
 };
 
@@ -142979,18 +143988,19 @@ struct action_data {
     struct synth_event *synth_event;
     bool use_trace_keyword;
     char *synth_event_name;
-    union {
-	struct {
-	    char *event;
-	    char *event_system;
-	} match_data;
-	struct {
-	    char *var_str;
-	    struct hist_field *var_ref;
-	    struct hist_field *track_var;
-	    check_track_val_fn_t check_val;
-	    action_fn_t save_data;
-	} track_data;
+    union
+    {
+        struct {
+            char *event;
+            char *event_system;
+        } match_data;
+        struct {
+            char *var_str;
+            struct hist_field *var_ref;
+            struct hist_field *track_var;
+            check_track_val_fn_t check_val;
+            action_fn_t save_data;
+        } track_data;
     };
 };
 
@@ -143471,9 +144481,10 @@ struct opal_resp_tok {
     size_t len;
     enum opal_response_token type;
     enum opal_atom_width width;
-    union {
-	u64 u;
-	s64 s;
+    union
+    {
+        u64 u;
+        s64 s;
     } stored;
 };
 
@@ -144382,14 +145393,16 @@ struct br_mcast_stats {
 };
 
 struct br_ip {
-    union {
-	__be32 ip4;
-	struct in6_addr ip6;
+    union
+    {
+        __be32 ip4;
+        struct in6_addr ip6;
     } src;
-    union {
-	__be32 ip4;
-	struct in6_addr ip6;
-	unsigned char mac_addr[6];
+    union
+    {
+        __be32 ip4;
+        struct in6_addr ip6;
+        unsigned char mac_addr[6];
     } dst;
     __be16 proto;
     __u16 vid;
@@ -144475,9 +145488,10 @@ struct net_bridge {
     struct net_bridge_vlan_group *vlgrp;
     struct rhashtable fdb_hash_tbl;
     struct list_head port_list;
-    union {
-	struct rtable fake_rtable;
-	struct rt6_info fake_rt6_info;
+    union
+    {
+        struct rtable fake_rtable;
+        struct rt6_info fake_rt6_info;
     };
     u16 group_fwd_mask;
     u16 group_fwd_mask_required;
@@ -144497,9 +145511,9 @@ struct net_bridge {
     u32 root_path_cost;
     u8 group_addr[6];
     enum {
-	BR_NO_STP = 0,
-	BR_KERNEL_STP = 1,
-	BR_USER_STP = 2,
+        BR_NO_STP = 0,
+        BR_KERNEL_STP = 1,
+        BR_USER_STP = 2,
     } stp_enabled;
     struct net_bridge_mcast multicast_ctx;
     struct bridge_mcast_stats *mcast_stats;
@@ -144595,18 +145609,21 @@ struct net_bridge_vlan {
     u16 priv_flags;
     u8 state;
     struct pcpu_sw_netstats *stats;
-    union {
-	struct net_bridge *br;
-	struct net_bridge_port *port;
+    union
+    {
+        struct net_bridge *br;
+        struct net_bridge_port *port;
     };
-    union {
-	refcount_t refcnt;
-	struct net_bridge_vlan *brvlan;
+    union
+    {
+        refcount_t refcnt;
+        struct net_bridge_vlan *brvlan;
     };
     struct br_tunnel_info tinfo;
-    union {
-	struct net_bridge_mcast br_mcast_ctx;
-	struct net_bridge_mcast_port port_mcast_ctx;
+    union
+    {
+        struct net_bridge_mcast br_mcast_ctx;
+        struct net_bridge_mcast_port port_mcast_ctx;
     };
     u16 msti;
     struct list_head vlist;
@@ -145291,13 +146308,13 @@ struct scan_control {
     long unsigned int nr_scanned;
     long unsigned int nr_reclaimed;
     struct {
-	unsigned int dirty;
-	unsigned int unqueued_dirty;
-	unsigned int congested;
-	unsigned int writeback;
-	unsigned int immediate;
-	unsigned int file_taken;
-	unsigned int taken;
+        unsigned int dirty;
+        unsigned int unqueued_dirty;
+        unsigned int congested;
+        unsigned int writeback;
+        unsigned int immediate;
+        unsigned int file_taken;
+        unsigned int taken;
     } nr;
     struct reclaim_state reclaim_state;
 };
@@ -145357,9 +146374,10 @@ struct simple_attr {
 };
 
 struct timerfd_ctx {
-    union {
-	struct hrtimer tmr;
-	struct alarm alarm;
+    union
+    {
+        struct hrtimer tmr;
+        struct alarm alarm;
     } t;
     ktime_t tintv;
     ktime_t moffs;
@@ -145428,9 +146446,10 @@ enum {
 };
 
 struct blkdev_dio {
-    union {
-	struct kiocb *iocb;
-	struct task_struct *waiter;
+    union
+    {
+        struct kiocb *iocb;
+        struct task_struct *waiter;
     };
     size_t size;
     atomic_t ref;
@@ -145517,7 +146536,8 @@ typedef struct {
     size_t prefixSize;
 } LZ4_streamDecode_t_internal;
 
-typedef union {
+typedef union
+{
     long long unsigned int table[4];
     LZ4_streamDecode_t_internal internal_donotuse;
 } LZ4_streamDecode_t;
@@ -145595,10 +146615,11 @@ typedef enum {
 typedef struct {
     unsigned int count[256];
     HUF_CElt CTable[257];
-    union {
-	HUF_buildCTable_wksp_tables buildCTable_wksp;
-	HUF_WriteCTableWksp writeCTable_wksp;
-	U32 hist_wksp[1024];
+    union
+    {
+        HUF_buildCTable_wksp_tables buildCTable_wksp;
+        HUF_WriteCTableWksp writeCTable_wksp;
+        U32 hist_wksp[1024];
     } wksps;
 } HUF_compress_tables_t;
 
@@ -146256,9 +147277,10 @@ struct zswap_entry {
     swp_entry_t swpentry;
     unsigned int length;
     struct zswap_pool *pool;
-    union {
-	long unsigned int handle;
-	long unsigned int value;
+    union
+    {
+        long unsigned int handle;
+        long unsigned int value;
     };
     struct obj_cgroup *objcg;
     struct list_head lru;
@@ -146275,7 +147297,8 @@ enum zswap_init_type {
     ZSWAP_INIT_FAILED = 2,
 };
 
-typedef union {
+typedef union
+{
 } release_pages_arg;
 
 typedef int splice_direct_actor(struct pipe_inode_info *, struct splice_desc *);
@@ -146465,9 +147488,10 @@ struct io_worker {
     long unsigned int create_state;
     struct callback_head create_work;
     int create_index;
-    union {
-	struct callback_head rcu;
-	struct work_struct work;
+    union
+    {
+        struct callback_head rcu;
+        struct work_struct work;
     };
 };
 
@@ -146640,9 +147664,10 @@ struct usbdevfs_urb {
     int buffer_length;
     int actual_length;
     int start_frame;
-    union {
-	int number_of_packets;
-	unsigned int stream_id;
+    union
+    {
+        int number_of_packets;
+        unsigned int stream_id;
     };
     int error_count;
     unsigned int signr;
@@ -147047,9 +148072,10 @@ struct net_dm_hw_entries {
 
 struct per_cpu_dm_data {
     spinlock_t lock;
-    union {
-	struct sk_buff *skb;
-	struct net_dm_hw_entries *hw_entries;
+    union
+    {
+        struct sk_buff *skb;
+        struct net_dm_hw_entries *hw_entries;
     };
     struct sk_buff_head drop_queue;
     struct work_struct dm_alert_work;
@@ -147066,9 +148092,10 @@ struct net_dm_alert_ops {
 };
 
 struct net_dm_skb_cb {
-    union {
-	struct devlink_trap_metadata *hw_metadata;
-	void *pc;
+    union
+    {
+        struct devlink_trap_metadata *hw_metadata;
+        void *pc;
     };
     enum skb_drop_reason reason;
 };
@@ -147544,12 +148571,12 @@ struct cipher_test_suite {
 
 struct comp_test_suite {
     struct {
-	const struct comp_testvec *vecs;
-	unsigned int count;
+        const struct comp_testvec *vecs;
+        unsigned int count;
     } comp;
     struct {
-	const struct comp_testvec *vecs;
-	unsigned int count;
+        const struct comp_testvec *vecs;
+        unsigned int count;
     } decomp;
 };
 
@@ -147583,15 +148610,16 @@ struct alg_test_desc {
     const char *generic_driver;
     int (*test)(const struct alg_test_desc *, const char *, u32, u32);
     int fips_allowed;
-    union {
-	struct aead_test_suite aead;
-	struct cipher_test_suite cipher;
-	struct comp_test_suite comp;
-	struct hash_test_suite hash;
-	struct cprng_test_suite cprng;
-	struct drbg_test_suite drbg;
-	struct akcipher_test_suite akcipher;
-	struct kpp_test_suite kpp;
+    union
+    {
+        struct aead_test_suite aead;
+        struct cipher_test_suite cipher;
+        struct comp_test_suite comp;
+        struct hash_test_suite hash;
+        struct cprng_test_suite cprng;
+        struct drbg_test_suite drbg;
+        struct akcipher_test_suite akcipher;
+        struct kpp_test_suite kpp;
     } suite;
 };
 
@@ -147682,9 +148710,10 @@ struct genradix_iter {
 };
 
 struct genradix_node {
-    union {
-	struct genradix_node *children[64];
-	u8 data[512];
+    union
+    {
+        struct genradix_node *children[64];
+        u8 data[512];
     };
 };
 
@@ -147883,10 +148912,10 @@ struct vring_virtqueue_split {
 
 struct vring_virtqueue_packed {
     struct {
-	unsigned int num;
-	struct vring_packed_desc *desc;
-	struct vring_packed_desc_event *driver;
-	struct vring_packed_desc_event *device;
+        unsigned int num;
+        struct vring_packed_desc *desc;
+        struct vring_packed_desc_event *driver;
+        struct vring_packed_desc_event *device;
     } vring;
     bool avail_wrap_counter;
     u16 avail_used_flags;
@@ -147915,9 +148944,10 @@ struct vring_virtqueue {
     unsigned int num_added;
     u16 last_used_idx;
     bool event_triggered;
-    union {
-	struct vring_virtqueue_split split;
-	struct vring_virtqueue_packed packed;
+    union
+    {
+        struct vring_virtqueue_split split;
+        struct vring_virtqueue_packed packed;
     };
     bool (*notify)(struct virtqueue *);
     bool we_own_ring;
@@ -148170,9 +149200,10 @@ struct fsl_mc_io {
     phys_addr_t portal_phys_addr;
     void *portal_virt_addr;
     struct fsl_mc_device *dpmcp_dev;
-    union {
-	struct mutex mutex;
-	raw_spinlock_t spinlock;
+    union
+    {
+        struct mutex mutex;
+        raw_spinlock_t spinlock;
     };
 };
 
@@ -148392,17 +149423,18 @@ struct broadcast_sk {
 
 struct nf_loginfo {
     u_int8_t type;
-    union {
-	struct {
-	    u_int32_t copy_len;
-	    u_int16_t group;
-	    u_int16_t qthreshold;
-	    u_int16_t flags;
-	} ulog;
-	struct {
-	    u_int8_t level;
-	    u_int8_t logflags;
-	} log;
+    union
+    {
+        struct {
+            u_int32_t copy_len;
+            u_int16_t group;
+            u_int16_t qthreshold;
+            u_int16_t flags;
+        } ulog;
+        struct {
+            u_int8_t level;
+            u_int8_t logflags;
+        } log;
     } u;
 };
 
@@ -148431,9 +149463,9 @@ enum {
 
 struct rpl_iptunnel_encap {
     struct {
-	struct {
-	} __empty_srh;
-	struct ipv6_rpl_sr_hdr srh[0];
+        struct {
+        } __empty_srh;
+        struct ipv6_rpl_sr_hdr srh[0];
     };
 };
 
@@ -148450,21 +149482,23 @@ struct restore_data_record {
     long unsigned int e820_checksum;
 };
 
-union hv_x64_msr_hypercall_contents {
+union hv_x64_msr_hypercall_contents
+{
     u64 as_uint64;
     struct {
-	u64 enable : 1;
-	u64 reserved : 11;
-	u64 guest_physical_address : 52;
+        u64 enable : 1;
+        u64 reserved : 11;
+        u64 guest_physical_address : 52;
     };
 };
 
-union hv_vp_assist_msr_contents {
+union hv_vp_assist_msr_contents
+{
     u64 as_uint64;
     struct {
-	u64 enable : 1;
-	u64 reserved : 11;
-	u64 pfn : 52;
+        u64 enable : 1;
+        u64 reserved : 11;
+        u64 pfn : 52;
     };
 };
 
@@ -148664,10 +149698,11 @@ struct ns_get_path_task_args {
 
 struct fscrypt_get_policy_ex_arg {
     __u64 policy_size;
-    union {
-	__u8 version;
-	struct fscrypt_policy_v1 v1;
-	struct fscrypt_policy_v2 v2;
+    union
+    {
+        __u8 version;
+        struct fscrypt_policy_v1 v1;
+        struct fscrypt_policy_v2 v2;
     } policy;
 };
 
@@ -148750,9 +149785,9 @@ struct ima_rule_entry {
     int pcr;
     unsigned int allowed_algos;
     struct {
-	void *rule;
-	char *args_p;
-	int type;
+        void *rule;
+        char *args_p;
+        int type;
     } lsm[6];
     char *fsname;
     struct ima_rule_opt_list *keyrings;
@@ -148846,14 +149881,15 @@ struct closure_syncer {
 };
 
 struct closure {
-    union {
-	struct {
-	    struct workqueue_struct *wq;
-	    struct closure_syncer *s;
-	    struct llist_node list;
-	    closure_fn *fn;
-	};
-	struct work_struct work;
+    union
+    {
+        struct {
+            struct workqueue_struct *wq;
+            struct closure_syncer *s;
+            struct llist_node list;
+            closure_fn *fn;
+        };
+        struct work_struct work;
     };
     struct closure *parent;
     atomic_t remaining;
@@ -149364,17 +150400,19 @@ struct tpacket3_hdr {
     __u32 tp_status;
     __u16 tp_mac;
     __u16 tp_net;
-    union {
-	struct tpacket_hdr_variant1 hv1;
+    union
+    {
+        struct tpacket_hdr_variant1 hv1;
     };
     __u8 tp_padding[8];
 };
 
 struct tpacket_bd_ts {
     unsigned int ts_sec;
-    union {
-	unsigned int ts_usec;
-	unsigned int ts_nsec;
+    union
+    {
+        unsigned int ts_usec;
+        unsigned int ts_nsec;
     };
 };
 
@@ -149388,7 +150426,8 @@ struct tpacket_hdr_v1 {
     struct tpacket_bd_ts ts_last_pkt;
 };
 
-union tpacket_bd_header_u {
+union tpacket_bd_header_u
+{
     struct tpacket_hdr_v1 bh1;
 };
 
@@ -149415,7 +150454,8 @@ struct tpacket_req3 {
     unsigned int tp_feature_req_word;
 };
 
-union tpacket_req_u {
+union tpacket_req_u
+{
     struct tpacket_req req;
     struct tpacket_req3 req3;
 };
@@ -149447,7 +150487,8 @@ struct packet_mreq_max {
     unsigned char mr_address[32];
 };
 
-union tpacket_uhdr {
+union tpacket_uhdr
+{
     struct tpacket_hdr *h1;
     struct tpacket2_hdr *h2;
     struct tpacket3_hdr *h3;
@@ -149455,12 +150496,14 @@ union tpacket_uhdr {
 };
 
 struct packet_skb_cb {
-    union {
-	struct sockaddr_pkt pkt;
-	union {
-	    unsigned int origlen;
-	    struct sockaddr_ll ll;
-	};
+    union
+    {
+        struct sockaddr_pkt pkt;
+        union
+        {
+            unsigned int origlen;
+            struct sockaddr_ll ll;
+        };
     } sa;
 };
 
@@ -150146,9 +151189,10 @@ struct iova_rcache {
 };
 
 struct iova_magazine {
-    union {
-	long unsigned int size;
-	struct iova_magazine *next;
+    union
+    {
+        long unsigned int size;
+        struct iova_magazine *next;
     };
     long unsigned int pfns[127];
 };
@@ -150204,9 +151248,10 @@ struct ata_acpi_gtf {
 
 struct ata_acpi_hotplug_context {
     struct acpi_hotplug_context hp;
-    union {
-	struct ata_port *ap;
-	struct ata_device *dev;
+    union
+    {
+        struct ata_port *ap;
+        struct ata_device *dev;
     } data;
 };
 
@@ -150240,10 +151285,11 @@ enum ptp_clock_events {
 struct ptp_clock_event {
     int type;
     int index;
-    union {
-	u64 timestamp;
-	s64 offset;
-	struct pps_event_time pps_times;
+    union
+    {
+        u64 timestamp;
+        s64 offset;
+        struct pps_event_time pps_times;
     };
 };
 
@@ -150298,12 +151344,13 @@ struct edac_pci_gen_data {
 };
 
 struct flow_dissector_key_ports_range {
-    union {
-	struct flow_dissector_key_ports tp;
-	struct {
-	    struct flow_dissector_key_ports tp_min;
-	    struct flow_dissector_key_ports tp_max;
-	};
+    union
+    {
+        struct flow_dissector_key_ports tp;
+        struct {
+            struct flow_dissector_key_ports tp_min;
+            struct flow_dissector_key_ports tp_max;
+        };
     };
 };
 
@@ -150472,9 +151519,10 @@ struct ovs_flow_stats {
 };
 
 struct ovs_key_ct_labels {
-    union {
-	__u8 ct_labels[16];
-	__u32 ct_labels_32[4];
+    union
+    {
+        __u8 ct_labels[16];
+        __u32 ct_labels_32[4];
     };
 };
 
@@ -150538,86 +151586,90 @@ struct sw_flow_key {
     u8 tun_opts_len;
     struct ip_tunnel_key tun_key;
     struct {
-	u32 priority;
-	u32 skb_mark;
-	u16 in_port;
+        u32 priority;
+        u32 skb_mark;
+        u16 in_port;
     } __attribute__((packed)) phy;
     u8 mac_proto;
     u8 tun_proto;
     u32 ovs_flow_hash;
     u32 recirc_id;
     struct {
-	u8 src[6];
-	u8 dst[6];
-	struct vlan_head vlan;
-	struct vlan_head cvlan;
-	__be16 type;
+        u8 src[6];
+        u8 dst[6];
+        struct vlan_head vlan;
+        struct vlan_head cvlan;
+        __be16 type;
     } eth;
     u8 ct_state;
     u8 ct_orig_proto;
-    union {
-	struct {
-	    u8 proto;
-	    u8 tos;
-	    u8 ttl;
-	    u8 frag;
-	} ip;
+    union
+    {
+        struct {
+            u8 proto;
+            u8 tos;
+            u8 ttl;
+            u8 frag;
+        } ip;
     };
     u16 ct_zone;
     struct {
-	__be16 src;
-	__be16 dst;
-	__be16 flags;
+        __be16 src;
+        __be16 dst;
+        __be16 flags;
     } tp;
-    union {
-	struct {
-	    struct {
-		__be32 src;
-		__be32 dst;
-	    } addr;
-	    union {
-		struct {
-		    __be32 src;
-		    __be32 dst;
-		} ct_orig;
-		struct {
-		    u8 sha[6];
-		    u8 tha[6];
-		} arp;
-	    };
-	} ipv4;
-	struct {
-	    struct {
-		struct in6_addr src;
-		struct in6_addr dst;
-	    } addr;
-	    __be32 label;
-	    u16 exthdrs;
-	    union {
-		struct {
-		    struct in6_addr src;
-		    struct in6_addr dst;
-		} ct_orig;
-		struct {
-		    struct in6_addr target;
-		    u8 sll[6];
-		    u8 tll[6];
-		} nd;
-	    };
-	} ipv6;
-	struct {
-	    u32 num_labels_mask;
-	    __be32 lse[3];
-	} mpls;
-	struct ovs_key_nsh nsh;
+    union
+    {
+        struct {
+            struct {
+                __be32 src;
+                __be32 dst;
+            } addr;
+            union
+            {
+                struct {
+                    __be32 src;
+                    __be32 dst;
+                } ct_orig;
+                struct {
+                    u8 sha[6];
+                    u8 tha[6];
+                } arp;
+            };
+        } ipv4;
+        struct {
+            struct {
+                struct in6_addr src;
+                struct in6_addr dst;
+            } addr;
+            __be32 label;
+            u16 exthdrs;
+            union
+            {
+                struct {
+                    struct in6_addr src;
+                    struct in6_addr dst;
+                } ct_orig;
+                struct {
+                    struct in6_addr target;
+                    u8 sll[6];
+                    u8 tll[6];
+                } nd;
+            };
+        } ipv6;
+        struct {
+            u32 num_labels_mask;
+            __be32 lse[3];
+        } mpls;
+        struct ovs_key_nsh nsh;
     };
     struct {
-	struct {
-	    __be16 src;
-	    __be16 dst;
-	} orig_tp;
-	u32 mark;
-	struct ovs_key_ct_labels labels;
+        struct {
+            __be16 src;
+            __be16 dst;
+        } orig_tp;
+        u32 mark;
+        struct ovs_key_ct_labels labels;
     } ct;
 };
 
@@ -150998,9 +152050,10 @@ struct nshhdr {
     u8 mdtype;
     u8 np;
     __be32 path_hdr;
-    union {
-	struct nsh_md1_ctx md1;
-	struct nsh_md2_tlv md2;
+    union
+    {
+        struct nsh_md1_ctx md1;
+        struct nsh_md2_tlv md2;
     };
 };
 
@@ -151247,11 +152300,11 @@ struct nf_conntrack_l4proto {
     int (*nlattr_to_tuple)(struct nlattr **, struct nf_conntrack_tuple *, u_int32_t);
     const struct nla_policy *nla_policy;
     struct {
-	int (*nlattr_to_obj)(struct nlattr **, struct net *, void *);
-	int (*obj_to_nlattr)(struct sk_buff *, const void *);
-	u16 obj_size;
-	u16 nlattr_max;
-	const struct nla_policy *nla_policy;
+        int (*nlattr_to_obj)(struct nlattr **, struct net *, void *);
+        int (*obj_to_nlattr)(struct sk_buff *, const void *);
+        u16 obj_size;
+        u16 nlattr_max;
+        const struct nla_policy *nla_policy;
     } ctnl_timeout;
     void (*print_conntrack)(struct seq_file *, struct nf_conn *);
 };
@@ -151466,9 +152519,10 @@ struct sw_flow_match {
 
 struct sw_flow_id {
     u32 ufid_len;
-    union {
-	u32 ufid[4];
-	struct sw_flow_key *unmasked_key;
+    union
+    {
+        u32 ufid[4];
+        struct sw_flow_key *unmasked_key;
     };
 };
 
@@ -151483,12 +152537,12 @@ struct sw_flow_stats {
 struct sw_flow {
     struct callback_head rcu;
     struct {
-	struct hlist_node node[2];
-	u32 hash;
+        struct hlist_node node[2];
+        u32 hash;
     } flow_table;
     struct {
-	struct hlist_node node[2];
-	u32 hash;
+        struct hlist_node node[2];
+        u32 hash;
     } ufid_table;
     int stats_last_writer;
     struct sw_flow_key key;
@@ -151809,16 +152863,18 @@ struct nft_chain {
 };
 
 struct nft_data {
-    union {
-	u32 data[4];
-	struct nft_verdict verdict;
+    union
+    {
+        u32 data[4];
+        struct nft_verdict verdict;
     };
 };
 
 struct nft_regs {
-    union {
-	u32 data[20];
-	struct nft_verdict verdict;
+    union
+    {
+        u32 data[20];
+        struct nft_verdict verdict;
     };
 };
 
@@ -151831,9 +152887,9 @@ struct nft_expr {
 
 struct nft_regs_track {
     struct {
-	const struct nft_expr *selector;
-	const struct nft_expr *bitwise;
-	u8 num_reg;
+        const struct nft_expr *selector;
+        const struct nft_expr *bitwise;
+        u8 num_reg;
     } regs[20];
     const struct nft_expr *cur;
     const struct nft_expr *last;
@@ -152123,14 +153179,16 @@ struct nf_flow_key {
     struct flow_dissector_key_basic basic;
     struct flow_dissector_key_vlan vlan;
     struct flow_dissector_key_vlan cvlan;
-    union {
-	struct flow_dissector_key_ipv4_addrs ipv4;
-	struct flow_dissector_key_ipv6_addrs ipv6;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs ipv4;
+        struct flow_dissector_key_ipv6_addrs ipv6;
     };
     struct flow_dissector_key_keyid enc_key_id;
-    union {
-	struct flow_dissector_key_ipv4_addrs enc_ipv4;
-	struct flow_dissector_key_ipv6_addrs enc_ipv6;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs enc_ipv4;
+        struct flow_dissector_key_ipv6_addrs enc_ipv6;
     };
     struct flow_dissector_key_tcp tcp;
     struct flow_dissector_key_ports tp;
@@ -152169,24 +153227,26 @@ struct nf_flowtable_type {
 };
 
 struct flow_offload_tuple {
-    union {
-	struct in_addr src_v4;
-	struct in6_addr src_v6;
+    union
+    {
+        struct in_addr src_v4;
+        struct in6_addr src_v6;
     };
-    union {
-	struct in_addr dst_v4;
-	struct in6_addr dst_v6;
+    union
+    {
+        struct in_addr dst_v4;
+        struct in6_addr dst_v6;
     };
     struct {
-	__be16 src_port;
-	__be16 dst_port;
+        __be16 src_port;
+        __be16 dst_port;
     };
     int iifidx;
     u8 l3proto;
     u8 l4proto;
     struct {
-	u16 id;
-	__be16 proto;
+        u16 id;
+        __be16 proto;
     } encap[2];
     struct {
     } __hash;
@@ -152196,20 +153256,21 @@ struct flow_offload_tuple {
     char : 1;
     u8 in_vlan_ingress : 2;
     u16 mtu;
-    union {
-	struct {
-	    struct dst_entry *dst_cache;
-	    u32 dst_cookie;
-	};
-	struct {
-	    u32 ifidx;
-	    u32 hw_ifidx;
-	    u8 h_source[6];
-	    u8 h_dest[6];
-	} out;
-	struct {
-	    u32 iifidx;
-	} tc;
+    union
+    {
+        struct {
+            struct dst_entry *dst_cache;
+            u32 dst_cookie;
+        };
+        struct {
+            u32 ifidx;
+            u32 hw_ifidx;
+            u8 h_source[6];
+            u8 h_dest[6];
+        } out;
+        struct {
+            u32 iifidx;
+        } tc;
     };
 };
 
@@ -152252,9 +153313,9 @@ struct nft_offload_reg {
 
 struct nft_offload_ctx {
     struct {
-	enum nft_offload_dep_type type;
-	__be16 l3num;
-	u8 protonum;
+        enum nft_offload_dep_type type;
+        __be16 l3num;
+        u8 protonum;
     } dep;
     unsigned int num_actions;
     struct net *net;
@@ -152264,9 +153325,10 @@ struct nft_offload_ctx {
 struct nft_flow_key {
     struct flow_dissector_key_basic basic;
     struct flow_dissector_key_control control;
-    union {
-	struct flow_dissector_key_ipv4_addrs ipv4;
-	struct flow_dissector_key_ipv6_addrs ipv6;
+    union
+    {
+        struct flow_dissector_key_ipv4_addrs ipv4;
+        struct flow_dissector_key_ipv6_addrs ipv6;
     };
     struct flow_dissector_key_ports tp;
     struct flow_dissector_key_ip ip;
@@ -152299,7 +153361,8 @@ struct nft_cmp_expr {
     enum nft_cmp_ops op : 8;
 };
 
-union nft_cmp_offload_data {
+union nft_cmp_offload_data
+{
     u16 val16;
     u32 val32;
     u64 val64;
@@ -152661,17 +153724,20 @@ struct nft_userdata {
 struct nft_elem_priv {};
 
 struct nft_set_elem {
-    union {
-	u32 buf[16];
-	struct nft_data val;
+    union
+    {
+        u32 buf[16];
+        struct nft_data val;
     } key;
-    union {
-	u32 buf[16];
-	struct nft_data val;
+    union
+    {
+        u32 buf[16];
+        struct nft_data val;
     } key_end;
-    union {
-	u32 buf[16];
-	struct nft_data val;
+    union
+    {
+        u32 buf[16];
+        struct nft_data val;
     } data;
     struct nft_elem_priv *priv;
 };
@@ -153316,9 +154382,10 @@ enum nft_secmark_attributes {
 struct nft_meta {
     enum nft_meta_keys key : 8;
     u8 len;
-    union {
-	u8 dreg;
-	u8 sreg;
+    union
+    {
+        u8 dreg;
+        u8 sreg;
     };
 };
 
@@ -153387,9 +154454,10 @@ struct genevehdr {
 
 struct __nft_expr {
     const struct nft_expr_ops *ops;
-    union {
-	struct nft_payload payload;
-	struct nft_meta meta;
+    union
+    {
+        struct nft_payload payload;
+        struct nft_meta meta;
     };
 };
 
@@ -153509,10 +154577,11 @@ struct nft_hash_elem {
 
 struct nft_pipapo_elem;
 
-union nft_pipapo_map_bucket {
+union nft_pipapo_map_bucket
+{
     struct {
-	u32 to;
-	u32 n;
+        u32 to;
+        u32 n;
     };
     struct nft_pipapo_elem *e;
 };
@@ -153628,9 +154697,10 @@ struct nft_ct {
     enum nft_ct_keys key : 8;
     enum ip_conntrack_dir dir : 8;
     u8 len;
-    union {
-	u8 dreg;
-	u8 sreg;
+    union
+    {
+        u8 dreg;
+        u8 sreg;
     };
 };
 
@@ -153646,8 +154716,8 @@ struct nft_bitmap {
     u8 bitmap[0];
 };
 
-#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-#pragma clang attribute pop
-#endif
+#    ifndef BPF_NO_PRESERVE_ACCESS_INDEX
+#        pragma clang attribute pop
+#    endif
 
 #endif /* __VMLINUX_H__ */
