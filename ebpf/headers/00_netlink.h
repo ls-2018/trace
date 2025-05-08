@@ -4,8 +4,7 @@
 #include <bpf/bpf_core_read.h>
 #include <vmlinux.h>
 
-/* Minimum set of netlink helpers. */
-
+// 最小的 netlink 辅助函数集。
 #define NLA_F_NESTED (1 << 15)
 #define NLA_F_NET_BYTEORDER (1 << 14)
 #define NLA_TYPE_MASK ~(NLA_F_NESTED | NLA_F_NET_BYTEORDER)

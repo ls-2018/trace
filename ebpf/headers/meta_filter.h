@@ -1,9 +1,8 @@
 #ifndef __CORE_FILTERS_META_FILTER__
 #define __CORE_FILTERS_META_FILTER__
 
-#include <01_common_defs.h>
+#include <00_common_defs.h>
 
-/* Please keep in sync with its Rust counterpart. */
 #define META_OPS_MAX 32
 #define META_TARGET_MAX 32
 
@@ -35,55 +34,43 @@ union retis_meta_op
     struct {
         u8 md[META_TARGET_MAX];
         u8 sz;
-        u8 cmp;
+        u8 cmp; // retis_meta_cmp
     } t __attribute__((aligned(8)));
 };
 
-/* Probe configuration; the key is the target symbol address */
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __uint(max_entries, META_OPS_MAX);
-    __type(key, u32);
+    __type(key, u32); // 目标符号地址
     __type(value, union retis_meta_op);
 } filter_meta_map SEC(".maps");
 
 struct retis_meta_ctx {
-    /* base address to read from. */
-    void *base;
-    /* relative to base. */
-    u16 offset;
-    /* type of leaf value. */
-    u8 type;
-    /* optional */
-    u8 nmemb;
-    /* optional bitfield size. */
-    u8 bfs;
-    /* Target Info */
-    /* actual data. */
-    void *data;
-    /* size of data (optional). */
-    u8 sz;
-    /* mask for unsigned num comparison. */
-    u64 mask;
-    /* operation. */
-    u8 cmp;
+    void *base; // 基准地址，读取数据的起点（比如 skb、struct header等）
+    u16 offset; // 相对于 base 的偏移（单位字节）
+    u8 type;    // 值的类型，如整型、布尔、结构体中的某字段等
+    u8 nmemb;   // 可选：如果是数组，表示成员数量（number of members）
+    u8 bfs;     // 可选：bitfield size，若字段是位域，用这个指定其大小（单位：位）
+
+    // 目标值（匹配目标）：
+    void *data; // 指向用于比较的目标值，比如要匹配的整数、数组等
+    u8 sz;      // 目标值的大小（字节数），如果不为 0 用于验证长度
+    u64 mask;   // 比较时使用的掩码（仅对无符号数有效，如 0xff, 0xffff 等）
+    u8 cmp;     // 比较操作符，如等于、大于、小于、位与、位或等
 };
 
 #define PTR_BIT 1 << 6
 #define SIGN_BIT 1 << 7
 
-/* Global ro variable that identifies the number of elements in
- * filter_meta_map. Zero mean, no filter.
- */
+// 这个全局只读变量用于跟踪 filter_meta_map 中的过滤器数量。当它的值为 0 时，表示没有任何过滤器被应用。
 const volatile u32 nmeta = 0;
 
 static __always_inline long meta_process_ops(struct retis_meta_ctx *ctx) {
-    union retis_meta_op *val;
     u32 k = 0;
     u64 ptr;
     u32 i;
 
-    val = bpf_map_lookup_elem(&filter_meta_map, &k);
+    union retis_meta_op *val = bpf_map_lookup_elem(&filter_meta_map, &k);
     if (!val) {
         log_error("Failed to lookup meta-filter target");
         return -1;

@@ -5,8 +5,8 @@
 #include <bpf/usdt.bpf.h>
 #include <vmlinux.h>
 
-#include <01_common_defs.h>
-#include <events.h>
+#include <00_common_defs.h>
+#include <00_events.h>
 
 enum userspace_event_type {
     USDT = 1,

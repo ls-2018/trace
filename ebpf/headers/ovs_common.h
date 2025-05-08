@@ -5,7 +5,7 @@
 #include <vmlinux.h>
 
 #include "jhash.h"
-#include <01_common_defs.h>
+#include <00_common_defs.h>
 
 /* Please keep in sync with its Rust counterpart in crate::module::ovs::bpf.rs.
  */

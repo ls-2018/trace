@@ -1,7 +1,7 @@
 #ifndef __MODULE_OVS_JHASH_
 #define __MODULE_OVS_JHASH_
 
-/* Jenkins hash implementation taken essentially from the linux kernel tree
+/* Jenkins的哈希实现主要取自 Linux 内核代码库。
  * (include/linux/jhash.h).
  */
 
@@ -22,7 +22,7 @@
  * @word: value to rotate
  * @shift: bits to roll
  */
-static inline __u32 rol32(__u32 word, unsigned int shift) {
+static inline __u32 rol32(__u32 word, unsigned int shift) { // 循环左移shift 位
     return (word << (shift & 31)) | (word >> ((-shift) & 31));
 }
 

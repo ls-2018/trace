@@ -1,22 +1,21 @@
 #ifndef __MODULE_SKB_BPF_IF_VLAN__
 #define __MODULE_SKB_BPF_IF_VLAN__
 
-/* Code to handle VLAN tags ported from source/include/linux/if_vlan.h and
-   modified to handle BPF */
+// /include/linux/if_vlan.h
 
 #include <bpf/bpf_core_read.h>
 #include <bpf/bpf_endian.h>
 #include <vmlinux.h>
 
 #include <common.h>
-#include <compat.h>
+#include <00_compat.h>
 
 #define ENODATA 61
 #define ETH_P_8021Q 0x8100
 #define ETH_P_8021AD 0x88A8
 
 // Used for kernels prior to 0c4b2d370514cb4f3454dd3b18f031d2651fab73.
-#define VLAN_CFI_MASK 0x1000 /* Canonical Format Indicator */
+#define VLAN_CFI_MASK 0x1000 // 标准格式标识符
 #define VLAN_TAG_PRESENT VLAN_CFI_MASK
 
 #define set_skb_vlan_event(e, vlan_tci, vlan_accel) \

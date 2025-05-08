@@ -25,6 +25,7 @@ struct tracking_config {
      */
     u8 no_tracking;
 } __packed __binding;
+
 struct {
     __uint(type, BPF_MAP_TYPE_HASH);
     __uint(max_entries, PROBE_MAX);
