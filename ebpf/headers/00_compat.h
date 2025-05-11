@@ -12,7 +12,7 @@ struct nft_rule_dp___5_17_0 {
 
 // /include/net/netfilter/nf_tables.h
 // struct nft_traceinfo {
-struct nft_traceinfo___6_3_0 {
+struct nft_traceinfo___6_3_0 {         // 6.3 内核的部分字段
     const struct nft_pktinfo *pkt;     // 指向当前处理的数据包信息
     const struct nft_rule_dp *rule;    // 当前匹配的规则
     const struct nft_verdict *verdict; // 当前规则的裁决（接受、丢弃、跳转等）

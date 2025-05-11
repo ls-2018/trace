@@ -4,7 +4,7 @@
 #include <bpf/bpf_core_read.h>
 #include <vmlinux.h>
 
-#include <retis_context.h>
+#include <00_retis_context.h>
 
 /* Tracking configuration to provide hints about what the probed function does
  * for some special handling scenarios.
@@ -54,7 +54,7 @@ struct {
     __type(value, struct tracking_info);
 } tracking_map SEC(".maps");
 
-/* Must be called with a valid skb pointer */
+// 必须与有效的 sk_buff 指针一起使用
 static __always_inline struct tracking_info *skb_tracking_info(struct sk_buff *skb) {
     struct tracking_info *ti = NULL;
     u64 head;
@@ -65,7 +65,7 @@ static __always_inline struct tracking_info *skb_tracking_info(struct sk_buff *s
 
     ti = bpf_map_lookup_elem(&tracking_map, &head);
     if (!ti)
-        /* It might be temporarily stored it using its skb address. */
+        // 它可能会通过其 skb 地址进行临时存储。
         ti = bpf_map_lookup_elem(&tracking_map, (u64 *)&skb);
 
     return ti;
@@ -186,7 +186,7 @@ static __always_inline int track_skb_end(struct retis_context *ctx) {
     return 0;
 }
 
-/* Must be called with a valid skb pointer */
+// 必须与有效的 sk_buff 指针一起使用
 static __always_inline bool skb_is_tracked(struct sk_buff *skb) {
     return skb_tracking_info(skb) != NULL;
 }

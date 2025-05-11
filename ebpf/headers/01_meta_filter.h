@@ -25,16 +25,16 @@ enum retis_meta_type {
 union retis_meta_op
 {
     struct {
-        u8 type;
-        u8 nmemb;
-        u16 offt;
-        u8 bf_size;
-        u64 mask;
+        u8 type;    // 元数据类型，例如 IP、端口、协议等
+        u8 nmemb;   // 成员数量，可能用于数组或结构体中的字段计数
+        u16 offt;   // 偏移地址，用于定位字段在结构体或数据包中的位置
+        u8 bf_size; // 位字段大小，可能表示多少位有效（位图）
+        u64 mask;   // 掩码，用于字段匹配（例如过滤某几个 bit）
     } l;
     struct {
-        u8 md[META_TARGET_MAX];
-        u8 sz;
-        u8 cmp; // retis_meta_cmp
+        u8 md[META_TARGET_MAX]; // 目标数据值（即你要比较的值），比如一个 IP 地址或端口号
+        u8 sz;                  // 数据大小（字节）
+        u8 cmp;                 // 比较操作符，例如 ==、!=、<，由 retis_meta_cmp 枚举定义
     } t __attribute__((aligned(8)));
 };
 
@@ -93,6 +93,7 @@ static __always_inline long meta_process_ops(struct retis_meta_ctx *ctx) {
             if (bpf_probe_read_kernel(&ptr, sizeof(void *), (char *)ctx->base + (val->l.offt)))
                 return -1;
 
+            // 这可能是为了将地址对齐到 4K 或更大页面边界（如 4MB 页等），或只保留上位地址作为分类标识。
             ctx->base = val->l.mask ? (void *)(ptr & val->l.mask) : (void *)ptr;
             continue;
         }
@@ -109,7 +110,7 @@ static __always_inline long meta_process_ops(struct retis_meta_ctx *ctx) {
 }
 
 static __always_inline bool cmp_num(u64 operand1, u64 mmask, u64 operand2, bool sign_bit, u8 cmp_type) {
-    if (!sign_bit && mmask)
+    if (!sign_bit && mmask) // u64 && mmask
         operand1 &= mmask;
 
     switch (cmp_type) {
@@ -185,16 +186,10 @@ static __always_inline bool filter_bytes(struct retis_meta_ctx *ctx) {
     return false;
 }
 
-/* Removes prefix and suffix bits that can be part of a potential
- * previous or following bitfield and extracts the bitfield into a
- * u64.
- * Right shift on a signed negative numbers is implementation-defined.
- * Both clang and gcc act on them by sign extension.
- * This allows to preseve sign while extracting the bitfield.
- */
+// 提取位字段时，需要去掉不相关的前后位，然后考虑右移操作的行为是否会影响符号位。
+// Clang 和 GCC 都使用符号扩展，这让我们在提取带符号字段时不会丢失负号。
 static __always_inline u64 extract_bf(u64 val, bool has_sign, u16 bit_off, u16 bit_sz) {
     val <<= (64 - bit_sz) - (bit_off % 8);
-
     return has_sign ? (s64)val >> (64 - bit_sz) : val >> (64 - bit_sz);
 }
 
@@ -225,14 +220,11 @@ static __always_inline unsigned int filter_num(struct retis_meta_ctx *ctx) {
     u16 offset;
     u32 sz;
 
-    if (ctx->bfs) {
+    if (ctx->bfs) { // 有比特
         offset = ctx->offset / 8;
-        /* Size in bytes that fits the bitfield size + the
-         * starting offset.
-         * The unsigned literal is required for clang's
-         * front-end (unsupported signed div).
-         */
-        sz = DIV_CEIL((ctx->offset - offset * 8U) + ctx->bfs, 8);
+        //    10 - 17
+        //  8    16   24
+        sz = DIV_CEIL(ctx->bfs + (ctx->offset - offset * 8U), 8);
         if (!sz)
             return 0;
     }
@@ -241,22 +233,21 @@ static __always_inline unsigned int filter_num(struct retis_meta_ctx *ctx) {
         offset = ctx->offset;
     }
 
-    sz = MIN(sz, sizeof(mval));
+    sz = MIN(sz, sizeof(mval)); // 尧都区的字节数
     if (!sz) {
         log_error("error while calculating bytes to read (zero not allowed)");
         return 0;
     }
-
+    // 读取一个64 bit 的值； 最多提取 64 位（可以根据需求修改支持 128+）。
     if (bpf_probe_read_kernel(&mval, sz, (char *)ctx->base + offset))
         return 0;
 
-    /* Bitfields are handled separately as, considering they could
-     * start at any offset (can be "packed into adjacent bits of
-     * the same unit"), they require to be properly extracted
-     * before proceeding with the comparison.
-     */
-    if (ctx->bfs)
+    // 由于位字段可能位于任意 bit 偏移处且被紧凑打包，
+    // 它们必须通过专门的逻辑正确提取，不能像普通字段那样直接做比较。
+
+    if (ctx->bfs) {
         mval = extract_bf(mval, sign_bit, ctx->offset, ctx->bfs);
+    }
     else if (sign_bit)
         mval = fixup_signed(mval, sz);
 
@@ -268,10 +259,9 @@ static __always_inline unsigned int filter_num(struct retis_meta_ctx *ctx) {
 static __always_inline unsigned int meta_filter(struct sk_buff *skb) {
     struct retis_meta_ctx ctx = {};
 
-    /* reduce actions to load/cmp info. If no entries, return
-     * match.
-     */
-    if (!nmeta || nmeta > META_OPS_MAX)
+    // 将操作简化为加载/比较信息的步骤。如果没有相关条目，则返回匹配结果。
+    // <=0  或者 > 32 直接认为匹配成功
+    if (!nmeta || nmeta > META_OPS_MAX) // 1 用于记录匹配成功的过滤器标识
         return 1;
 
     ctx.base = skb;

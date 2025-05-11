@@ -34,10 +34,8 @@ struct {
 } global_config_map SEC(".maps");
 
 static __always_inline bool collection_enabled() {
-    struct retis_global_config *cfg;
-    u8 key = 0;
-
-    cfg = bpf_map_lookup_elem(&global_config_map, &key);
+    const u8 key = 0;
+    const struct retis_global_config *cfg = bpf_map_lookup_elem(&global_config_map, &key);
     return cfg && !!cfg->enabled;
 }
 

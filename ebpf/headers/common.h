@@ -8,39 +8,33 @@
 #include <00_common_defs.h>
 #include <00_events.h>
 #include <00_helpers.h>
-#include <meta_filter.h>
+#include <01_meta_filter.h>
 #include <00_packet_filter.h>
-#include <retis_context.h>
+#include <00_retis_context.h>
 #include <skb_tracking.h>
 
-/* Kernel section of the event data. */
 struct kernel_event {
-    u64 symbol;
-    long stack_id;
-    /* values from enum kernel_probe_type */
-    u8 type;
+    u64 symbol;    // 存储被探测的内核符号地址
+    long stack_id; // 表示当前事件的调用栈 ID
+    u8 type;       // 事件的来源类型
 } __binding;
 
-/* Per-probe configuration. */
 struct retis_probe_config {
-    struct retis_probe_offsets offsets;
-    u8 stack_trace;
+    struct retis_probe_offsets offsets; // 包含内核中相关结构体字段的偏移信息
+    u8 stack_trace;                     // 是否启用调用栈采集
 } __binding;
 
-/* Probe configuration; the key is the target symbol address */
 struct {
     __uint(type, BPF_MAP_TYPE_HASH);
-    __uint(max_entries, PROBE_MAX);
+    __uint(max_entries, PROBE_MAX); // 1024
     __type(key, u64);
     __type(value, struct retis_probe_config);
 } config_map SEC(".maps");
 
-/* Probe stack trace map. */
 struct {
     __uint(type, BPF_MAP_TYPE_STACK_TRACE);
     __uint(max_entries, 4096);
     __uint(key_size, sizeof(u32));
-    /* PERF_MAX_STACK_DEPTH times u64 for value size. */
     __uint(value_size, 127 * sizeof(u64));
 } stack_map SEC(".maps");
 
@@ -139,6 +133,12 @@ HOOK(9)
 #define HOOK_MAX 10
 
 __attribute__((noinline)) int ctx_hook(struct retis_context *ctx) {
+    // 用途	说明
+    // 类型锚点/上下文保留	        ctx 参数被引用一次，能让 verifier 识别其类型。
+    // 避免优化丢失	            volatile 和 noinline 用于保持函数形状、避免变量优化。
+    // BPF verifier 辅助路径	    某些 verifier 检查依赖于函数存在性和参数类型，这里是辅助构建“合法路径”。
+
+    // return 0  ; 可能会报错    R1 type=ctx expected=ctx, but got unknown or scalar
     volatile int ret = 0;
     if (!ctx)
         return 0;
@@ -153,19 +153,77 @@ __attribute__((noinline)) int ctx_hook(struct retis_context *ctx) {
         statements                        \
     }
 
+// 加载时动态替换 BPF 指令
+// 调用一个 BPF 子程序并获取其返回值，而且强制使用 BPF 指令语义和寄存器规范
+#define FILTER(x)                                                                                                                                                       \
+    static __noinline unsigned int filter_##x(void *ctx) {                                                                                                              \
+        register void *ctx_reg asm("r1") = ctx; /* 保证 r1 寄存器不会变化 */                                                                                            \
+        volatile unsigned int ret;              /* */                                                                                                                   \
+        asm volatile("call " s(x) ";"             /* 调用 ebpf 子程序（宏 x 指代子程序名） */                                                           \
+			"*(u32 *)%[ret] = r0"                 /* 把 r0 的值写到 ret 上 */                                                                       \
+		     : [ret] "=m"(ret)                    /* 输出：ret 是一个内存变量（写）*/                                                               \
+		     : "r"(ctx_reg)                       /* 输入：r1 = ctx_reg（刚才绑定好的） */                                                           \
+		     : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "memory");  /* clobbers：说明这些寄存器会被用到/修改 */ \
+        return ret;                                                                                                                                                     \
+    }
+
+FILTER(l2)
+FILTER(l3)
+
+static __always_inline void filter(struct retis_context *ctx) {
+    struct retis_packet_filter_ctx fctx = {};
+
+    struct sk_buff *skb = retis_get_sk_buff(ctx);
+    if (!skb)
+        return;
+    /* 如果 skb 已经被跟踪，则对数据包过滤逻辑进行特殊处理。这样做在多个方面都有助益，包括：
+     * - 提升性能。
+     * - 确保能够跟踪数据包的转换过程。
+     * - 在数据完全不可用时进行数据包过滤。*/
+    if (skb_is_tracked(skb)) {
+        ctx->filters_ret |= RETIS_ALL_FILTERS;
+        return;
+    }
+
+    char *head = (char *)BPF_CORE_READ(skb, head);
+    fctx.len = BPF_CORE_READ(skb, len);
+
+    /*
+     * L3 过滤器所需的负载更少（这意味着由于内存访问而产生的开销也更小），
+     * 并且在 mac_header 不存在（即在传输路径的早期阶段）的情况下也能实现匹配。
+     * 尽管存在这种特殊性，但当前的方法较为保守，
+     * 在 mac_header 存在时会优先选择 L2 过滤器而非 L3 过滤器。
+     */
+    if (is_mac_data_valid(skb)) {
+        fctx.data = head + BPF_CORE_READ(skb, mac_header);
+        ctx->filters_ret |= !!filter_l2(&fctx) << RETIS_F_PACKET_PASS_SH; // 0
+        goto next_filter;
+    }
+
+    if (!is_network_data_valid(skb))
+        return;
+
+    fctx.data = head + BPF_CORE_READ(skb, network_header); // 它是一个 偏移值，表示网络层（如 IP）的头部相对于 skb->head 的地址。
+
+    // L3 过滤器可以设置为“无操作”状态，这意味着仅从 L3 角度来看，这些条件不足以确定匹配关系。
+    ctx->filters_ret |= !!filter_l3(&fctx) << RETIS_F_PACKET_PASS_SH; // 0
+
+next_filter:
+    ctx->filters_ret |= (!!meta_filter(skb)) << RETIS_F_META_PASS_SH; // 1
+}
+
 static __always_inline int extend_ctx_nft(struct retis_context *ctx) {
-    struct nft_traceinfo___6_3_0 *info_63;
+    // 从偏移量、填充到regs
     const struct nft_pktinfo *pkt;
-    struct nft_traceinfo *info;
 
     if (retis_arg_valid(ctx, sk_buff) || !bpf_core_type_exists(struct nft_traceinfo) || !bpf_core_type_exists(struct nft_pktinfo))
         return 0;
 
-    info = retis_get_nft_traceinfo(ctx);
+    struct nft_traceinfo *info = retis_get_nft_traceinfo(ctx); // ctx.offset.
     if (!info)
         return 0;
 
-    info_63 = (struct nft_traceinfo___6_3_0 *)info;
+    struct nft_traceinfo___6_3_0 *info_63 = (struct nft_traceinfo___6_3_0 *)info;
     if (bpf_core_field_exists(info_63->pkt))
         pkt = BPF_CORE_READ(info_63, pkt);
     else
@@ -181,14 +239,12 @@ static __always_inline int extend_ctx(struct retis_context *ctx) {
     void *orig_ctx;
     int ret;
 
-    /* Builtin context extensions. */
-    ret = extend_ctx_nft(ctx);
+    ret = extend_ctx_nft(ctx); // ✅
     if (ret)
         return ret;
 
     /* Builtin context extensions. */
-    /* The verifier seems to have trouble keeping track of the type of
-     * the original context which. This seems to help.
+    /* 验证器在识别原始上下文类型时好像会出问题，而这样做能有所帮助。
      */
     orig_ctx = ctx->orig_ctx;
     barrier_var(orig_ctx);
@@ -198,80 +254,8 @@ static __always_inline int extend_ctx(struct retis_context *ctx) {
     return ret;
 }
 
-/* The template defines a placeholder instruction that will be
- * replaced on load with the actual filtering instructions.
- * Normally, if no filter gets set, a simple mov r0, 0x40000 will
- * replace the call. 0x40000 is used as it is also used by generated
- * cBPF filters, whereas 0 means no match, instead.
- * Ideally this function would be __naked, but apparently subprogs and
- * non-ctx arguments don't play well together during BTF generation.
- */
-#define FILTER(x)                                                                         \
-    static __noinline unsigned int filter_##x(void *ctx) {                                \
-        /* Not strictly required, but make sure r1 doesn't change for                     \
-         * some reason.                                                                   \
-         */                                                                               \
-        register void *ctx_reg asm("r1") = ctx;                                           \
-        volatile unsigned int ret;                                                        \
-        asm volatile("call " s(x) ";"                                                   \
-				  "*(u32 *)%[ret] = r0"                                 \
-		     : [ret] "=m"(ret)                                                  \
-		     : "r"(ctx_reg)                                                     \
-		     : "r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "memory"); \
-        return ret;                                                                       \
-    }
-FILTER(l2)
-FILTER(l3)
-
-static __always_inline void filter(struct retis_context *ctx) {
-    struct retis_packet_filter_ctx fctx = {};
-    struct sk_buff *skb;
-    char *head;
-
-    skb = retis_get_sk_buff(ctx);
-    if (!skb)
-        return;
-    /* Special case the packet filtering logic if the skb is already
-     * tracked. This helps in may ways, including:
-     * - Performances.
-     * - Following packet transformations.
-     * - Filtering packets when the whole data isn't available anymore.
-     */
-    if (skb_is_tracked(skb)) {
-        ctx->filters_ret |= RETIS_ALL_FILTERS;
-        return;
-    }
-
-    head = (char *)BPF_CORE_READ(skb, head);
-    fctx.len = BPF_CORE_READ(skb, len);
-
-    /* L3 filters require fewer loads (which means less overhead due to
-     * memory access) and can match in the case the mac_header is not
-     * present (i.e. early in the tx path).
-     * Despite this peculiarity, the current approach is conservative,
-     * favouring L2 filters over L3 when the mac_header is present.
-     */
-    if (is_mac_data_valid(skb)) {
-        fctx.data = head + BPF_CORE_READ(skb, mac_header);
-        ctx->filters_ret |= !!filter_l2(&fctx) << RETIS_F_PACKET_PASS_SH;
-        goto next_filter;
-    }
-
-    if (!is_network_data_valid(skb))
-        return;
-
-    fctx.data = head + BPF_CORE_READ(skb, network_header);
-    /* L3 filter can be a nop, meaning the criteria are not enough to
-     * express a match in terms of L3 only.
-     */
-    ctx->filters_ret |= !!filter_l3(&fctx) << RETIS_F_PACKET_PASS_SH;
-
-next_filter:
-    ctx->filters_ret |= (!!meta_filter(skb)) << RETIS_F_META_PASS_SH;
-}
-
 /*
- * 链式函数包含了我们所有的核心探测逻辑。它在每个特定探测部分填充完通用上下文并在返回之前被调用。
+ * 链式函数包含了我们所有的核心探测逻辑。它在每个特定探测部分填充完通用上下文并，在返回之前被调用。
  */
 static __always_inline int chain(struct retis_context *ctx) {
     struct retis_probe_config *cfg;
@@ -292,13 +276,13 @@ static __always_inline int chain(struct retis_context *ctx) {
         }
     }
 
-    cfg = bpf_map_lookup_elem(&config_map, &ctx->ksym);
+    cfg = bpf_map_lookup_elem(&config_map, &ctx->ksym); // 检查有没有注册对应hook
     if (!cfg) {
         return 0;
     }
     ctx->offsets = cfg->offsets;
 
-    ret = extend_ctx(ctx);
+    ret = extend_ctx(ctx); // ✅
     if (ret) {
         log_warning("ctx extension failed: %d", ret);
     }
@@ -363,6 +347,7 @@ static __always_inline int chain(struct retis_context *ctx) {
         if (ret == -ENOMSG)            \
             goto discard_event;        \
     }
+
     CALL_HOOK(0)
     CALL_HOOK(1)
     CALL_HOOK(2)
