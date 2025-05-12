@@ -3,7 +3,7 @@
 
 #include <vmlinux.h>
 
-#include <00_common_defs.h>
+#include <common_defs.h>
 
 // 请确保以下内容与对应的 Rust 版本保持一致。
 #define EVENTS_MAX 8 * 1024
@@ -45,7 +45,7 @@ struct retis_raw_event_section_header {
 
 struct {
     __uint(type, BPF_MAP_TYPE_RINGBUF);
-    __uint(max_entries, sizeof(struct retis_raw_event) * EVENTS_MAX); // 8 * 1024
+    __uint(max_entries, sizeof(struct retis_raw_event) * EVENTS_MAX); //  * 1024
 } events_map SEC(".maps");
 
 struct {
@@ -71,6 +71,7 @@ static __always_inline void send_event(struct retis_raw_event *event) {
     bpf_ringbuf_submit(event, 0);
 }
 
+// 添加完 retis_raw_event_section_header 后的偏移地址
 static __always_inline void *get_event_section(struct retis_raw_event *event, u8 owner, u8 data_type, u16 size) {
     struct retis_raw_event_section_header *header;
 

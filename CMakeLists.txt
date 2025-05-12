@@ -23,3 +23,4 @@ add_library(ebpf-nftrace
 )
 
 add_executable(extract_btf cases/extract_btf.c)
+add_executable(expect cases/expect.c)

@@ -1,8 +1,8 @@
 #ifndef __CORE_PROBE_KERNEL_BPF_RETIS_CONTEXT__
 #define __CORE_PROBE_KERNEL_BPF_RETIS_CONTEXT__
 
-#include <00_common_defs.h>
-#include <00_compat.h>
+#include <common_defs.h>
+#include <compat.h>
 
 enum kernel_probe_type {
     KERNEL_PROBE_KPROBE = 0,

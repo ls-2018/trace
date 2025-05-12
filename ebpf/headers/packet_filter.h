@@ -1,7 +1,7 @@
 #ifndef __CORE_FILTERS_PACKETS_PACKET_FILTER__
 #define __CORE_FILTERS_PACKETS_PACKET_FILTER__
 
-#include <00_common_defs.h>
+#include <common_defs.h>
 
 struct retis_packet_filter_ctx {
     /* Input */

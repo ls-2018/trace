@@ -39,7 +39,7 @@ static __always_inline bool collection_enabled() {
     return cfg && !!cfg->enabled;
 }
 
-#define COMMON_SECTION_CORE 0
+#define COMMON_SECTION_CORE 0 // 公共部分核心部分
 #define COMMON_SECTION_TASK 1
 
 enum {
@@ -94,18 +94,20 @@ struct {
 } counters_map SEC(".maps");
 
 static __always_inline void err_report(u64 sym_addr, u32 pid) {
-    struct retis_counters *err_counters;
     struct retis_counters_key key;
 
     key.pid = pid;
     key.sym_addr = sym_addr;
-    err_counters = bpf_map_lookup_elem(&counters_map, &key);
+    struct retis_counters *err_counters = bpf_map_lookup_elem(&counters_map, &key);
     // 仅在存在数据时进行更新。此处若有任何错误，应通过专用的跟踪管道进行报告。
     if (err_counters)
         __sync_fetch_and_add(&err_counters->dropped_events, 1);
 }
 
 #ifndef likely
+// y 只是个编译器优化提示，不会影响逻辑
+// 返回!!(x)，但我告诉编译器，它通常情况下是 1
+// 编译器会据此安排机器指令的布局（比如跳转目标）来提高 CPU 分支预测命中率。
 #    define likely(x) __builtin_expect(!!(x), 1)
 #endif
 

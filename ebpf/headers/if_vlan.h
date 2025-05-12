@@ -8,7 +8,7 @@
 #include <vmlinux.h>
 
 #include <common.h>
-#include <00_compat.h>
+#include <compat.h>
 
 #define ENODATA 61
 #define ETH_P_8021Q 0x8100

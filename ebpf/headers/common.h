@@ -5,12 +5,12 @@
 #include <bpf/bpf_helpers.h>
 #include <vmlinux.h>
 
-#include <00_common_defs.h>
-#include <00_events.h>
-#include <00_helpers.h>
-#include <01_meta_filter.h>
-#include <00_packet_filter.h>
-#include <00_retis_context.h>
+#include <common_defs.h>
+#include <events.h>
+#include <helpers.h>
+#include <meta_filter.h>
+#include <packet_filter.h>
+#include <retis_context.h>
 #include <skb_tracking.h>
 
 struct kernel_event {
@@ -105,13 +105,12 @@ enum {
  */
 #define DEFINE_HOOK_RAW(statements) DEFINE_HOOK(F_AND, 0, statements)
 
-/* Number of hooks installed, used to micro-optimize the call chain */
+// 安装的钩子数量，用于对调用链进行微优化;volatile 避免优化
 const volatile u32 nhooks = 0;
 
-/* Hook definition, aimed at being replaced before the program is attached. The
- * temporary retval is volatile to not let the compiler think he can optimize
- * it. Credits to the XDP dispatcher.
- */
+// 钩子定义，旨在在程序连接之前被替换掉。
+// 这个临时返回值是易变的，目的是不让编译器认为它可以对其进行优化。
+// 这要归功于 XDP 中心处理程序。
 #define HOOK(x)                                                                                       \
     __attribute__((noinline)) int hook##x(struct retis_context *ctx, struct retis_raw_event *event) { \
         volatile int ret = 0;                                                                         \
@@ -261,11 +260,9 @@ static __always_inline int chain(struct retis_context *ctx) {
     struct retis_probe_config *cfg;
     struct retis_raw_event *event;
     // 这里需要使用 volatile，以防止在钩子链前后读取事件使用长度时被优化。
-    struct common_task_event *ti;
+
     static bool enabled = false;
-    volatile u16 pass_threshold;
-    struct common_event *e;
-    struct kernel_event *k;
+
     int ret;
 
     // 检查是否启用了收集功能，否则就退出。一旦确认启用，就将结果缓存起来。
@@ -287,7 +284,7 @@ static __always_inline int chain(struct retis_context *ctx) {
         log_warning("ctx extension failed: %d", ret);
     }
 
-    filter(ctx);
+    filter(ctx); // 会填充一些属性
     // 跟踪 skb。注意，这一步是在过滤之后进行的！如果没有可用的 skb，这将不会执行任何操作（no-op）。
 
     // 重要提示：我们必须尽早执行这一操作，这样即使后续操作失败，跟踪逻辑仍然能够运行；我们不希望因为非致命错误而丢失信息！
@@ -295,7 +292,6 @@ static __always_inline int chain(struct retis_context *ctx) {
         track_skb_start(ctx);
     }
 
-    // 当没有钩子时可以走快捷路径（例如仅用于追踪的探针）；没必要分配并填充一个事件，之后再把它丢弃。
     if (nhooks == 0) {
         goto exit;
     }
@@ -306,15 +302,15 @@ static __always_inline int chain(struct retis_context *ctx) {
         goto exit;
     }
 
-    e = get_event_section(event, COMMON, COMMON_SECTION_CORE, sizeof(*e));
+    struct common_event *e = get_event_section(event, COMMON, COMMON_SECTION_CORE, sizeof(*e));
     if (!e) {
         goto discard_event;
     }
-
+    // todo ,剩余部分，会不会不足以承载 common_event
     e->timestamp = ctx->timestamp;
     e->smp_id = bpf_get_smp_processor_id();
 
-    ti = get_event_zsection(event, COMMON, COMMON_SECTION_TASK, sizeof(*ti));
+    struct common_task_event *ti = get_event_zsection(event, COMMON, COMMON_SECTION_TASK, sizeof(*ti));
     if (!ti) {
         goto discard_event;
     }
@@ -322,7 +318,7 @@ static __always_inline int chain(struct retis_context *ctx) {
     ti->pid = bpf_get_current_pid_tgid();
     bpf_get_current_comm(ti->comm, sizeof(ti->comm));
 
-    k = get_event_section(event, KERNEL, 0, sizeof(*k));
+    struct kernel_event *k = get_event_section(event, KERNEL, 0, sizeof(*k));
     if (!k)
         goto discard_event;
 
@@ -333,7 +329,7 @@ static __always_inline int chain(struct retis_context *ctx) {
     else
         k->stack_id = -1;
 
-    pass_threshold = get_event_size(event);
+    volatile u16 pass_threshold = get_event_size(event);
     barrier_var(pass_threshold);
 
 // 定义了逐个调用钩子的逻辑。
@@ -359,7 +355,7 @@ static __always_inline int chain(struct retis_context *ctx) {
     CALL_HOOK(8)
     CALL_HOOK(9)
 
-    if (get_event_size(event) > pass_threshold)
+    if (get_event_size(event) > pass_threshold) // todo ,why >
         send_event(event);
     else
     discard_event:
@@ -367,7 +363,6 @@ static __always_inline int chain(struct retis_context *ctx) {
 
 exit:
 
-    // 在跟踪 skb 时的清理阶段。如果没有可用的 skb，这将不会执行任何操作（no-op）。
     if (RETIS_TRACKABLE(ctx->filters_ret))
         track_skb_end(ctx);
 
