@@ -73,16 +73,17 @@ struct skb_gso_event {
     u32 gso_type; // GSO 类型（如 TCPv4, TCPv6, UDP 等，见 linux/net.h 中 SKB_GSO_* 宏定义）
 } __binding;
 
+#define PACKET_CAPTURE_SIZE 255
 struct skb_packet_event {
-    u32 len;         // 数据包的实际总长度（skb->len），可能远大于捕获长度
-    u32 capture_len; // 实际被捕获的长度，即 packet[] 中有效字节数，最大不超过 255
-    u8 packet[255];  // 捕获的数据包头部内容（通常是前 N 个字节），用于用户空间分析或日志记录
-    u8 fake_eth;     // 标记是否是伪造的以太网头（如在某些虚拟接口或非 L2 skb 中人工补充的 Ethernet header）
+    u32 len;                        // 数据包的实际总长度（skb->len），可能远大于捕获长度
+    u32 capture_len;                // 实际被捕获的长度，即 packet[] 中有效字节数，最大不超过 255
+    u8 packet[PACKET_CAPTURE_SIZE]; // 捕获的数据包头部内容（通常是前 N 个字节），用于用户空间分析或日志记录
+    u8 fake_eth;                    // 标记是否是伪造的以太网头（如在某些虚拟接口或非 L2 skb 中人工补充的 Ethernet header）
 } __binding;
 
 // 获取一个 sk_buff 的线性长度
 static __always_inline int skb_linear_len(struct sk_buff *skb) {
-    return BPF_CORE_READ(skb, len) - BPF_CORE_READ(skb, data_len);
+    return BPF_CORE_READ(skb, len) - BPF_CORE_READ(skb, data_len); // 当前协议层中的线性区长度
 }
 
 // 获取一个 sk_buff 对象的 L3 协议，可以通过查找 sk_buff 的 protocol 字段，或者通过解析数据包的头部来实现。
@@ -125,33 +126,24 @@ static __always_inline u16 skb_protocol(struct sk_buff *skb) {
 }
 
 static __always_inline int process_packet(struct retis_raw_event *event, struct sk_buff *skb) {
-    /* Use int instead of the underlying (smaller) unsigned type to allow
-     * signed arithmetic operations.
-     */
-    int mac, headroom, linear_len;
+    // 请使用整型（int）而非底层（较小的）无符号类型，以便能够进行有符号的算术运算。
     struct skb_packet_event *e;
-    unsigned char *head;
-    u16 network;
-    u32 len;
 
-    head = BPF_CORE_READ(skb, head);
-    headroom = BPF_CORE_READ(skb, data) - head;
+    const unsigned char *head = BPF_CORE_READ(skb, head);
+    const int headroom = BPF_CORE_READ(skb, data) - head;
 
-    mac = BPF_CORE_READ(skb, mac_header);
-    network = BPF_CORE_READ(skb, network_header);
-    linear_len = skb_linear_len(skb);
-    len = BPF_CORE_READ(skb, len);
+    const int mac = BPF_CORE_READ(skb, mac_header);
+    const u16 network = BPF_CORE_READ(skb, network_header);
+    const int linear_len = skb_linear_len(skb);
+    u32 len = BPF_CORE_READ(skb, len); // 数据包的实际总长度
 
-    /* No data in the linear len, nothing to report */
+    // 线性长度中没有数据，无可报告的内容。
     if (!linear_len)
         return 0;
 
-    /* Best case: mac offset is set and valid */
-    if (is_mac_data_valid(skb)) {
-        long mac_offset, size;
-
-        mac_offset = mac - headroom;
-        size = MIN(linear_len - mac_offset, PACKET_CAPTURE_SIZE);
+    if (is_mac_data_valid(skb)) { // 最佳情况：mac偏移量已设置且有效
+        long mac_offset = mac - headroom;
+        long size = MIN(linear_len - mac_offset, PACKET_CAPTURE_SIZE);
         if (size <= 0)
             return 0;
 
@@ -169,8 +161,6 @@ static __always_inline int process_packet(struct retis_raw_event *event, struct 
     }
     else if (is_network_data_valid(skb)) {
         u16 etype = skb_protocol(skb);
-        long network_offset, size;
-        struct ethhdr *eth;
 
         /* We do need the ethertype to be set at the skb level here,
          * otherwise we can't guess what kind of packet this is.
@@ -178,8 +168,8 @@ static __always_inline int process_packet(struct retis_raw_event *event, struct 
         if (!etype)
             return 0;
 
-        network_offset = network - headroom;
-        size = MIN(linear_len - network_offset, PACKET_CAPTURE_SIZE - sizeof(struct ethhdr));
+        long network_offset = network - headroom;
+        long size = MIN(linear_len - network_offset, PACKET_CAPTURE_SIZE - sizeof(struct ethhdr));
         if (size <= 0)
             return 0;
 
@@ -188,7 +178,7 @@ static __always_inline int process_packet(struct retis_raw_event *event, struct 
             return 0;
 
         /* Fake eth header */
-        eth = (struct ethhdr *)e->packet;
+        struct ethhdr *eth = (struct ethhdr *)e->packet;
         __builtin_memset(eth, 0, sizeof(*eth));
         eth->h_proto = etype;
 

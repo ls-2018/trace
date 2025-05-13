@@ -21,6 +21,8 @@ endif ()
 add_library(ebpf-nftrace
         ./ebpf/src/kernel/01_kprobe.bpf.c
         ./ebpf/src/kernel/02_kretprobe.bpf.c
+        ./ebpf/src/kernel/03_raw_tracepoint.bpf.c
+        ./ebpf/src/skb/04_skb_hook.bpf.c
 )
 
 add_executable(extract_btf cases/extract_btf.c)
