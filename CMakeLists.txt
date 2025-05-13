@@ -20,6 +20,7 @@ endif ()
 
 add_library(ebpf-nftrace
         ./ebpf/src/kernel/01_kprobe.bpf.c
+        ./ebpf/src/kernel/02_kretprobe.bpf.c
 )
 
 add_executable(extract_btf cases/extract_btf.c)

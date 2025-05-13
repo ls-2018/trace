@@ -11,7 +11,6 @@
 #define ETH_P_ARP 0x0806
 #define ETH_P_IPV6 0x86dd
 
-/* Skb raw event sections. */
 enum skb_sections {
     SECTION_PACKET = 1,
     SECTION_VLAN,
@@ -28,6 +27,7 @@ enum skb_sections {
 struct skb_config {
     u64 sections;
 } __binding;
+
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __uint(max_entries, 1);
@@ -38,79 +38,80 @@ struct {
 BINDING_DEF(IFNAMSIZ, 16)
 
 struct skb_netdev_event {
-    u8 dev_name[IFNAMSIZ];
-    u32 ifindex;
-    u32 iif;
+    u8 dev_name[IFNAMSIZ]; // 表示网络设备的名字 例如 "eth0"、"lo"。
+    u32 ifindex;           // 网络设备的索引号
+    u32 iif;               // 输入接口索引（Input Interface Index），也就是数据包是从哪个接口进入的。
 } __binding;
+
 struct skb_netns_event {
     u32 netns;
 } __binding;
+
 struct skb_meta_event {
-    u32 len;
-    u32 data_len;
-    u32 hash;
-    u8 ip_summed;
-    u32 csum;
-    u8 csum_level;
-    u32 priority;
-} __binding;
-struct skb_data_ref_event {
-    u8 nohdr;
-    u8 cloned;
-    u8 fclone;
-    u8 users;
-    u8 dataref;
-} __binding;
-struct skb_gso_event {
-    u8 flags;
-    u8 nr_frags;
-    u32 gso_size;
-    u32 gso_segs;
-    u32 gso_type;
-} __binding;
-struct skb_packet_event {
-    u32 len;
-    u32 capture_len;
-#define PACKET_CAPTURE_SIZE 255
-    u8 packet[PACKET_CAPTURE_SIZE];
-    u8 fake_eth;
+    u32 len;       // 报文的总长度（skb->len），包括协议头和数据
+    u32 data_len;  // 非线性数据长度，表示有多少数据不在主线性缓冲区（对应 skb->data_len）
+    u32 hash;      // skb 哈希值（skb->hash），可能用于流分类
+    u8 ip_summed;  // 校验和状态（CHECKSUM_NONE, CHECKSUM_PARTIAL, CHECKSUM_COMPLETE 等）
+    u32 csum;      // 报文的校验和值（如果适用）
+    u8 csum_level; // 校验级别（如是否嵌套隧道，通常与 ip_summed 联合使用）
+    u32 priority;  // skb 优先级（skb->priority），通常用于流控或队列调度
 } __binding;
 
-/* Retrieve an skb linear len */
+struct skb_data_ref_event {
+    u8 nohdr;   // 是否缺少头部数据（可能是 skb->nohdr，表示头部数据未分配或被跳过）
+    u8 cloned;  // 表示 skb 是否被克隆（skb->cloned），即多个 skb 实例共享相同的数据缓冲区
+    u8 fclone;  // 是否是 "fast clone" skb（skb->fclone），一种特殊的克隆机制，用于优化性能（如 TCP fast clone）
+    u8 users;   // skb 实例的引用计数（skb->users），即有多少实体正在引用这个 skb
+    u8 dataref; // 数据缓冲区的引用计数（skb_shinfo(skb)->dataref），用于判断数据是否被多个 skb 实例共享
+} __binding;
+
+struct skb_gso_event {
+    u8 flags;     // GSO 相关标志位（通常是 skb_shinfo(skb)->gso_type 附带的标志，比如是否支持 ECN、TSO 等）
+    u8 nr_frags;  // 表示该 skb 使用了多少个 page fragment（skb_shinfo(skb)->nr_frags）
+    u32 gso_size; // 每个分段的大小（skb_shinfo(skb)->gso_size），例如每个 TCP 分段大小
+    u32 gso_segs; // 总共会被分成多少个分段（skb_shinfo(skb)->gso_segs）
+    u32 gso_type; // GSO 类型（如 TCPv4, TCPv6, UDP 等，见 linux/net.h 中 SKB_GSO_* 宏定义）
+} __binding;
+
+struct skb_packet_event {
+    u32 len;         // 数据包的实际总长度（skb->len），可能远大于捕获长度
+    u32 capture_len; // 实际被捕获的长度，即 packet[] 中有效字节数，最大不超过 255
+    u8 packet[255];  // 捕获的数据包头部内容（通常是前 N 个字节），用于用户空间分析或日志记录
+    u8 fake_eth;     // 标记是否是伪造的以太网头（如在某些虚拟接口或非 L2 skb 中人工补充的 Ethernet header）
+} __binding;
+
+// 获取一个 sk_buff 的线性长度
 static __always_inline int skb_linear_len(struct sk_buff *skb) {
     return BPF_CORE_READ(skb, len) - BPF_CORE_READ(skb, data_len);
 }
 
-/* Retrieve the L3 protocol of an skb, either by looking up skb->protocol or by
- * parsing the header of the packet.
- */
+// 获取一个 sk_buff 对象的 L3 协议，可以通过查找 sk_buff 的 protocol 字段，或者通过解析数据包的头部来实现。
 static __always_inline u16 skb_protocol(struct sk_buff *skb) {
     u16 protocol = BPF_CORE_READ(skb, protocol);
-    int network, transport, l4hlen;
-    unsigned char *head;
     u8 ip_version;
 
-    /* Fast path, skb->protocol was set. */
-    if (likely(protocol))
+    if (likely(protocol)) { // 如果设置了，直接返回
         return protocol;
+    }
 
-    /* We're *most likely* in the Tx path; skb->protocol wasn't set yet.
-     * Let's try to detect the protocol from the packet data.
-     */
+    // 我们 *很有可能* 处于 Tx 路径中；skb->protocol 还未被设置。让我们尝试从数据包内容中检测出协议类型。
+    unsigned char *head = BPF_CORE_READ(skb, head);
 
-    head = BPF_CORE_READ(skb, head);
-
-    /* L4 must be set as we derive L3 header len from it. */
-    if (!is_network_data_valid(skb) || !is_transport_data_valid(skb))
+    // L4 必须先进行设置，因为我们要据此计算 L3 头部的长度。
+    if (!is_network_data_valid(skb)      // 3
+        || !is_transport_data_valid(skb) // 4
+    ) {
         return 0;
+    }
 
-    network = BPF_CORE_READ(skb, network_header);
-    transport = BPF_CORE_READ(skb, transport_header);
-    l4hlen = transport - network;
+    int network = BPF_CORE_READ(skb, network_header);// 3 偏移值,不是指针  ip   起始地址的偏移量
+    int transport = BPF_CORE_READ(skb, transport_header);//4 偏移值,不是指针   udp\tcp
+    int l4hlen = transport - network;// ip
 
     /* Check if the L3 header looks like an IP one. The below is not 100%
      * right (no ext support), but let's stay on the safe side for now.
      */
+    // https://en.wikipedia.org/wiki/IPv4#Header
     bpf_probe_read_kernel(&ip_version, sizeof(ip_version), head + network);
     ip_version >>= 4;
     if (ip_version == 4 && l4hlen == sizeof(struct iphdr)) {

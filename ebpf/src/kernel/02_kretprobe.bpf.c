@@ -36,11 +36,10 @@ static __always_inline void kprobe_get_regs(struct retis_regs *regs, struct pt_r
 SEC("kretprobe/probe")
 int probe_kretprobe_kretprobe(struct pt_regs *ctx) {
     struct retis_context context = {};
-    struct retis_context *kprobe_ctx;
     u64 tid = bpf_get_current_pid_tgid();
 
     /* Look if the matching kprobe has left a context for us to pick up. */
-    kprobe_ctx = bpf_map_lookup_elem(&kretprobe_context, &tid);
+    struct retis_context *kprobe_ctx = bpf_map_lookup_elem(&kretprobe_context, &tid);
     if (!kprobe_ctx) {
         return 0;
     }
