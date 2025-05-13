@@ -104,9 +104,9 @@ static __always_inline u16 skb_protocol(struct sk_buff *skb) {
         return 0;
     }
 
-    int network = BPF_CORE_READ(skb, network_header);// 3 偏移值,不是指针  ip   起始地址的偏移量
-    int transport = BPF_CORE_READ(skb, transport_header);//4 偏移值,不是指针   udp\tcp
-    int l4hlen = transport - network;// ip
+    int network = BPF_CORE_READ(skb, network_header);     // 3 偏移值,不是指针  ip   起始地址的偏移量
+    int transport = BPF_CORE_READ(skb, transport_header); // 4 偏移值,不是指针   udp\tcp
+    int l4hlen = transport - network;                     // ip
 
     /* Check if the L3 header looks like an IP one. The below is not 100%
      * right (no ext support), but let's stay on the safe side for now.
