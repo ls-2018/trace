@@ -49,7 +49,7 @@ struct skb_netns_event {
 
 struct skb_meta_event {
     u32 len;       // 报文的总长度（skb->len），包括协议头和数据
-    u32 data_len;  // 非线性数据长度，表示有多少数据不在主线性缓冲区（对应 skb->data_len）
+    u32 data_len;  // 分片数据的长度，表示有多少数据不在主线性缓冲区（对应 skb->data_len）
     u32 hash;      // skb 哈希值（skb->hash），可能用于流分类
     u8 ip_summed;  // 校验和状态（CHECKSUM_NONE, CHECKSUM_PARTIAL, CHECKSUM_COMPLETE 等）
     u32 csum;      // 报文的校验和值（如果适用）
@@ -83,7 +83,7 @@ struct skb_packet_event {
 
 // 获取一个 sk_buff 的线性长度
 static __always_inline int skb_linear_len(struct sk_buff *skb) {
-    return BPF_CORE_READ(skb, len) - BPF_CORE_READ(skb, data_len); // 当前协议层中的线性区长度
+    return BPF_CORE_READ(skb, len) - BPF_CORE_READ(skb, data_len); // 是当前片（unpaged data）长度
 }
 
 // 获取一个 sk_buff 对象的 L3 协议，可以通过查找 sk_buff 的 protocol 字段，或者通过解析数据包的头部来实现。
