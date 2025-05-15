@@ -6,21 +6,21 @@
 /* Please keep these in sync with
  * include/linux/netfilter/nf_conntrack_common.h.
  */
-#define NFCT_INFOMASK 7UL
-#define NFCT_PTRMASK ~(NFCT_INFOMASK)
+#define NFCT_INFOMASK 7UL             // 提取连接追踪指针中的附加信息的掩码
+#define NFCT_PTRMASK ~(NFCT_INFOMASK) // 用于屏蔽低 3 位，以提取出纯净的指针地址
 
 /* Keep in sync with include/linux/netfilter/nf_conntrack_zones_common.h */
-#define NF_CT_ZONE_DIR_ORIG (1 << IP_CT_DIR_ORIGINAL)
-#define NF_CT_ZONE_DIR_REPL (1 << IP_CT_DIR_REPLY)
+#define NF_CT_ZONE_DIR_ORIG (1 << IP_CT_DIR_ORIGINAL) // 1<<0     发送方
+#define NF_CT_ZONE_DIR_REPL (1 << IP_CT_DIR_REPLY)    // 1<<1      接收方
 #define NF_CT_DEFAULT_ZONE_DIR (NF_CT_ZONE_DIR_ORIG | NF_CT_ZONE_DIR_REPL)
 
 #define ORIG tuplehash[IP_CT_DIR_ORIGINAL].tuple
 #define REPLY tuplehash[IP_CT_DIR_REPLY].tuple
 
 enum ct_sections {
-    SECTION_META = 0,
-    SECTION_BASE_CONN,
-    SECTION_PARENT_CONN,
+    SECTION_META = 0,    // 表示元数据部分，可能包含 zone、mark、timestamp 等
+    SECTION_BASE_CONN,   // 表示当前连接本身（例如 5 元组、状态）的主结构部分
+    SECTION_PARENT_CONN, // 表示父连接（如 NAT、helper、FTP 数据连接）相关部分
 } __binding;
 
 /* Retis-specific flags */
@@ -94,9 +94,7 @@ static __always_inline void get_nf_ct_labels(struct ct_event *e, struct nf_conn 
     struct nf_conn_labels *labels;
     int offset, nf_ct_ext_labels;
 
-    /* Conntrack labels depend on CONFIG_NF_CONNTRACK_LABELS, the following
-     * enum variant is only defined if enabled.
-     */
+    // Conntrack 标签取决于 CONFIG_NF_CONNTRACK_LABELS，以下枚举变体仅在启用时才定义。
     if (!bpf_core_enum_value_exists(enum nf_ct_ext_id, NF_CT_EXT_LABELS))
         return;
 

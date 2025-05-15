@@ -8,28 +8,24 @@
 #define ALLOWED_VERDICTS(verd, mask) (1 << (verd + VERD_SCALE) & mask)
 #define NFT_NAME_SIZE 128
 
-#define retis_get_nft_chain(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_chain, struct nft_chain *)
-#define retis_get_nft_rule(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_rule, struct nft_rule_dp *)
-#define retis_get_nft_verdict(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_verdict, struct nft_verdict *)
-#define retis_get_nft_type(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_type, enum nft_trace_types)
-
-/**
- * Nft hook configuration.
- *
- * Skip Default trait implementation:
- *
- * <div rustbindgen nodefault></div>
- */
 struct nft_offsets {
     s8 nft_chain;
     s8 nft_rule;
     s8 nft_verdict;
     s8 nft_type;
 };
+
 struct nft_config {
-    u64 verdicts;
+    u64 verdicts; // 要追踪 的 nft 匹配结果
     struct nft_offsets offsets;
 } __binding;
+
+// nft_config
+#define retis_get_nft_chain(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_chain, struct nft_chain *)
+#define retis_get_nft_rule(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_rule, struct nft_rule_dp *)
+#define retis_get_nft_verdict(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_verdict, struct nft_verdict *)
+#define retis_get_nft_type(ctx, cfg) RETIS_HOOK_GET(ctx, cfg->offsets, nft_type, enum nft_trace_types)
+
 struct {
     __uint(type, BPF_MAP_TYPE_ARRAY);
     __uint(max_entries, 1);
@@ -38,17 +34,19 @@ struct {
 } nft_config_map SEC(".maps");
 
 struct nft_event {
-    char table_name[NFT_NAME_SIZE];
-    char chain_name[NFT_NAME_SIZE];
-    u32 verdict;
-    char verdict_chain_name[NFT_NAME_SIZE];
-    s64 t_handle;
-    s64 c_handle;
-    s64 r_handle;
-    u8 policy;
+    char table_name[NFT_NAME_SIZE];         // 表名，大小为 128 字节
+    char chain_name[NFT_NAME_SIZE];         // 链名，大小为 128 字节
+    u32 verdict;                            // 判决（verdict），例如 ACCEPT、DROP 等
+    char verdict_chain_name[NFT_NAME_SIZE]; // 如果是跳转（JUMP/GOTO）之类的 verdict，这里是目标链名
+    s64 t_handle;                           // 表的 handle（唯一标识符），64 位整数
+    s64 c_handle;                           // 链的 handle，64 位整数
+    s64 r_handle;                           // 规则的 handle，64 位整数
+    u8 policy;                              // 默认策略，例如 NF_ACCEPT、NF_DROP 等
 } __binding;
 
-/* Specialized macro. Deals with different types with similar layout. */
+// 如果这个 trace 是一个 NFT_TRACETYPE_RETURN 类型（意味着规则链返回了），
+// 且其 verdict.code 是 NFT_CONTINUE（表示未做处理，继续执行下一规则），
+// 那么我们不认为有有效 rule handle，返回 -1。
 #define __nft_get_rule_handle(__info, __verdict, __rule)                                                                       \
     ({                                                                                                                         \
         if (BPF_CORE_READ_BITFIELD_PROBED(info, type) == NFT_TRACETYPE_RETURN && BPF_CORE_READ(verdict, code) == NFT_CONTINUE) \
@@ -56,10 +54,7 @@ struct nft_event {
         (u64) BPF_CORE_READ_BITFIELD_PROBED(__rule, handle);                                                                   \
     })
 
-/* Handles both legacy and current upstream types. is_last for
- * nft_rule_dp acts as a flag to identify a trailing rule and acts
- * as a NULL rule marker.
- */
+// is_last 用来判断当前规则是不是“最后一条”规则
 static __always_inline s64 nft_get_rule_handle(const struct nft_traceinfo *info, const struct nft_verdict *verdict, const void *rule) {
     if (!rule || !verdict || !info)
         return -1;
@@ -76,32 +71,35 @@ static __always_inline s64 nft_get_rule_handle(const struct nft_traceinfo *info,
         return __nft_get_rule_handle(info, verdict, r);
     }
     else {
-        /* This should emit a warning that must be returned by
-         * userspace.
-         */
+        // 这应该触发一个警告，该警告必须由用户空间返回处理。
         return -1;
     }
 }
 
 static __always_inline int nft_trace(struct nft_config *cfg, struct retis_raw_event *event, const struct nft_traceinfo *info, const struct nft_chain *chain, const struct nft_verdict *verdict, const void *rule, enum nft_trace_types type) {
-    struct nft_event *e;
-    char *name;
-    u8 policy;
-    u32 code;
+    // NFT_TRACETYPE_UNSPEC = 0,    表示没有指定的跟踪类型，通常是默认值或无效值。
+    // NFT_TRACETYPE_POLICY = 1,    用于指示包在链的末尾时被默认策略（如 ACCEPT 或 DROP）处理。这是“链策略”的跟踪事件。
+    // NFT_TRACETYPE_RETURN = 2,    表示在执行 return 指令时的跟踪事件。通常用于从子链返回主链时。
+    // NFT_TRACETYPE_RULE = 3,      规则命中跟踪（Rule trace）
 
-    policy = (type == NFT_TRACETYPE_POLICY);
-    code = policy ? (u32)BPF_CORE_READ(info, basechain, policy) : (u32)BPF_CORE_READ(verdict, code);
+    // nft_verdict.code
+    // 低 8 位（低字节）：表示实际的 verdict 类型，比如 NF_ACCEPT（接受）、NF_DROP（丢弃）、NFT_GOTO、NFT_JUMP 等。
+    // 高位部分：如果是 GOTO 或 JUMP 类型，剩下的高位用于指定跳转到的链（chain）的编号。
+
+    const u8 policy = (type == NFT_TRACETYPE_POLICY);
+    const u32 code = policy ? (u32)BPF_CORE_READ(info, basechain, policy) : (u32)BPF_CORE_READ(verdict, code);
     if (!ALLOWED_VERDICTS(code, cfg->verdicts))
         return -ENOMSG;
 
-    e = get_event_zsection(event, COLLECTOR_NFT, 1, sizeof(*e));
+    struct nft_event *e = get_event_zsection(event, COLLECTOR_NFT, 1, sizeof(*e));
     if (!e)
         return 0;
 
     e->policy = policy;
     e->verdict = code;
+
     /* Table info */
-    name = BPF_CORE_READ(chain, table, name);
+    const char *name = BPF_CORE_READ(chain, table, name); // 跳转的表名
     bpf_probe_read_kernel_str(e->table_name, sizeof(e->table_name), name);
 
     /* Chain info */
@@ -119,13 +117,9 @@ static __always_inline int nft_trace(struct nft_config *cfg, struct retis_raw_ev
 
 static __always_inline const struct nft_chain *nft_get_chain_from_rule(struct retis_context *ctx, struct nft_traceinfo *info, const struct nft_rule_dp *rule) {
     const struct nft_rule_dp_last___6_4_0 *last = NULL;
-    const struct nft_base_chain *base_chain;
-    struct nft_traceinfo___6_3_0 *info_63;
-    u64 rule_dlen;
-    int i;
 
     if (!rule) {
-        base_chain = BPF_CORE_READ(info, basechain);
+        const struct nft_base_chain *base_chain = BPF_CORE_READ(info, basechain);
         if (!base_chain)
             return NULL;
 
@@ -136,18 +130,16 @@ static __always_inline const struct nft_chain *nft_get_chain_from_rule(struct re
      * nft_rule_dp_last___6_4_0). For the time being this could not be
      * done because of compilers and the way programs are built.
      */
-    info_63 = (struct nft_traceinfo___6_3_0 *)info;
+    struct nft_traceinfo___6_3_0 *info_63 = (struct nft_traceinfo___6_3_0 *)info;
     if (!bpf_core_field_exists(info_63->rule)) {
-        /* Make the loop bounded. 1024 has no specific
-         * meaning, just a reasonable value.
-         */
-        for (i = 0; i < 1024; i++) {
+        // 最多尝试1024 次
+        for (int i = 0; i < 1024; i++) {
             if (BPF_CORE_READ_BITFIELD_PROBED(rule, is_last)) {
                 last = (void *)rule;
                 break;
             }
 
-            rule_dlen = BPF_CORE_READ_BITFIELD_PROBED(rule, dlen);
+            const u64 rule_dlen = BPF_CORE_READ_BITFIELD_PROBED(rule, dlen);
             rule = (void *)rule + sizeof(*rule) + rule_dlen;
         }
 
@@ -158,9 +150,11 @@ static __always_inline const struct nft_chain *nft_get_chain_from_rule(struct re
 }
 
 /* Depending on the kernel:
+ * 在某些内核版本中：rule 是通过 info 来间接获取的；chain 是作为参数直接传入的。
  * - rule is under info, chain is a parameter
  *   - rule type is nft_rule
  *   - rule type is nft_rule_dp
+ * 在另一些场景下：rule 本身是直接传入的参数；chain 的获取依据条件而定：
  * - rule is a parameter, chain is one of:
  *   - last->chain; if rule->is_last
  *   - info->basechain->chain; if !rule
@@ -169,9 +163,7 @@ static __always_inline const struct nft_chain *nft_get_chain_from_rule(struct re
  * retrieves the nft_chain pointer.
  */
 static __always_inline void nft_retrieve_rule(struct retis_context *ctx, struct nft_config *cfg, struct nft_traceinfo *info, const void **rule, const struct nft_chain **chain) {
-    struct nft_traceinfo___6_3_0 *info_63;
-
-    info_63 = (struct nft_traceinfo___6_3_0 *)info;
+    struct nft_traceinfo___6_3_0 *info_63 = (struct nft_traceinfo___6_3_0 *)info;
     if (bpf_core_field_exists(info_63->rule)) {
         *chain = retis_get_nft_chain(ctx, cfg);
         *rule = BPF_CORE_READ(info_63, rule);
@@ -183,10 +175,9 @@ static __always_inline void nft_retrieve_rule(struct retis_context *ctx, struct 
 }
 
 static __always_inline const struct nft_verdict *nft_get_verdict(struct retis_context *ctx, struct nft_config *cfg, struct nft_traceinfo *info) {
-    struct nft_traceinfo___6_3_0 *info_63;
     const struct nft_verdict *verdict;
 
-    info_63 = (struct nft_traceinfo___6_3_0 *)info;
+    struct nft_traceinfo___6_3_0 *info_63 = (struct nft_traceinfo___6_3_0 *)info;
     if (!bpf_core_field_exists(info_63->verdict))
         verdict = retis_get_nft_verdict(ctx, cfg);
     else

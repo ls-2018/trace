@@ -25,6 +25,7 @@ add_library(ebpf-nftrace
         ./ebpf/src/skb/04_skb_hook.bpf.c
         ./ebpf/src/skb/05_skb_drop_hook.bpf.c
         ./ebpf/src/skb/06_tracking_hook.bpf.c
+        ./ebpf/src/nft/07_nft.bpf.c
 )
 
 add_executable(extract_btf cases/extract_btf.c)
