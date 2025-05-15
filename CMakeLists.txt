@@ -23,6 +23,8 @@ add_library(ebpf-nftrace
         ./ebpf/src/kernel/02_kretprobe.bpf.c
         ./ebpf/src/kernel/03_raw_tracepoint.bpf.c
         ./ebpf/src/skb/04_skb_hook.bpf.c
+        ./ebpf/src/skb/05_skb_drop_hook.bpf.c
+        ./ebpf/src/skb/06_tracking_hook.bpf.c
 )
 
 add_executable(extract_btf cases/extract_btf.c)
